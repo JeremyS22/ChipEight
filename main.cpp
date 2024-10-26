@@ -34,6 +34,18 @@ int main (){
 
     decodeAndExecuteInstructions(currentInstruction);     
 
+    fetchInstructions(memory); 
+
+    decodeAndExecuteInstructions(currentInstruction);     
+
+    fetchInstructions(memory); 
+
+    decodeAndExecuteInstructions(currentInstruction);     
+
+    cout << "PROGRAM COUNTER " << programCounter << endl;   
+
+
+
 
 
 
@@ -48,6 +60,7 @@ int main (){
 
     // TODO: Create Cpu class and memory to separate functions and value, make program counter private? 
 
+    // TODO: Test out the 1nnn jump to address function! 
 
     // DONE: Cpu fetch, combine 2 memory addresses to get 16 bit address, increment program counter in memory 
     // DONE: Update the Program Counter to be used outside of the function using pass by reference and 
