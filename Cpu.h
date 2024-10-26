@@ -74,3 +74,47 @@ uint8_t fontData[] = {
 
 }; 
 
+void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]); 
+
+void loadRomIntoMemory(uint8_t memory[], std::string romFileLocation, uint16_t* programCounter); 
+
+void setProgramCounter(uint16_t * programCounter, int value); 
+
+void incrementProgramCounter(uint16_t * programCounter, int value); 
+
+// including this just in case, may delete this later 
+void decrementProgramCounter(uint16_t * programCounter, int value); 
+
+uint16_t getProgramCounter (); 
+
+void setCurrentInstruction (std::string Instruction); 
+
+std::string getCurrentInstruction (); 
+
+void findRegisterOfNibble(char nibble, std::string lastTwoNibbles); 
+
+std::string getLastTwoNibbles (std::string currentInstruction); 
+
+std::string getLastThreeNibbles (std::string currentInstruction); 
+
+// 1nnn 
+void jumpToAddress(std::string address); 
+
+// 6xnn 
+void setValueInRegisterX (char secondNibble, std::string value); 
+
+// annn 
+void loadAddressInRegisterI(std::string address); 
+
+void fetchInstructions(uint8_t memory[]); 
+
+void decodeAndExecuteInstructions(std::string currentInstruction); 
+ 
+
+// Use for debugging ------------------------------------------------------------------------------- 
+
+void printMemory(uint8_t memory[]); 
+
+// TODO: Expand this to include other registers 
+void printCurrentInstruction(std::string Instruction); 
+

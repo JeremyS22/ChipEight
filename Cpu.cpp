@@ -58,6 +58,11 @@ void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* progr
         cout << "Status: Could not read rom\n  Check file path" << endl; 
 
 }
+
+void setProgramCounter(uint16_t * programCounter, int value){
+    *programCounter = value;  
+}
+
 void incrementProgramCounter(uint16_t * programCounter, int value){
     *programCounter += value;  
 }
@@ -67,8 +72,8 @@ void decrementProgramCounter(uint16_t * programCounter, int value){
     *programCounter -= value;  
 }
 
-uint16_t getProgramCounter (uint16_t * programCounter){
-    return *programCounter; 
+uint16_t getProgramCounter (){
+    return programCounter; 
 }
 
 void setCurrentInstruction (string Instruction) {
@@ -79,102 +84,189 @@ string getCurrentInstruction (){
     return currentInstruction; 
 }
 
-// TODO: Expand this to include other registers 
-void printCurrentInstruction(string Instruction){
-    cout << "Current Instruction: " << Instruction << endl; 
+void findRegisterOfNibble(char nibble, string lastTwoNibbles){
+    if (nibble == '0'){
+        regist_V0 = stoi(lastTwoNibbles, nullptr, 16); 
+
+        cout << "REGISTER WITH THE NIBBLE " << regist_V0 << endl; 
+    }
+    else if (nibble == '1'){
+        regist_V1 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '2'){
+        regist_V2 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '3'){
+        regist_V3 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '4'){
+        regist_V4 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '5'){
+        regist_V5 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '6'){
+        regist_V6 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '7'){
+        regist_V7 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '8'){
+        regist_V8 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == '9'){
+        regist_V9 = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == 'a'){
+        regist_VA = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == 'b'){
+        regist_VB = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == 'c'){
+        regist_VC = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == 'd'){
+        regist_VD = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == 'e'){
+        regist_VE = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+    else if (nibble == 'f'){
+        regist_VF = stoi(lastTwoNibbles, nullptr, 16); 
+    }
+
+}
+
+string getLastTwoNibbles (string currentInstruction){
+    stringstream nibbleParser;
+
+    // TODO: Check if we might have to delete the first two 0's, since Vx registers are 8 bits, not 16 
+    nibbleParser << currentInstruction[2] << currentInstruction[3]; 
+        string lastTwoNibbles = nibbleParser.str(); 
+
+    cout << lastTwoNibbles << endl; 
+
+    return lastTwoNibbles; 
+
+}
+
+string getLastThreeNibbles (string currentInstruction){
+    stringstream nibbleParser;
+
+    nibbleParser << "0" << currentInstruction[1] << currentInstruction[2] << currentInstruction[3]; 
+        string lastThreeNibbles = nibbleParser.str(); 
+
+    cout << lastThreeNibbles << endl; 
+
+    return lastThreeNibbles; 
+
+}
+
+// 1nnn 
+void jumpToAddress(string address){
+    setProgramCounter(&programCounter, stoi(address, nullptr, 16));   
+}
+
+
+// 6xnn 
+void setValueInRegisterX (char secondNibble, string value){
+    
+    findRegisterOfNibble(secondNibble, value); 
+}
+
+// annn 
+void loadAddressInRegisterI(string address){
+    cout << address << " HERE IS THE NUMBER VERSION OF THIS " << hex << setw(2) << setfill('0') << stoi(address, nullptr, 16) << endl; 
+    regist_I = stoi(address, nullptr, 16); 
 }
 
 void fetchInstructions(uint8_t memory[]){
 
     stringstream instructionString;
-    instructionString << hex << setw(2) << setfill('0') << (int)memory[getProgramCounter(&programCounter)];
-    instructionString << hex << setw(2) << setfill('0') << (int)memory[getProgramCounter(&programCounter)+1];
-
-    // TODO: check if this needs to be deleted, currentInstruction may need to be a string intead 
-    // of int 
-    // uint16_t instruction = stoi(instructionString.str());   
-    
-    // TODO: Check if this needs to be deleted, make string and use setter for currentInstruction 
-    // setCurrentInstruction(instruction); 
+    instructionString << hex << setw(2) << setfill('0') << (int)memory[getProgramCounter()];
+    instructionString << hex << setw(2) << setfill('0') << (int)memory[getProgramCounter()+1];
 
     setCurrentInstruction(instructionString.str()); 
 
     incrementProgramCounter(&programCounter, 2); 
-    cout << getProgramCounter(&programCounter) << endl; 
+    cout << getProgramCounter() << endl; 
 
     printCurrentInstruction(instructionString.str());  
-    
 }
 
 void decodeAndExecuteInstructions(string currentInstruction){
+    char firstNibble = currentInstruction[0]; 
+    char secondNibble = currentInstruction[1]; 
+    char thirdNibble = currentInstruction[2]; 
+    char fourthNibble = currentInstruction[3]; 
 
-char firstNibble = currentInstruction[0]; 
-char secondNibble = currentInstruction[1]; 
-char thirdNibble = currentInstruction[2]; 
-char fourthNibble = currentInstruction[3]; 
 
-    switch(firstNibble){
-        case '0': 
-            getCurrentInstruction(); // call function 
-            switch (fourthNibble){
-                case '0':
-                // call clear screen function 00e0 
+        switch(firstNibble){
+            case '0': 
+                getCurrentInstruction(); // call function 
+                switch (fourthNibble){
+                    case '0':
+                    // call clear screen function 00e0 
+                    break; 
+                    case 'e':
+                    // call return function 00ee
+                    break; 
+                } 
+                break;
+            case '1':
+                // call jump address function 1nnn  
+                // Note: n = the 12 bit address  
+                
+                jumpToAddress(getLastThreeNibbles(currentInstruction));  // call function 
+                break;
+            case '2': 
+                getCurrentInstruction(); // call the subroutine call function 2nnn 
+                break;
+            case '3': 
+                getCurrentInstruction(); // call skip next instruction 3xkk 
+                break;
+            case '4': 
+                getCurrentInstruction(); // call function 
+                break;
+            case '5': 
+                getCurrentInstruction(); // call function 
+                break;
+            case '6': 
+                // call set register Vx function 
+                setValueInRegisterX(secondNibble, getLastTwoNibbles(currentInstruction)); 
+                break;
+            case '7': 
+                getCurrentInstruction(); // call add value to register Vx function  
+                break;
+            case '8': 
+                getCurrentInstruction(); // call function 
+                break;
+            case '9': 
+                getCurrentInstruction(); // call function 
+                break;
+            case 'a': 
+                // call set index to register I function  s
+                loadAddressInRegisterI(getLastThreeNibbles(currentInstruction));  
                 break; 
-                case 'e':
-                // call return function 00ee
-                break; 
-            } 
-            break;
-        case '1':
-            // call jump address function 1nnn  
-            // Note: n = the 12 bit address  
-            getCurrentInstruction(); // call function 
-            break;
-        case '2': 
-            getCurrentInstruction(); // call the subroutine call function 2nnn 
-            break;
-        case '3': 
-            getCurrentInstruction(); // call skip next instruction 3xkk 
-            break;
-        case '4': 
-            getCurrentInstruction(); // call function 
-            break;
-        case '5': 
-            getCurrentInstruction(); // call function 
-            break;
-        case '6': 
-            getCurrentInstruction(); // call set register Vx function 
-            break;
-        case '7': 
-            getCurrentInstruction(); // call add value to register Vx function  
-            break;
-        case '8': 
-            getCurrentInstruction(); // call function 
-            break;
-        case '9': 
-            getCurrentInstruction(); // call function 
-            break;
-        case 'a': 
-            getCurrentInstruction(); // call set index to register I function  
-            break;
-        case 'b': 
-            getCurrentInstruction(); // call function 
-            break;
-        case 'c': 
-            getCurrentInstruction(); // call function 
-            break;
-        case 'd': 
-            getCurrentInstruction(); // call display/draw fucntion  
-            break;
-        case 'e':       
-            getCurrentInstruction(); // call function 
-            break;
-        case 'f': 
-            getCurrentInstruction(); // call function 
-            break;
-        default: 
-            cout << "Status: Error, Opcode not found " << endl; 
-    }
+            case 'b': 
+                getCurrentInstruction(); // call function 
+                break;
+            case 'c': 
+                getCurrentInstruction(); // call function 
+                break;
+            case 'd': 
+                getCurrentInstruction(); // call display/draw fucntion  
+                break;
+            case 'e':       
+                getCurrentInstruction(); // call function 
+                break;
+            case 'f': 
+                getCurrentInstruction(); // call function 
+                break;
+            default: 
+                cout << "Status: Error, Opcode not found " << endl; 
+        }
 }
  
 
@@ -192,3 +284,7 @@ void printMemory(uint8_t memory[]){
     }
 }
 
+// TODO: Expand this to include other registers 
+void printCurrentInstruction(string Instruction){
+    cout << "Current Instruction: " << Instruction << endl; 
+}
