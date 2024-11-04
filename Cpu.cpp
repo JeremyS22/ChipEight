@@ -6,13 +6,9 @@
 
 using namespace std; 
 
-void initialize (){
-
-}
-
 void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]){
 
-    cout << "Status: Loading font data into memory" << endl; 
+    cout << "Status: (CPU) Loading font data into memory" << endl; 
 
     int tempMemLocation = 0x050; 
     
@@ -32,7 +28,7 @@ void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* progr
     fstream rom; 
     rom.open(romFileLocation, ios::in); 
     if(rom.is_open()){
-        cout << "Status: OPENED ROM" << endl; 
+        cout << "Status: (CPU) OPENED ROM" << endl; 
 
         int i = 0x200; 
             while (getline(rom, romParser)){
@@ -51,11 +47,11 @@ void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* progr
             }
 
         *programCounter = 0x200; 
-        cout << "Status: Contents read, Closing rom" << endl; 
+        cout << "Status: (CPU) Contents read, Closing rom" << endl; 
         rom.close(); 
     }
     else
-        cout << "Status: Could not read rom\n  Check file path" << endl; 
+        cout << "Status: (CPU) Could not read rom\n  Check file path" << endl; 
 
 }
 
@@ -265,7 +261,7 @@ void decodeAndExecuteInstructions(string currentInstruction){
                 getCurrentInstruction(); // call function 
                 break;
             default: 
-                cout << "Status: Error, Opcode not found " << endl; 
+                cout << "Status: (CPU) Error, Opcode not found " << endl; 
         }
 }
  
