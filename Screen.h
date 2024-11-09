@@ -5,8 +5,8 @@
 
 class Screen {
 private: 
-    // Setting this to 16 by default since Chip 8 native's resoution is so small  
-    int scalingMultipiler = 16; 
+    int scalingMultipiler; 
+    bool pixelStatus[64][32]; 
 
 public: 
     SDL_Window* window; 
@@ -22,7 +22,8 @@ public:
 
     void initializeScreen(); 
     void setScalingMultipiler(int ScalingMultipiler); 
-    int getScalingMultipiler(); 
+    int getScalingMultipiler();  
+    void setPixelStatus(bool pixelStatus[64][32]); 
     void destroyCreatedWindow(); 
 }; 
 
