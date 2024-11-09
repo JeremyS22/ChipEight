@@ -3,6 +3,9 @@
 #include <string> 
 #include <sstream> 
 #include <iomanip> 
+#include <bitset> 
+
+#include "Screen.h" 
 
 using namespace std; 
 
@@ -20,10 +23,7 @@ void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]){
 
 }
 
-void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* programCounter){
-
-    // TODO: Make programCounter argument pass by reference 
-    
+void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* programCounter){    
     string romParser; 
     fstream rom; 
     rom.open(romFileLocation, ios::in); 
@@ -80,66 +80,12 @@ string getCurrentInstruction (){
     return currentInstruction; 
 }
 
-void findRegisterOfNibble(char nibble, string lastTwoNibbles){
-    if (nibble == '0'){
-        regist_V0 = stoi(lastTwoNibbles, nullptr, 16); 
-
-        cout << "REGISTER WITH THE NIBBLE " << regist_V0 << endl; 
-    }
-    else if (nibble == '1'){
-        regist_V1 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '2'){
-        regist_V2 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '3'){
-        regist_V3 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '4'){
-        regist_V4 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '5'){
-        regist_V5 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '6'){
-        regist_V6 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '7'){
-        regist_V7 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '8'){
-        regist_V8 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == '9'){
-        regist_V9 = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == 'a'){
-        regist_VA = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == 'b'){
-        regist_VB = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == 'c'){
-        regist_VC = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == 'd'){
-        regist_VD = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == 'e'){
-        regist_VE = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-    else if (nibble == 'f'){
-        regist_VF = stoi(lastTwoNibbles, nullptr, 16); 
-    }
-
-}
-
 string getLastTwoNibbles (string currentInstruction){
     stringstream nibbleParser;
 
     // TODO: Check if we might have to delete the first two 0's, since Vx registers are 8 bits, not 16 
     nibbleParser << currentInstruction[2] << currentInstruction[3]; 
-        string lastTwoNibbles = nibbleParser.str(); 
+    string lastTwoNibbles = nibbleParser.str(); 
 
     cout << lastTwoNibbles << endl; 
 
@@ -159,6 +105,12 @@ string getLastThreeNibbles (string currentInstruction){
 
 }
 
+//00e0
+void clearScreenInstruction(Screen screen){
+    SDL_RenderClear(screen.renderer); 
+    SDL_RenderPresent(screen.renderer); 
+}
+
 // 1nnn 
 void jumpToAddress(string address){
     setProgramCounter(&programCounter, stoi(address, nullptr, 16));   
@@ -166,15 +118,59 @@ void jumpToAddress(string address){
 
 
 // 6xnn 
-void setValueInRegisterX (char secondNibble, string value){
-    
-    findRegisterOfNibble(secondNibble, value); 
+void setValueInRegisterVX (char secondNibble, string value){
+    int X = convertCharToHex(secondNibble); 
+    int lastTwoNibbles = stoi(value, nullptr, 16); 
+    regist_V[X] = lastTwoNibbles; 
 }
 
 // annn 
 void loadAddressInRegisterI(string address){
-    cout << address << " HERE IS THE NUMBER VERSION OF THIS " << hex << setw(2) << setfill('0') << stoi(address, nullptr, 16) << endl; 
+    // add to debugger 
+    cout << address << "Address being stored in Register I " << hex << setw(2) << setfill('0') << stoi(address, nullptr, 16) << endl; 
     regist_I = stoi(address, nullptr, 16); 
+}
+
+// dxyn 
+void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
+                            uint8_t memory[4096]){
+
+    // secondNibble = VX, thirdNibble = VY 
+    int X = convertCharToHex(secondNibble);  
+    int Y = convertCharToHex(thirdNibble); 
+    int spriteHeight = convertCharToHex(fourthNibble); 
+
+    int coordinateX = regist_V[X];
+    int coordinateY = regist_V[Y]; 
+
+    SDL_SetRenderDrawColor(screen.renderer, 255, 255, 255, 255);  
+    SDL_RenderClear(screen.renderer); 
+
+    SDL_SetRenderDrawColor(screen.renderer, 255, 0, 255, 255); 
+    uint16_t spriteDataAddress = regist_I; 
+    
+    for(int i = 0; i < spriteHeight; i++){
+        uint16_t binaryVal = memory[spriteDataAddress]; 
+        bitset<16> binaryValue (binaryVal); 
+
+        // TODO: add to debugger 
+        cout << "Binary value from memory address of register I " << binaryValue << endl; 
+
+        for(int j = 8; j > 0; j--){
+            cout << "BINARY VALUE LOL IDK " << binaryValue[j] << endl; 
+
+            if(binaryValue[j] == 1){
+                SDL_SetRenderDrawColor(screen.renderer, 255, 0, 255, 255); 
+                SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
+            }
+            coordinateY++; 
+        }
+        spriteDataAddress++; 
+        coordinateX++; 
+        // resets Y coordinate for drawing the next line 
+        coordinateY = regist_V[Y];    
+    }
+    SDL_RenderPresent(screen.renderer); 
 }
 
 void fetchInstructions(uint8_t memory[]){
@@ -188,10 +184,10 @@ void fetchInstructions(uint8_t memory[]){
     incrementProgramCounter(&programCounter, 2); 
     cout << getProgramCounter() << endl; 
 
-    printCurrentInstruction(instructionString.str());  
+    debug_printCurrentInstruction(getCurrentInstruction());  
 }
 
-void decodeAndExecuteInstructions(string currentInstruction){
+void decodeAndExecuteInstructions(string currentInstruction, Screen screen, uint8_t memory[4096]){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
@@ -204,6 +200,7 @@ void decodeAndExecuteInstructions(string currentInstruction){
                 switch (fourthNibble){
                     case '0':
                     // call clear screen function 00e0 
+                    clearScreenInstruction(screen); 
                     break; 
                     case 'e':
                     // call return function 00ee
@@ -213,7 +210,6 @@ void decodeAndExecuteInstructions(string currentInstruction){
             case '1':
                 // call jump address function 1nnn  
                 // Note: n = the 12 bit address  
-                
                 jumpToAddress(getLastThreeNibbles(currentInstruction));  // call function 
                 break;
             case '2': 
@@ -229,8 +225,9 @@ void decodeAndExecuteInstructions(string currentInstruction){
                 getCurrentInstruction(); // call function 
                 break;
             case '6': 
+                // 600c 
                 // call set register Vx function 
-                setValueInRegisterX(secondNibble, getLastTwoNibbles(currentInstruction)); 
+                setValueInRegisterVX(secondNibble, getLastTwoNibbles(currentInstruction)); 
                 break;
             case '7': 
                 getCurrentInstruction(); // call add value to register Vx function  
@@ -242,7 +239,7 @@ void decodeAndExecuteInstructions(string currentInstruction){
                 getCurrentInstruction(); // call function 
                 break;
             case 'a': 
-                // call set index to register I function  s
+                // call set index to register I function  
                 loadAddressInRegisterI(getLastThreeNibbles(currentInstruction));  
                 break; 
             case 'b': 
@@ -252,7 +249,8 @@ void decodeAndExecuteInstructions(string currentInstruction){
                 getCurrentInstruction(); // call function 
                 break;
             case 'd': 
-                getCurrentInstruction(); // call display/draw fucntion  
+                // call display/draw fucntion  
+                drawSpriteAtVXAndVY(secondNibble, thirdNibble, fourthNibble, screen, memory);  
                 break;
             case 'e':       
                 getCurrentInstruction(); // call function 
@@ -265,10 +263,15 @@ void decodeAndExecuteInstructions(string currentInstruction){
         }
 }
  
+int convertCharToHex(char Value){
+        stringstream hexString; 
+        hexString << "0x" << Value;     
+    return stoi(hexString.str(), nullptr, 16);    
+}
 
 // Use for debugging ------------------------------------------------------------------------------- 
 
-void printMemory(uint8_t memory[]){
+void debug_printMemory(uint8_t memory[]){
 
 // Note: font data at 0x050, program data at 0x200 
     for (int i = 0x050; i < 1000; i++){
@@ -281,6 +284,7 @@ void printMemory(uint8_t memory[]){
 }
 
 // TODO: Expand this to include other registers 
-void printCurrentInstruction(string Instruction){
+void debug_printCurrentInstruction(string Instruction){
     cout << "Current Instruction: " << Instruction << endl; 
+
 }

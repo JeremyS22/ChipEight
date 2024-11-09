@@ -6,13 +6,13 @@ using namespace std;
 void Screen::initializeScreen(){
         SDL_Init(SDL_INIT_EVERYTHING); 
 
-        // TODO: make this dynamic later 
+        // Initializing this to 16 by default since Chip 8 native's resoution is so small  
+        setScalingMultipiler(16); 
         SDL_CreateWindowAndRenderer(64 * getScalingMultipiler(), 32 * getScalingMultipiler(), 0, &window, &renderer); 
 
         // TODO: Add customizable color background 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  
         SDL_RenderClear(renderer); 
-        SDL_RenderPresent(renderer); 
 
         cout << "Status: (Screen) Created Window and Redenerer " << endl; 
 } 
@@ -27,5 +27,6 @@ int Screen::getScalingMultipiler(){
 
 void Screen::destroyCreatedWindow(){
         // SDL_DestroyWindow(window); 
+        //SDL_DestroyRenderer(renderer); 
         SDL_Quit();  
 } 

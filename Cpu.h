@@ -2,12 +2,12 @@
 #include <cstdint> 
 #include <string> 
 
-uint8_t memory[4096] = {
+#include "Screen.h" 
 
-// unsigned char memory[4096] = {
-
-    // 0x050 =  
-}; 
+// 0x000 to 0x1FF are reserved for interpreter 
+// font data at 0x050 - 0x09F  
+// 0x200 to 0xFFF Chip 8 program/data space 
+uint8_t memory[4096]; 
 
 // have stack big enough for 16 2 byte address, may make bigger later 
 uint16_t stack[16]; 
@@ -20,37 +20,15 @@ uint16_t programCounter;
 
 uint8_t stackPointer; 
 
+// TODO: set constructor to intialize this to 0 
 // points at locations in memory 
-uint16_t regist_I; 
+uint16_t regist_I = 0; 
 
-uint8_t regist_V0; 
-uint8_t regist_V1; 
-uint8_t regist_V2; 
-uint8_t regist_V3; 
-uint8_t regist_V4; 
-uint8_t regist_V5; 
-uint8_t regist_V6; 
-uint8_t regist_V7; 
-uint8_t regist_V8; 
-uint8_t regist_V9;
-uint8_t regist_VA; 
-uint8_t regist_VB; 
-uint8_t regist_VC; 
-uint8_t regist_VD; 
-uint8_t regist_VE; 
-uint8_t regist_VF; 
-
+uint8_t regist_V[16]; 
+ 
 // VF is used as a carry flag register by some instructions, set to either 1 or 0 
-// 0x000 to 0x1FF 
 
-// Reserved for interpreter 
-
-// TODO: Place fonts here (Preferably 050 - 09F) 
-
-
-// 0x200 to 0xFFF Chip 8 program/data space 
-
-// set this as a private member? 
+// TODO: set this as a private member 
 std::string currentInstruction; 
 
 uint8_t fontData[] = {
@@ -97,24 +75,29 @@ std::string getLastTwoNibbles (std::string currentInstruction);
 
 std::string getLastThreeNibbles (std::string currentInstruction); 
 
+// 00e0 
+void clearScreenInstruction(Screen screen);  
+
 // 1nnn 
 void jumpToAddress(std::string address); 
 
 // 6xnn 
-void setValueInRegisterX (char secondNibble, std::string value); 
+void setValueInRegisterVX (char secondNibble, std::string value); 
 
 // annn 
 void loadAddressInRegisterI(std::string address); 
 
 void fetchInstructions(uint8_t memory[]); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, uint8_t memory[]); 
+
+int convertCharToHex(char Value); 
  
 
 // Use for debugging ------------------------------------------------------------------------------- 
 
-void printMemory(uint8_t memory[]); 
+void debug_printMemory(uint8_t memory[]); 
 
 // TODO: Expand this to include other registers 
-void printCurrentInstruction(std::string Instruction); 
+void debug_printCurrentInstruction(std::string Instruction); 
 
