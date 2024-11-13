@@ -87,6 +87,10 @@ void setValueInRegisterVX (char secondNibble, std::string value);
 // annn 
 void loadAddressInRegisterI(std::string address); 
 
+// dxyn 
+void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
+                            uint8_t memory[]); 
+
 void fetchInstructions(uint8_t memory[]); 
 
 void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, uint8_t memory[]); 

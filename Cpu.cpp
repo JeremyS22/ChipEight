@@ -124,6 +124,13 @@ void setValueInRegisterVX (char secondNibble, string value){
     regist_V[X] = lastTwoNibbles; 
 }
 
+//7xnn
+void addValueToRegisterVX (char secondNibble, string value){
+    int X = convertCharToHex(secondNibble); 
+    int originalVXValue = regist_V[X]; 
+    regist_V[X] = originalVXValue + stoi(value, nullptr, 16);     
+}
+
 // annn 
 void loadAddressInRegisterI(string address){
     // add to debugger 
@@ -141,12 +148,10 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
     int spriteHeight = convertCharToHex(fourthNibble); 
 
     int coordinateX = regist_V[X];
-    int coordinateY = regist_V[Y]; 
+    int coordinateY = regist_V[Y];  
 
-    SDL_SetRenderDrawColor(screen.renderer, 255, 255, 255, 255);  
-    SDL_RenderClear(screen.renderer); 
 
-    SDL_SetRenderDrawColor(screen.renderer, 255, 0, 255, 255); 
+    SDL_RenderSetScale(screen.renderer, 16, 16);    
     uint16_t spriteDataAddress = regist_I; 
     
     for(int i = 0; i < spriteHeight; i++){
@@ -163,12 +168,12 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
                 SDL_SetRenderDrawColor(screen.renderer, 255, 0, 255, 255); 
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
             }
-            coordinateY++; 
+            coordinateX++; 
         }
         spriteDataAddress++; 
-        coordinateX++; 
-        // resets Y coordinate for drawing the next line 
-        coordinateY = regist_V[Y];    
+        coordinateY++; 
+        // resets X coordinate for drawing the next line 
+        coordinateX = regist_V[X];    
     }
     SDL_RenderPresent(screen.renderer); 
 }
@@ -230,7 +235,8 @@ void decodeAndExecuteInstructions(string currentInstruction, Screen screen, uint
                 setValueInRegisterVX(secondNibble, getLastTwoNibbles(currentInstruction)); 
                 break;
             case '7': 
-                getCurrentInstruction(); // call add value to register Vx function  
+                // call add value to register Vx function  
+                addValueToRegisterVX(secondNibble, getLastTwoNibbles(currentInstruction)); 
                 break;
             case '8': 
                 getCurrentInstruction(); // call function 
