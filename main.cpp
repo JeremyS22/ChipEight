@@ -58,6 +58,18 @@ int main (int argv, char** args){
 
             decodeAndExecuteInstructions(currentInstruction, screen, memory);     
 
+            fetchInstructions(memory); 
+
+            decodeAndExecuteInstructions(currentInstruction, screen, memory);   
+
+            fetchInstructions(memory); 
+
+            decodeAndExecuteInstructions(currentInstruction, screen, memory);   
+
+            fetchInstructions(memory); 
+
+            decodeAndExecuteInstructions(currentInstruction, screen, memory);   
+
             cout << "PROGRAM COUNTER " << getProgramCounter() << endl;   
 
             // TODO: delete these later 

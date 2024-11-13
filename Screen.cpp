@@ -13,7 +13,7 @@ void Screen::initializeScreen(){
         // TODO: Add customizable color background 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  
         SDL_RenderClear(renderer); 
-
+        
         cout << "Status: (Screen) Created Window and Redenerer " << endl; 
 } 
 
