@@ -1,11 +1,13 @@
 # ChipEight Emulator
 
-A project dedicated towards learning about the Chip 8 interpreter and implementing a software that emulates it.  
+A project dedicated towards learing and implementing a emulator that runs Chip 8 games and apps.  
 
-The main goal with this emulator is to research and implement: 
-- Cpu and almost* all of it's instructions 
+Chip 8 is a interpreted programming language that was used to write various software/games and ran on several devices since the 1970's. 
+
+The main goal with this emulator is to learn/implement: 
+- Cpu and it's instructions 
 - Graphics
-- Sounds
+- Sound
 
 Additional Features I may add: 
 
