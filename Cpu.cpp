@@ -20,7 +20,6 @@ void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]){
         memory[tempMemLocation]= fontDataArray[i]; 
         tempMemLocation++; 
     }
-
 }
 
 void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* programCounter){    
@@ -150,8 +149,9 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
     int coordinateX = regist_V[X];
     int coordinateY = regist_V[Y];  
 
+    
 
-    SDL_RenderSetScale(screen.renderer, 16, 16);    
+    SDL_RenderSetScale(screen.renderer, screen.getScalingMultipiler(), screen.getScalingMultipiler());    
     uint16_t spriteDataAddress = regist_I; 
     
     for(int i = 0; i < spriteHeight; i++){
@@ -161,13 +161,12 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
         // TODO: add to debugger 
         cout << "Binary value from memory address of register I " << binaryValue << endl; 
 
-        for(int j = 8; j > 0; j--){
-            cout << "BINARY VALUE LOL IDK " << binaryValue[j] << endl; 
-
+        for(int j = 7; j >= 0; j--){
             if(binaryValue[j] == 1){
                 SDL_SetRenderDrawColor(screen.renderer, 255, 0, 255, 255); 
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
             }
+            screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j]); 
             coordinateX++; 
         }
         spriteDataAddress++; 
