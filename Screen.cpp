@@ -1,3 +1,6 @@
+#ifndef CPU_H 
+#define CPU_H
+
 #include "Screen.h" 
 #include <iostream> 
 
@@ -25,8 +28,14 @@ int Screen::getScalingMultipiler(){
         return scalingMultipiler; 
 }
 
+void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value){
+        pixelStatus[coordinateX][coordinateY] = value; 
+}
+
 void Screen::destroyCreatedWindow(){
-        // SDL_DestroyWindow(window); 
-        //SDL_DestroyRenderer(renderer); 
+        SDL_DestroyWindow(window); 
+        SDL_DestroyRenderer(renderer); 
         SDL_Quit();  
 } 
+
+#endif 

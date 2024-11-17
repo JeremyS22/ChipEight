@@ -17,13 +17,19 @@ public:
         this->scalingMultipiler = scalingMultipiler; 
         this->window = window; 
         this->renderer = renderer; 
+
+        for (int i = 0; i < 64; i++){
+            for (int j = 0; j < 32; j++){
+                    pixelStatus[i][j] = 0; 
+            }
+        }   
     }
     ~Screen(){}; 
 
     void initializeScreen(); 
     void setScalingMultipiler(int ScalingMultipiler); 
     int getScalingMultipiler();  
-    void setPixelStatus(bool pixelStatus[64][32]); 
+    void setPixelStatus(int coordinateX, int coordinateY, bool value); 
     void destroyCreatedWindow(); 
 }; 
 
