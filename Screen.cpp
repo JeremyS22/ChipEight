@@ -29,7 +29,15 @@ int Screen::getScalingMultipiler(){
 }
 
 void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value){
-        pixelStatus[coordinateX][coordinateY] = value; 
+        
+        if (value == 1 && pixelStatus[coordinateX][coordinateY] == 0){
+                pixelStatus[coordinateX][coordinateY] = value; 
+        }
+        else if (value == 1 && pixelStatus[coordinateX][coordinateY] == 1){
+                pixelStatus[coordinateX][coordinateY] = 0; 
+                regist_V[0xF] = 1; 
+        }
+        
 }
 
 void Screen::destroyCreatedWindow(){

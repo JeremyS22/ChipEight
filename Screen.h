@@ -20,6 +20,7 @@ public:
 
         for (int i = 0; i < 64; i++){
             for (int j = 0; j < 32; j++){
+                    // initialized to FALSE by default to represent turned off pixels 
                     pixelStatus[i][j] = 0; 
             }
         }   
