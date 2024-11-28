@@ -104,7 +104,7 @@ string getLastThreeNibbles (string currentInstruction){
 
 }
 
-//00e0
+// 00e0
 void clearScreenInstruction(Screen screen){
     SDL_RenderClear(screen.renderer); 
     SDL_RenderPresent(screen.renderer); 
@@ -123,7 +123,7 @@ void setValueInRegisterVX (char secondNibble, string value){
     regist_V[X] = lastTwoNibbles; 
 }
 
-//7xnn
+// 7xnn
 void addValueToRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int originalVXValue = regist_V[X]; 
