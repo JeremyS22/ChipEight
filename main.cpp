@@ -3,6 +3,8 @@
 #include "Cpu.cpp" 
 #include "Screen.h"
 #include "Screen.cpp" 
+#include "Memory.h" 
+#include "Memory.cpp" 
 
 #include <SDL2/SDL.h> 
 
@@ -11,6 +13,7 @@ using namespace std;
 int main (int argv, char** args){
 
     Screen screen;  
+    Memory memory; 
 
     screen.initializeScreen(); 
 
@@ -26,7 +29,7 @@ int main (int argv, char** args){
             }
 
 
-            loadDataIntoMemory(fontData, memory); 
+            memory.loadDataIntoMemory(fontData, memory); 
             
             cout << "PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
 
@@ -73,7 +76,7 @@ int main (int argv, char** args){
             cout << "PROGRAM COUNTER " << getProgramCounter() << endl;   
 
             // TODO: delete these later 
-            unsigned char testVar = memory[regist_I]; 
+            unsigned char testVar = memory.memory[regist_I]; 
             cout << "Sprite to be drawn " << int(testVar) << endl; 
             SDL_Delay(10000); 
         }

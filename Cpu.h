@@ -3,11 +3,12 @@
 #include <string> 
 
 #include "Screen.h" 
+#include "Memory.h"  
 
 // 0x000 to 0x1FF are reserved for interpreter 
 // font data at 0x050 - 0x09F  
 // 0x200 to 0xFFF Chip 8 program/data space 
-uint8_t memory[4096]; 
+
 
 // have stack big enough for 16 2 byte address, may make bigger later 
 uint16_t stack[16]; 
@@ -52,9 +53,9 @@ uint8_t fontData[] = {
 
 }; 
 
-void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]); 
+void loadDataIntoMemory(uint8_t fontDataArray[], Memory memory);  
 
-void loadRomIntoMemory(uint8_t memory[], std::string romFileLocation, uint16_t* programCounter); 
+void loadRomIntoMemory(Memory memory, std::string romFileLocation, uint16_t* programCounter); 
 
 void setProgramCounter(uint16_t * programCounter, int value); 
 
@@ -89,11 +90,11 @@ void loadAddressInRegisterI(std::string address);
 
 // dxyn 
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
-                            uint8_t memory[]); 
+                            Memory memory); 
 
-void fetchInstructions(uint8_t memory[]); 
+void fetchInstructions(Memory memory); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, uint8_t memory[]); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory memory); 
 
 int convertCharToHex(char Value); 
  
