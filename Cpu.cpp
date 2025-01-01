@@ -6,10 +6,11 @@
 #include <bitset> 
 
 #include "Screen.h" 
+#include "Memory.h" 
 
 using namespace std; 
 
-void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]){
+/* void loadDataIntoMemory(uint8_t fontDataArray[], Memory memory){
 
     cout << "Status: (CPU) Loading font data into memory" << endl; 
 
@@ -17,12 +18,12 @@ void loadDataIntoMemory(uint8_t fontDataArray[], uint8_t memory[]){
     
     for (int i = 0; i < 80; i++){ 
         // cout << int(fontDataArray[i]) << endl; 
-        memory[tempMemLocation]= fontDataArray[i]; 
+        memory.memory[tempMemLocation]= fontDataArray[i]; 
         tempMemLocation++; 
     }
-}
+} */
 
-void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* programCounter){    
+void loadRomIntoMemory(Memory memory, string romFileLocation, uint16_t* programCounter){    
     string romParser; 
     fstream rom; 
     rom.open(romFileLocation, ios::in); 
@@ -40,7 +41,7 @@ void loadRomIntoMemory(uint8_t memory[], string romFileLocation, uint16_t* progr
                         // converts binary file data into hexadecimal 
                         cout << hex << setw(2) << setfill('0') << (int)(unsigned char)romData << " \n"; 
                         
-                        memory[i] = romData; 
+                        memory.memory[i] = romData; 
                         i++; 
                 }
             }
@@ -139,7 +140,7 @@ void loadAddressInRegisterI(string address){
 
 // dxyn 
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
-                            uint8_t memory[4096]){
+                            Memory memory ){
 
     // secondNibble = VX, thirdNibble = VY 
     int X = convertCharToHex(secondNibble);  
@@ -155,7 +156,7 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
     uint16_t spriteDataAddress = regist_I; 
     
     for(int i = 0; i < spriteHeight; i++){
-        uint16_t binaryVal = memory[spriteDataAddress]; 
+        uint16_t binaryVal = memory.memory[spriteDataAddress]; 
         bitset<16> binaryValue (binaryVal); 
 
         // TODO: add to debugger 
@@ -177,11 +178,11 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
     SDL_RenderPresent(screen.renderer); 
 }
 
-void fetchInstructions(uint8_t memory[]){
+void fetchInstructions(Memory memory){
 
     stringstream instructionString;
-    instructionString << hex << setw(2) << setfill('0') << (int)memory[getProgramCounter()];
-    instructionString << hex << setw(2) << setfill('0') << (int)memory[getProgramCounter()+1];
+    instructionString << hex << setw(2) << setfill('0') << (int)memory.memory[getProgramCounter()];
+    instructionString << hex << setw(2) << setfill('0') << (int)memory.memory[getProgramCounter()+1];
 
     setCurrentInstruction(instructionString.str()); 
 
@@ -191,7 +192,7 @@ void fetchInstructions(uint8_t memory[]){
     debug_printCurrentInstruction(getCurrentInstruction());  
 }
 
-void decodeAndExecuteInstructions(string currentInstruction, Screen screen, uint8_t memory[4096]){
+void decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory memory){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
