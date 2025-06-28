@@ -53,10 +53,6 @@ uint8_t fontData[] = {
 
 }; 
 
-void loadDataIntoMemory(uint8_t fontDataArray[], Memory memory);  
-
-void loadRomIntoMemory(Memory memory, std::string romFileLocation, uint16_t* programCounter); 
-
 void setProgramCounter(uint16_t * programCounter, int value); 
 
 void incrementProgramCounter(uint16_t * programCounter, int value); 
@@ -100,8 +96,6 @@ int convertCharToHex(char Value);
  
 
 // Use for debugging ------------------------------------------------------------------------------- 
-
-void debug_printMemory(uint8_t memory[]); 
 
 // TODO: Expand this to include other registers 
 void debug_printCurrentInstruction(std::string Instruction); 
