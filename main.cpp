@@ -6,7 +6,9 @@
 #include "Memory.h" 
 #include "Memory.cpp" 
 
-#include <SDL2/SDL.h> 
+// #include <SDL2/SDL.h> 
+
+#include "src/include/SDL2/SDL.h" 
 
 using namespace std; 
 
@@ -29,11 +31,11 @@ int main (int argv, char** args){
             }
 
 
-            memory.loadDataIntoMemory(fontData, memory); 
+            memory.loadFontDataIntoMemory(fontData, memory); 
             
             cout << "PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
 
-            loadRomIntoMemory(memory, romFileLocation, &programCounter); 
+            memory.loadRomIntoMemory(memory, romFileLocation, &programCounter); 
 
             cout << "PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
 

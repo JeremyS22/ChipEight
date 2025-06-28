@@ -10,51 +10,6 @@
 
 using namespace std; 
 
-/* void loadDataIntoMemory(uint8_t fontDataArray[], Memory memory){
-
-    cout << "Status: (CPU) Loading font data into memory" << endl; 
-
-    int tempMemLocation = 0x050; 
-    
-    for (int i = 0; i < 80; i++){ 
-        // cout << int(fontDataArray[i]) << endl; 
-        memory.memory[tempMemLocation]= fontDataArray[i]; 
-        tempMemLocation++; 
-    }
-} */
-
-void loadRomIntoMemory(Memory memory, string romFileLocation, uint16_t* programCounter){    
-    string romParser; 
-    fstream rom; 
-    rom.open(romFileLocation, ios::in); 
-    if(rom.is_open()){
-        cout << "Status: (CPU) OPENED ROM" << endl; 
-
-        int i = 0x200; 
-            while (getline(rom, romParser)){
-
-                istringstream iStreamObject(romParser);
-
-
-                // memory[i] = romParser; 
-                for (char& romData : romParser) {
-                        // converts binary file data into hexadecimal 
-                        cout << hex << setw(2) << setfill('0') << (int)(unsigned char)romData << " \n"; 
-                        
-                        memory.memory[i] = romData; 
-                        i++; 
-                }
-            }
-
-        *programCounter = 0x200; 
-        cout << "Status: (CPU) Contents read, Closing rom" << endl; 
-        rom.close(); 
-    }
-    else
-        cout << "Status: (CPU) Could not read rom\n  Check file path" << endl; 
-
-}
-
 void setProgramCounter(uint16_t * programCounter, int value){
     *programCounter = value;  
 }
@@ -276,18 +231,6 @@ int convertCharToHex(char Value){
 }
 
 // Use for debugging ------------------------------------------------------------------------------- 
-
-void debug_printMemory(uint8_t memory[]){
-
-// Note: font data at 0x050, program data at 0x200 
-    for (int i = 0x050; i < 1000; i++){
-                    cout << "Address " << i << ": ";  
-                    cout << hex << setw(2) << setfill('0') << int(memory[i]) << " " << endl; 
-                    
-                   /*  if(i % 3 == 1)
-                        cout << "\n" << endl;  */
-    }
-}
 
 // TODO: Expand this to include other registers 
 void debug_printCurrentInstruction(string Instruction){
