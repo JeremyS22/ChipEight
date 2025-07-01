@@ -111,7 +111,7 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
     uint16_t spriteDataAddress = regist_I; 
     
     for(int i = 0; i < spriteHeight; i++){
-        uint16_t binaryVal = memory.memory[spriteDataAddress]; 
+        uint16_t binaryVal = memory.systemMemory[spriteDataAddress]; 
         bitset<16> binaryValue (binaryVal); 
 
         // TODO: add to debugger 
@@ -136,8 +136,8 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
 void fetchInstructions(Memory memory){
 
     stringstream instructionString;
-    instructionString << hex << setw(2) << setfill('0') << (int)memory.memory[getProgramCounter()];
-    instructionString << hex << setw(2) << setfill('0') << (int)memory.memory[getProgramCounter()+1];
+    instructionString << hex << setw(2) << setfill('0') << (int)memory.systemMemory[getProgramCounter()];
+    instructionString << hex << setw(2) << setfill('0') << (int)memory.systemMemory[getProgramCounter()+1];
 
     setCurrentInstruction(instructionString.str()); 
 
