@@ -6,8 +6,6 @@
 #include "Memory.h" 
 #include "Memory.cpp" 
 
-// #include <SDL2/SDL.h> 
-
 #include "src/include/SDL2/SDL.h" 
 
 using namespace std; 
