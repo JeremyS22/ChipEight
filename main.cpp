@@ -76,7 +76,7 @@ int main (int argv, char** args){
             cout << "PROGRAM COUNTER " << getProgramCounter() << endl;   
 
             // TODO: delete these later 
-            unsigned char testVar = memory.memory[regist_I]; 
+            unsigned char testVar = memory.systemMemory[regist_I]; 
             cout << "Sprite to be drawn " << int(testVar) << endl; 
             SDL_Delay(10000); 
         }

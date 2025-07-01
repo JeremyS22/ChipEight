@@ -14,7 +14,7 @@ void Memory::loadFontDataIntoMemory(uint8_t fontDataArray[], Memory& memory){
     
     for (int i = 0; i < 80; i++){ 
         // cout << int(fontDataArray[i]) << endl; 
-        memory.memory[tempMemLocation]= fontDataArray[i]; 
+        memory.systemMemory[tempMemLocation]= fontDataArray[i]; 
         tempMemLocation++; 
     }
 } 
@@ -35,7 +35,7 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, uint16_t*
                         // converts binary file data into hexadecimal 
                         cout << hex << setw(2) << setfill('0') << (int)(unsigned char)romData << " \n"; 
                         
-                        memory.memory[i] = romData; 
+                        memory.systemMemory[i] = romData; 
                         i++; 
                 }
             }
@@ -53,7 +53,7 @@ void Memory::debug_printMemory(Memory memory, bool spaceEveryFourNibbles){
 // Note: font data at 0x050, program data at 0x200 
     for (int i = 0x050; i < 1000; i++){
         cout << "Address " << i << ": ";  
-        cout << hex << setw(2) << setfill('0') << int(memory.memory[i]) << " " << endl; 
+        cout << hex << setw(2) << setfill('0') << int(memory.systemMemory[i]) << " " << endl; 
         
         debug_addSpacing(i, spaceEveryFourNibbles); 
     }

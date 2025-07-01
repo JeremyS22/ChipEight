@@ -13,10 +13,10 @@ class Memory {
 
     public: 
 
-    uint8_t memory[4096];
+    uint8_t systemMemory[4096];
 
     Memory(){
-        memory[4096]; 
+        systemMemory[4096]; 
     };  
     ~Memory(){}; 
 
