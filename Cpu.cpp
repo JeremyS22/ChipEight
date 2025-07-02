@@ -119,7 +119,8 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
 
         for(int j = 7; j >= 0; j--){
             if(binaryValue[j] == 1){
-                SDL_SetRenderDrawColor(screen.renderer, 255, 0, 255, 255); 
+                // TODO: add custom renderer color 
+                SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1); 
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
             }
             screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j]); 

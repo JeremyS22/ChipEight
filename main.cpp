@@ -7,6 +7,8 @@
 #include "Memory.cpp" 
 
 #include "src/include/SDL2/SDL.h" 
+#include <chrono> 
+#include <thread> 
 
 using namespace std; 
 
@@ -14,13 +16,24 @@ int main (int argv, char** args){
 
     Screen screen;  
     Memory memory; 
-
-    screen.initializeScreen(); 
-
+    
+    int instructionsPerSecond = 700; 
+    
     bool windowIsRunning = true; 
     SDL_Event windowEvent; 
 
     string romFileLocation = "ROMS/IBM Logo.ch8"; 
+    
+
+    screen.initializeScreen(); 
+
+    memory.loadFontDataIntoMemory(fontData, memory); 
+    
+    cout << "PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
+
+    memory.loadRomIntoMemory(memory, romFileLocation, &programCounter); 
+
+    cout << "PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
 
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){
@@ -28,57 +41,11 @@ int main (int argv, char** args){
                 break; 
             }
 
-
-            memory.loadFontDataIntoMemory(fontData, memory); 
-            
-            cout << "PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
-
-            memory.loadRomIntoMemory(memory, romFileLocation, &programCounter); 
-
-            cout << "PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
-
-            // debug_printMemory(memory);     
-
-            fetchInstructions(memory); 
-
-            cout << "PROGRAM COUNTER after fetching cpu instruction " << getProgramCounter() << endl;  
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory); 
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);     
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);     
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);     
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);     
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);   
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);   
-
-            fetchInstructions(memory); 
-
-            decodeAndExecuteInstructions(currentInstruction, screen, memory);   
-
-            cout << "PROGRAM COUNTER " << getProgramCounter() << endl;   
-
-            // TODO: delete these later 
-            unsigned char testVar = memory.systemMemory[regist_I]; 
-            cout << "Sprite to be drawn " << int(testVar) << endl; 
-            SDL_Delay(10000); 
+            for(int instructionCounter = 0; instructionCounter < instructionsPerSecond; instructionCounter++){
+                fetchInstructions(memory); 
+                decodeAndExecuteInstructions(currentInstruction, screen, memory); 
+            }
+            this_thread::sleep_for(chrono::seconds(1)); 
         }
     }   
 
