@@ -15,4 +15,4 @@ Additional Features I may add:
 - Customizations to Graphics and Sounds
 
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
-_IBM Boot Logo rom fully running_ 
+                     _IBM Boot Logo rom fully rendered and running on the ChipEight_ 
