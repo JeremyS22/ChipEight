@@ -8,12 +8,11 @@ using namespace std;
 
 void Memory::loadFontDataIntoMemory(uint8_t fontDataArray[], Memory& memory){
 
-    cout << "Status: (CPU) Loading font data into memory" << endl; 
+    cout << "Status: (Memory) Loading font data into memory" << endl; 
 
     int tempMemLocation = 0x050; 
     
     for (int i = 0; i < 80; i++){ 
-        // cout << int(fontDataArray[i]) << endl; 
         memory.systemMemory[tempMemLocation]= fontDataArray[i]; 
         tempMemLocation++; 
     }
@@ -23,30 +22,30 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, uint16_t*
     string romParser; 
     fstream rom; 
     rom.open(romFileLocation, ios::in); 
-    if(rom.is_open()){
-        cout << "Status: (CPU) OPENED ROM" << endl; 
+    if(!rom.is_open()){
+        cout << "Status: (Memory) Could not read rom\n  Check file path" << endl; 
+    }
+    else {
+        cout << "Status: (Memory) OPENED ROM" << endl; 
 
         int i = 0x200; 
-            while (getline(rom, romParser)){
+        while (getline(rom, romParser)){
 
-                istringstream iStreamObject(romParser);
+            istringstream iStreamObject(romParser);
 
-                for (char& romData : romParser) {
-                        // converts binary file data into hexadecimal 
-                        cout << hex << setw(2) << setfill('0') << (int)(unsigned char)romData << " \n"; 
-                        
-                        memory.systemMemory[i] = romData; 
-                        i++; 
-                }
+            for (char& romData : romParser) {
+                    // converts binary file data into hexadecimal 
+                    cout << hex << setw(2) << setfill('0') << (int)(unsigned char)romData << " \n"; 
+                    
+                    memory.systemMemory[i] = romData; 
+                    i++; 
             }
+        }
 
         *programCounter = 0x200; 
-        cout << "Status: (CPU) Contents read, Closing rom" << endl; 
+        cout << "Status: (Memory) Contents read, Closing rom" << endl; 
         rom.close(); 
     }
-    else
-        cout << "Status: (CPU) Could not read rom\n  Check file path" << endl; 
-
 }
 
 void Memory::debug_printMemory(Memory memory, bool spaceEveryFourNibbles){
