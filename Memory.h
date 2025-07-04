@@ -2,6 +2,7 @@
 #define MEMORY_H  
 
 #include <cstdint> 
+#include <stack>  
 
 class Memory {
     
@@ -10,10 +11,12 @@ class Memory {
     // Use for debugging ------------------------------------------------------------------------------- 
 
     void debug_addSpacing(int i, bool spaceEveryFourNibbles); 
-
+    
     public: 
-
+    
     uint8_t systemMemory[4096];
+    // have stack big enough for 16 2 byte address, may make bigger later 
+    std::stack<uint16_t> systemStack; 
 
     Memory(){
         systemMemory[4096]; 
