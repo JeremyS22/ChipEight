@@ -22,22 +22,25 @@ int main (int argv, char** args){
     bool windowIsRunning = true; 
     SDL_Event windowEvent; 
 
-    string romFileLocation = "ROMS/IBM Logo.ch8"; 
-    
+    string romFileLocation = "ROMS/Pong (1 player).ch8"; 
+        
 
     screen.initializeScreen(); 
 
     memory.loadFontDataIntoMemory(fontData, memory); 
     
-    cout << "PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
+    cout << "Status: (Main) PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
 
     memory.loadRomIntoMemory(memory, romFileLocation, &programCounter); 
 
-    cout << "PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
+    cout << "Status: (Main) PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
+
+    // memory.debug_printMemory(memory, true); 
 
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){
             if(windowEvent.type == SDL_QUIT){
+                windowIsRunning == false; 
                 break; 
             }
 

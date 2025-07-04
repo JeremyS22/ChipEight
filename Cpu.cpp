@@ -60,6 +60,9 @@ string getLastThreeNibbles (string currentInstruction){
 
 }
 
+// 0000
+/*Instruction to execute machine language routine (Not implementing)*/
+
 // 00e0
 void clearScreenInstruction(Screen screen){
     SDL_RenderClear(screen.renderer); 
@@ -143,7 +146,7 @@ void fetchInstructions(Memory memory){
     setCurrentInstruction(instructionString.str()); 
 
     incrementProgramCounter(&programCounter, 2); 
-    cout << getProgramCounter() << endl; 
+    cout << "Program Counter " << getProgramCounter() << endl; 
 
     debug_printCurrentInstruction(getCurrentInstruction());  
 }
