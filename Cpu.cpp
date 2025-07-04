@@ -4,6 +4,7 @@
 #include <sstream> 
 #include <iomanip> 
 #include <bitset> 
+#include <stack> 
 
 #include "Screen.h" 
 #include "Memory.h" 
@@ -35,6 +36,10 @@ string getCurrentInstruction (){
     return currentInstruction; 
 }
 
+void pushProgramCounterOnStack(Memory memory){
+    memory.systemStack.push(getProgramCounter());  
+}
+
 string getLastTwoNibbles (string currentInstruction){
     stringstream nibbleParser;
 
@@ -52,7 +57,7 @@ string getLastThreeNibbles (string currentInstruction){
     stringstream nibbleParser;
 
     nibbleParser << "0" << currentInstruction[1] << currentInstruction[2] << currentInstruction[3]; 
-        string lastThreeNibbles = nibbleParser.str(); 
+    string lastThreeNibbles = nibbleParser.str(); 
 
     cout << lastThreeNibbles << endl; 
 
@@ -74,6 +79,11 @@ void jumpToAddress(string address){
     setProgramCounter(&programCounter, stoi(address, nullptr, 16));   
 }
 
+// 2nnn
+void putAddressOnStack(string address, Memory memory){
+    pushProgramCounterOnStack(memory); 
+    setProgramCounter(&programCounter, stoi(address, nullptr, 16)); 
+}
 
 // 6xnn 
 void setValueInRegisterVX (char secondNibble, string value){
@@ -174,10 +184,11 @@ void decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memo
             case '1':
                 // call jump address function 1nnn  
                 // Note: n = the 12 bit address  
-                jumpToAddress(getLastThreeNibbles(currentInstruction));  // call function 
+                jumpToAddress(getLastThreeNibbles(currentInstruction));  
                 break;
             case '2': 
-                getCurrentInstruction(); // call the subroutine call function 2nnn 
+                // call the subroutine call function 2nnn 
+                putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
                 break;
             case '3': 
                 getCurrentInstruction(); // call skip next instruction 3xkk 

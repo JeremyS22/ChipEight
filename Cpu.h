@@ -10,8 +10,6 @@
 // 0x200 to 0xFFF Chip 8 program/data space 
 
 
-// have stack big enough for 16 2 byte address, may make bigger later 
-uint16_t stack[16]; 
 
 uint8_t delayTimer; 
 

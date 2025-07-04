@@ -23,7 +23,7 @@ int main (int argv, char** args){
     SDL_Event windowEvent; 
 
     string romFileLocation = "ROMS/Pong (1 player).ch8"; 
-        
+
 
     screen.initializeScreen(); 
 
@@ -50,7 +50,7 @@ int main (int argv, char** args){
             }
             this_thread::sleep_for(chrono::seconds(1)); 
         }
-    }   
+    }    
 
     screen.destroyCreatedWindow(); 
 
