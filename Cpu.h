@@ -64,11 +64,13 @@ void setCurrentInstruction (std::string Instruction);
 
 std::string getCurrentInstruction (); 
 
-void findRegisterOfNibble(char nibble, std::string lastTwoNibbles); 
+void pushProgramCounterOnStack(Memory memory); 
 
 std::string getLastTwoNibbles (std::string currentInstruction); 
 
 std::string getLastThreeNibbles (std::string currentInstruction); 
+
+// 0000 (Not implementing)
 
 // 00e0 
 void clearScreenInstruction(Screen screen);  
@@ -76,8 +78,17 @@ void clearScreenInstruction(Screen screen);
 // 1nnn 
 void jumpToAddress(std::string address); 
 
+// 2nnn
+void putAddressOnStack(std::string address, Memory memory); 
+
+// 3xnn 
+void skipInstructionIfVXEqualsNN(char secondNibble, std::string value); 
+
 // 6xnn 
 void setValueInRegisterVX (char secondNibble, std::string value); 
+
+// 7xnn
+void addValueToRegisterVX (char secondNibble, std::string value); 
 
 // annn 
 void loadAddressInRegisterI(std::string address); 

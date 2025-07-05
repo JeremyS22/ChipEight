@@ -35,7 +35,7 @@ int main (int argv, char** args){
 
     cout << "Status: (Main) PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
 
-    // memory.debug_printMemory(memory, true); 
+    
 
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){
@@ -51,7 +51,7 @@ int main (int argv, char** args){
             this_thread::sleep_for(chrono::seconds(1)); 
         }
     }    
-
+ 
     screen.destroyCreatedWindow(); 
 
 return 0; 
