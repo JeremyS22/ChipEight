@@ -83,6 +83,19 @@ void jumpToAddress(string address){
 void putAddressOnStack(string address, Memory memory){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(&programCounter, stoi(address, nullptr, 16)); 
+    
+    cout << "Previous Program Counter on stack, new address for Program Counter " << getProgramCounter() << endl; 
+    debug_printCurrentInstruction(getCurrentInstruction()); 
+}
+
+// 3xnn 
+void skipInstructionIfVXEqualsNN(char secondNibble, string value){
+    int X = convertCharToHex(secondNibble); 
+    int lastTwoNibbles = stoi(value, nullptr, 16); 
+    if(regist_V[X] == lastTwoNibbles){
+        incrementProgramCounter(&programCounter, 2); 
+        cout << "Program Counter " << getProgramCounter() << endl; 
+    }
 }
 
 // 6xnn 
@@ -191,7 +204,8 @@ void decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memo
                 putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
                 break;
             case '3': 
-                getCurrentInstruction(); // call skip next instruction 3xkk 
+                // call skip next instruction 3xkk 
+                skipInstructionIfVXEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '4': 
                 getCurrentInstruction(); // call function 
