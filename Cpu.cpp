@@ -6,10 +6,14 @@
 #include <bitset> 
 #include <stack> 
 
+#include "Cpu.h"
 #include "Screen.h" 
 #include "Memory.h" 
 
 using namespace std; 
+
+// for run older ROMs from 1980s and 1970s 
+bool COSMAC_VIP_IS_FLAG_ON = false; 
 
 void setProgramCounter(uint16_t * programCounter, int value){
     *programCounter = value;  
@@ -65,7 +69,7 @@ string getLastThreeNibbles (string currentInstruction){
 
 }
 
-// 0000
+// 0nnn
 /*Instruction to execute machine language routine (Not implementing)*/
 
 // 00e0
@@ -86,6 +90,7 @@ void putAddressOnStack(string address, Memory memory){
     
     cout << "Previous Program Counter on stack, new address for Program Counter " << getProgramCounter() << endl; 
     debug_printCurrentInstruction(getCurrentInstruction()); 
+    cout << "\n" << endl;  
 }
 
 // 3xnn 
@@ -159,6 +164,20 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
     }
     SDL_RenderPresent(screen.renderer); 
 }
+
+// fx55 
+void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON){
+    int X = convertCharToHex(secondNibble); 
+    uint16_t tempAddress = regist_I; 
+    for (int i = 0; i < X; i++){
+        memory.systemMemory[tempAddress] = regist_V[i]; 
+        tempAddress++; 
+    }
+
+    if (COSMAC_VIP_FLAG_IS_ON == true){
+        regist_I = tempAddress; 
+    }
+} 
 
 void fetchInstructions(Memory memory){
 
@@ -247,6 +266,25 @@ void decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memo
                 break;
             case 'f': 
                 getCurrentInstruction(); // call function 
+                switch (thirdNibble){
+                    case '1':
+                        // call fx1e  
+                        getCurrentInstruction(); // call function 
+                        break; 
+                    case '3':
+                        // call fx33 
+                        getCurrentInstruction(); // call function 
+                    break; 
+                    case '5':
+                        // call fx55  
+                        storeRegistersToMemory(secondNibble, memory, COSMAC_VIP_FLAG_IS_ON); 
+                    break; 
+                    case '6':
+                        // call fx65 
+                        getCurrentInstruction(); // call function 
+                    break; 
+                } 
+                break;
                 break;
             default: 
                 cout << "Status: (CPU) Error, Opcode not found " << endl; 
