@@ -10,6 +10,7 @@
 // 0x200 to 0xFFF Chip 8 program/data space 
 
 
+extern bool COSMAC_VIP_FLAG_IS_ON; 
 
 uint8_t delayTimer; 
 
@@ -70,7 +71,7 @@ std::string getLastTwoNibbles (std::string currentInstruction);
 
 std::string getLastThreeNibbles (std::string currentInstruction); 
 
-// 0000 (Not implementing)
+// 0nnn (Not implementing)
 
 // 00e0 
 void clearScreenInstruction(Screen screen);  
