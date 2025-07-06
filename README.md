@@ -17,8 +17,9 @@ Additional Features I may add:
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 _IBM Boot Logo rom fully rendered and running on the ChipEight_ 
 
-Test ROMs that run so far: 
-
 ![Screenshot 2025-07-05 ](https://github.com/user-attachments/assets/80045ea2-452f-48b2-ba56-1c59406104b8)
 _Timendus' Chip 8 splash screen rom_ 
+Thanks to Timendus for this very helpful resource 😊, ROM source: 
+https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file 
+
 
