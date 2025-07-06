@@ -1,6 +1,6 @@
 # ChipEight Emulator
 
-A project dedicated towards learing and implementing a emulator that runs Chip 8 games and apps.  
+A project dedicated towards learning and implementing a emulator that runs Chip 8 games and apps.  
 
 Chip 8 is a interpreted programming language that was used to write various software/games and ran on several devices since the 1970's. 
 
@@ -15,4 +15,10 @@ Additional Features I may add:
 - Customizations to Graphics and Sounds
 
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
-                     _IBM Boot Logo rom fully rendered and running on the ChipEight_ 
+_IBM Boot Logo rom fully rendered and running on the ChipEight_ 
+
+Test ROMs that run so far: 
+
+![Screenshot 2025-07-05 ](https://github.com/user-attachments/assets/80045ea2-452f-48b2-ba56-1c59406104b8)
+_Timendus' Chip 8 splash screen rom_ 
+
