@@ -1,10 +1,7 @@
 #include <iostream> 
 #include "Cpu.h" 
-#include "Cpu.cpp" 
 #include "Screen.h"
-#include "Screen.cpp" 
 #include "Memory.h" 
-#include "Memory.cpp" 
 
 #include "src/include/SDL2/SDL.h" 
 #include <chrono> 
@@ -16,26 +13,26 @@ int main (int argv, char** args){
 
     Screen screen;  
     Memory memory; 
+    Cpu cpu; 
     
     int instructionsPerSecond = 700; 
     
     bool windowIsRunning = true; 
     SDL_Event windowEvent; 
 
-    string romFileLocation = "ROMS/Pong (1 player).ch8"; 
-
+    string romFileLocation = "ROMS/3-corax+.ch8"; 
 
     screen.initializeScreen(); 
 
-    memory.loadFontDataIntoMemory(fontData, memory); 
+    memory.loadFontDataIntoMemory(cpu.fontData, memory); 
     
-    cout << "Status: (Main) PROGRAM COUNTER after loading font data in Memory " << getProgramCounter() << endl; 
+    cout << "Status: (Main) PROGRAM COUNTER after loading font data in Memory " << cpu.getProgramCounter() << endl; 
 
-    memory.loadRomIntoMemory(memory, romFileLocation, &programCounter); 
+    memory.loadRomIntoMemory(memory, romFileLocation, &cpu.getProgramCounterReference()); 
 
-    cout << "Status: (Main) PROGRAM COUNTER after loading roms in Memory " << getProgramCounter() << endl; 
+    cout << "Status: (Main) PROGRAM COUNTER after loading roms in Memory " << cpu.getProgramCounter() << endl; 
 
-    
+    // memory.debug_printMemory(memory, true); 
 
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){
@@ -45,13 +42,13 @@ int main (int argv, char** args){
             }
 
             for(int instructionCounter = 0; instructionCounter < instructionsPerSecond; instructionCounter++){
-                fetchInstructions(memory); 
-                decodeAndExecuteInstructions(currentInstruction, screen, memory); 
+                cpu.fetchInstructions(memory); 
+                cpu.decodeAndExecuteInstructions(cpu.currentInstruction, screen, memory); 
             }
             this_thread::sleep_for(chrono::seconds(1)); 
         }
     }    
- 
+
     screen.destroyCreatedWindow(); 
 
 return 0; 

@@ -3,6 +3,7 @@
 
 #include <cstdint> 
 #include <stack>  
+#include <string> 
 
 class Memory {
     
