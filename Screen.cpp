@@ -1,8 +1,7 @@
-#ifndef CPU_H 
-#define CPU_H
+#include <iostream> 
 
 #include "Screen.h" 
-#include <iostream> 
+#include "Cpu.h"
 
 using namespace std; 
 
@@ -29,13 +28,13 @@ int Screen::getScalingMultipiler(){
 }
 
 void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value){
-        
+        Cpu cpu; 
         if (value == 1 && pixelStatus[coordinateX][coordinateY] == 0){
                 pixelStatus[coordinateX][coordinateY] = value; 
         }
         else if (value == 1 && pixelStatus[coordinateX][coordinateY] == 1){
                 pixelStatus[coordinateX][coordinateY] = 0; 
-                regist_V[0xF] = 1; 
+                cpu.regist_V[0xF] = 1; 
         }
         
 }
@@ -45,5 +44,3 @@ void Screen::destroyCreatedWindow(){
         SDL_DestroyRenderer(renderer); 
         SDL_Quit();  
 } 
-
-#endif 

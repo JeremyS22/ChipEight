@@ -13,38 +13,46 @@
 using namespace std; 
 
 // for run older ROMs from 1980s and 1970s 
-bool COSMAC_VIP_IS_FLAG_ON = false; 
+bool COSMAC_VIP_FLAG_IS_ON = false; 
 
-void setProgramCounter(uint16_t * programCounter, int value){
+Cpu::Cpu(){
+    regist_I = 0; 
+}
+
+void Cpu::setProgramCounter(uint16_t * programCounter, int value){
     *programCounter = value;  
 }
 
-void incrementProgramCounter(uint16_t * programCounter, int value){
+void Cpu::incrementProgramCounter(uint16_t * programCounter, int value){
     *programCounter += value;  
 }
 
 // including this just in case, may delete this later 
-void decrementProgramCounter(uint16_t * programCounter, int value){
+void Cpu::decrementProgramCounter(uint16_t * programCounter, int value){
     *programCounter -= value;  
 }
 
-uint16_t getProgramCounter (){
+uint16_t Cpu::getProgramCounter(){
     return programCounter; 
 }
 
-void setCurrentInstruction (string Instruction) {
+uint16_t& Cpu::getProgramCounterReference(){
+    return programCounter; 
+}
+
+void Cpu::setCurrentInstruction (string Instruction) {
     currentInstruction = Instruction; 
 }
 
-string getCurrentInstruction (){
+string Cpu::getCurrentInstruction(){
     return currentInstruction; 
 }
 
-void pushProgramCounterOnStack(Memory memory){
+void Cpu::pushProgramCounterOnStack(Memory memory){
     memory.systemStack.push(getProgramCounter());  
 }
 
-string getLastTwoNibbles (string currentInstruction){
+string Cpu::getLastTwoNibbles (string currentInstruction){
     stringstream nibbleParser;
 
     // TODO: Check if we might have to delete the first two 0's, since Vx registers are 8 bits, not 16 
@@ -57,7 +65,7 @@ string getLastTwoNibbles (string currentInstruction){
 
 }
 
-string getLastThreeNibbles (string currentInstruction){
+string Cpu::getLastThreeNibbles (string currentInstruction){
     stringstream nibbleParser;
 
     nibbleParser << "0" << currentInstruction[1] << currentInstruction[2] << currentInstruction[3]; 
@@ -73,18 +81,18 @@ string getLastThreeNibbles (string currentInstruction){
 /*Instruction to execute machine language routine (Not implementing)*/
 
 // 00e0
-void clearScreenInstruction(Screen screen){
+void Cpu::clearScreenInstruction(Screen screen){
     SDL_RenderClear(screen.renderer); 
     SDL_RenderPresent(screen.renderer); 
 }
 
 // 1nnn 
-void jumpToAddress(string address){
+void Cpu::jumpToAddress(string address){
     setProgramCounter(&programCounter, stoi(address, nullptr, 16));   
 }
 
 // 2nnn
-void putAddressOnStack(string address, Memory memory){
+void Cpu::putAddressOnStack(string address, Memory memory){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(&programCounter, stoi(address, nullptr, 16)); 
     
@@ -94,7 +102,7 @@ void putAddressOnStack(string address, Memory memory){
 }
 
 // 3xnn 
-void skipInstructionIfVXEqualsNN(char secondNibble, string value){
+void Cpu::skipInstructionIfVXEqualsNN(char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     if(regist_V[X] == lastTwoNibbles){
@@ -104,29 +112,29 @@ void skipInstructionIfVXEqualsNN(char secondNibble, string value){
 }
 
 // 6xnn 
-void setValueInRegisterVX (char secondNibble, string value){
+void Cpu::setValueInRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     regist_V[X] = lastTwoNibbles; 
 }
 
 // 7xnn
-void addValueToRegisterVX (char secondNibble, string value){
+void Cpu::addValueToRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int originalVXValue = regist_V[X]; 
     regist_V[X] = originalVXValue + stoi(value, nullptr, 16);     
 }
 
 // annn 
-void loadAddressInRegisterI(string address){
+void Cpu::loadAddressInRegisterI(string address){
     // add to debugger 
     cout << address << "Address being stored in Register I " << hex << setw(2) << setfill('0') << stoi(address, nullptr, 16) << endl; 
     regist_I = stoi(address, nullptr, 16); 
 }
 
 // dxyn 
-void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
-                            Memory memory ){
+void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
+                            Memory memory){
 
     // secondNibble = VX, thirdNibble = VY 
     int X = convertCharToHex(secondNibble);  
@@ -166,7 +174,7 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
 }
 
 // fx55 
-void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON){
+void Cpu::storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
     uint16_t tempAddress = regist_I; 
     for (int i = 0; i < X; i++){
@@ -179,7 +187,7 @@ void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FL
     }
 } 
 
-void fetchInstructions(Memory memory){
+void Cpu::fetchInstructions(Memory memory){
 
     stringstream instructionString;
     instructionString << hex << setw(2) << setfill('0') << (int)memory.systemMemory[getProgramCounter()];
@@ -193,7 +201,7 @@ void fetchInstructions(Memory memory){
     debug_printCurrentInstruction(getCurrentInstruction());  
 }
 
-void decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory memory){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory memory){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
@@ -291,7 +299,7 @@ void decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memo
         }
 }
  
-int convertCharToHex(char Value){
+int Cpu::convertCharToHex(char Value){
         stringstream hexString; 
         hexString << "0x" << Value;     
     return stoi(hexString.str(), nullptr, 16);    
@@ -300,7 +308,7 @@ int convertCharToHex(char Value){
 // Use for debugging ------------------------------------------------------------------------------- 
 
 // TODO: Expand this to include other registers 
-void debug_printCurrentInstruction(string Instruction){
+void Cpu::debug_printCurrentInstruction(string Instruction){
     cout << "Current Instruction: " << Instruction << endl; 
 
 }

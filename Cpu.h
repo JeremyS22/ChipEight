@@ -1,3 +1,6 @@
+#ifndef CPU_H
+#define CPU_H  
+
 #include <iostream> 
 #include <cstdint> 
 #include <string> 
@@ -9,48 +12,54 @@
 // font data at 0x050 - 0x09F  
 // 0x200 to 0xFFF Chip 8 program/data space 
 
-
 extern bool COSMAC_VIP_FLAG_IS_ON; 
 
-uint8_t delayTimer; 
+class Cpu {
+    public:
+        
 
-uint8_t soundTimer; 
+        uint8_t delayTimer; 
 
-uint16_t programCounter; 
+        uint8_t soundTimer; 
 
-uint8_t stackPointer; 
+        uint16_t programCounter; 
 
-// TODO: set constructor to intialize this to 0 
-// points at locations in memory 
-uint16_t regist_I = 0; 
+        uint8_t stackPointer; 
 
-uint8_t regist_V[16]; 
- 
-// VF is used as a carry flag register by some instructions, set to either 1 or 0 
+        // TODO: set constructor to intialize this to 0 
+        // points at locations in memory 
+        uint16_t regist_I; 
 
-// TODO: set this as a private member 
-std::string currentInstruction; 
+        uint8_t regist_V[16]; 
 
-uint8_t fontData[] = {
+        // TODO: set this as a private member 
+        std::string currentInstruction; 
 
-    0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-    0x20, 0x60, 0x20, 0x20, 0x70, // 1
-    0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
-    0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
-    0x90, 0x90, 0xF0, 0x10, 0x10, // 4
-    0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
-    0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
-    0xF0, 0x10, 0x20, 0x40, 0x40, // 7
-    0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
-    0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-    0xF0, 0x90, 0xF0, 0x90, 0x90, // A
-    0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
-    0xF0, 0x80, 0x80, 0x80, 0xF0, // C
-    0xE0, 0x90, 0x90, 0x90, 0xE0, // D
-    0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
-    0xF0, 0x80, 0xF0, 0x80, 0x80  // F 
 
-}; 
+        uint8_t fontData[80] =  {
+        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+        0x20, 0x60, 0x20, 0x20, 0x70, // 1
+        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+        0xF0, 0x80, 0xF0, 0x80, 0x80  // F 
+
+    }; 
+
+    Cpu(); 
+    ~Cpu(){}
+
+
 
 void setProgramCounter(uint16_t * programCounter, int value); 
 
@@ -59,17 +68,19 @@ void incrementProgramCounter(uint16_t * programCounter, int value);
 // including this just in case, may delete this later 
 void decrementProgramCounter(uint16_t * programCounter, int value); 
 
-uint16_t getProgramCounter (); 
+uint16_t getProgramCounter(); 
+
+uint16_t& getProgramCounterReference(); 
 
 void setCurrentInstruction (std::string Instruction); 
 
-std::string getCurrentInstruction (); 
+std::string getCurrentInstruction(); 
 
 void pushProgramCounterOnStack(Memory memory); 
 
-std::string getLastTwoNibbles (std::string currentInstruction); 
+std::string getLastTwoNibbles(std::string currentInstruction); 
 
-std::string getLastThreeNibbles (std::string currentInstruction); 
+std::string getLastThreeNibbles(std::string currentInstruction); 
 
 // 0nnn (Not implementing)
 
@@ -86,10 +97,10 @@ void putAddressOnStack(std::string address, Memory memory);
 void skipInstructionIfVXEqualsNN(char secondNibble, std::string value); 
 
 // 6xnn 
-void setValueInRegisterVX (char secondNibble, std::string value); 
+void setValueInRegisterVX(char secondNibble, std::string value); 
 
 // 7xnn
-void addValueToRegisterVX (char secondNibble, std::string value); 
+void addValueToRegisterVX(char secondNibble, std::string value); 
 
 // annn 
 void loadAddressInRegisterI(std::string address); 
@@ -97,6 +108,9 @@ void loadAddressInRegisterI(std::string address);
 // dxyn 
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
                             Memory memory); 
+
+// fx55 
+void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON); 
 
 void fetchInstructions(Memory memory); 
 
@@ -110,3 +124,6 @@ int convertCharToHex(char Value);
 // TODO: Expand this to include other registers 
 void debug_printCurrentInstruction(std::string Instruction); 
 
+}; 
+
+#endif 
