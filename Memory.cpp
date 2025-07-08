@@ -1,24 +1,26 @@
-#include "Memory.h" 
 #include <iostream>
 #include <fstream> 
 #include <sstream>
 #include <iomanip>
 
+#include "Memory.h"
+#include "Cpu.h"
+
 using namespace std;  
 
-void Memory::loadFontDataIntoMemory(uint8_t fontDataArray[], Memory& memory){
+void Memory::loadFontDataIntoMemory(Cpu cpu, Memory& memory){
 
     cout << "Status: (Memory) Loading font data into memory" << endl; 
 
     int tempMemLocation = 0x050; 
     
     for (int i = 0; i < 80; i++){ 
-        memory.systemMemory[tempMemLocation]= fontDataArray[i]; 
+        memory.systemMemory[tempMemLocation]= cpu.fontData[i]; 
         tempMemLocation++; 
     }
 } 
 
-void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, uint16_t* programCounter){    
+void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu){    
     string romParser; 
     fstream rom; 
     rom.open(romFileLocation, ios::in); 
@@ -42,7 +44,7 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, uint16_t*
             }
         }
 
-        *programCounter = 0x200; 
+        cpu.setProgramCounter(cpu.getProgramCounterPointer(),0x200); 
         cout << "Status: (Memory) Contents read, Closing rom" << endl; 
         rom.close(); 
     }

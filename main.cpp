@@ -2,6 +2,7 @@
 #include "Cpu.h" 
 #include "Screen.h"
 #include "Memory.h" 
+#include "Cpu.h"
 
 #include "src/include/SDL2/SDL.h" 
 #include <chrono> 
@@ -20,19 +21,19 @@ int main (int argv, char** args){
     bool windowIsRunning = true; 
     SDL_Event windowEvent; 
 
-    string romFileLocation = "ROMS/3-corax+.ch8"; 
+    string romFileLocation = "ROMS/1-chip8-logo.ch8"; 
 
     screen.initializeScreen(); 
 
-    memory.loadFontDataIntoMemory(cpu.fontData, memory); 
+    memory.loadFontDataIntoMemory(cpu, memory); 
     
     cout << "Status: (Main) PROGRAM COUNTER after loading font data in Memory " << cpu.getProgramCounter() << endl; 
 
-    memory.loadRomIntoMemory(memory, romFileLocation, &cpu.getProgramCounterReference()); 
+    memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 
     cout << "Status: (Main) PROGRAM COUNTER after loading roms in Memory " << cpu.getProgramCounter() << endl; 
 
-    // memory.debug_printMemory(memory, true); 
+    memory.debug_printMemory(memory, true); 
 
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){

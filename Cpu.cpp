@@ -40,6 +40,11 @@ uint16_t& Cpu::getProgramCounterReference(){
     return programCounter; 
 }
 
+// getter for &programCounter 
+uint16_t* Cpu::getProgramCounterPointer(){
+    return &programCounter; 
+}
+
 void Cpu::setCurrentInstruction (string Instruction) {
     currentInstruction = Instruction; 
 }
@@ -88,13 +93,13 @@ void Cpu::clearScreenInstruction(Screen screen){
 
 // 1nnn 
 void Cpu::jumpToAddress(string address){
-    setProgramCounter(&programCounter, stoi(address, nullptr, 16));   
+    setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16));   
 }
 
 // 2nnn
 void Cpu::putAddressOnStack(string address, Memory memory){
     pushProgramCounterOnStack(memory); 
-    setProgramCounter(&programCounter, stoi(address, nullptr, 16)); 
+    setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     
     cout << "Previous Program Counter on stack, new address for Program Counter " << getProgramCounter() << endl; 
     debug_printCurrentInstruction(getCurrentInstruction()); 
@@ -106,7 +111,7 @@ void Cpu::skipInstructionIfVXEqualsNN(char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     if(regist_V[X] == lastTwoNibbles){
-        incrementProgramCounter(&programCounter, 2); 
+        incrementProgramCounter(getProgramCounterPointer(), 2); 
         cout << "Program Counter " << getProgramCounter() << endl; 
     }
 }
@@ -195,7 +200,7 @@ void Cpu::fetchInstructions(Memory memory){
 
     setCurrentInstruction(instructionString.str()); 
 
-    incrementProgramCounter(&programCounter, 2); 
+    incrementProgramCounter(getProgramCounterPointer(), 2); 
     cout << "Program Counter " << getProgramCounter() << endl; 
 
     debug_printCurrentInstruction(getCurrentInstruction());  
