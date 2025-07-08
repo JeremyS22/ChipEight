@@ -7,6 +7,7 @@
 
 #include "Screen.h" 
 #include "Memory.h"  
+class Memory;
 
 // 0x000 to 0x1FF are reserved for interpreter 
 // font data at 0x050 - 0x09F  
@@ -15,14 +16,16 @@
 extern bool COSMAC_VIP_FLAG_IS_ON; 
 
 class Cpu {
+
+    private: 
+
+        uint16_t programCounter; 
+
     public:
         
-
         uint8_t delayTimer; 
 
         uint8_t soundTimer; 
-
-        uint16_t programCounter; 
 
         uint8_t stackPointer; 
 
@@ -60,7 +63,8 @@ class Cpu {
     ~Cpu(){}
 
 
-
+uint16_t* getProgramCounterPointer(); 
+    
 void setProgramCounter(uint16_t * programCounter, int value); 
 
 void incrementProgramCounter(uint16_t * programCounter, int value); 

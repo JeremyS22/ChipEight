@@ -1,9 +1,11 @@
 #ifndef MEMORY_H
 #define MEMORY_H  
 
+#include "Cpu.h"
 #include <cstdint> 
 #include <stack>  
 #include <string> 
+class Cpu; 
 
 class Memory {
     
@@ -24,9 +26,9 @@ class Memory {
     };  
     ~Memory(){}; 
 
-    void loadFontDataIntoMemory(uint8_t fontDataArray[], Memory& memory); 
+    void loadFontDataIntoMemory(Cpu cpu, Memory& memory); 
 
-    void loadRomIntoMemory(Memory& memory, std::string romFileLocation, uint16_t* programCounter); 
+    void loadRomIntoMemory(Memory& memory, std::string romFileLocation, Cpu& cpu); 
 
     // Use for debugging ------------------------------------------------------------------------------- 
 
