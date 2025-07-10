@@ -18,16 +18,19 @@ public:
         this->window = window; 
         this->renderer = renderer; 
 
-        for (int i = 0; i < 64; i++){
+        turnOffAllPixels(); 
+
+        /* for (int i = 0; i < 64; i++){
             for (int j = 0; j < 32; j++){
                     // initialized to FALSE by default to represent turned off pixels 
                     pixelStatus[i][j] = 0; 
             }
-        }   
+        }    */
     }
     ~Screen(){}; 
 
     void initializeScreen(); 
+    void turnOffAllPixels(); 
     void setScalingMultipiler(int ScalingMultipiler); 
     int getScalingMultipiler();  
     void setPixelStatus(int coordinateX, int coordinateY, bool value); 

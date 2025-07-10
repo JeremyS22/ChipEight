@@ -88,6 +88,7 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 // 00e0
 void Cpu::clearScreenInstruction(Screen screen){
     SDL_RenderClear(screen.renderer); 
+    screen.turnOffAllPixels(); 
     SDL_RenderPresent(screen.renderer); 
 }
 
