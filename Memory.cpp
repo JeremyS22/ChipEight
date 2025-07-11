@@ -35,7 +35,7 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu)
         char lineOfRomData; 
 
         // prevents i from superceeding system's 4096 bytes of memory 
-        for(int i = 0x200; file.get(lineOfRomData) || i < 4096; i++){
+        for(int i = 0x200; file.get(lineOfRomData) && i < 4096; i++){
             cout << hex << setw(2) << setfill('0') << (int)(unsigned char)lineOfRomData << " \n"; 
             memory.systemMemory[i] = (uint8_t)lineOfRomData; 
         }
