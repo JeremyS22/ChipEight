@@ -61,9 +61,6 @@ class Cpu {
 
     Cpu(); 
     ~Cpu(){}
-
-
-uint16_t* getProgramCounterPointer(); 
     
 void setProgramCounter(uint16_t * programCounter, int value); 
 
@@ -76,11 +73,15 @@ uint16_t getProgramCounter();
 
 uint16_t& getProgramCounterReference(); 
 
+uint16_t* getProgramCounterPointer(); 
+
 void setCurrentInstruction (std::string Instruction); 
 
 std::string getCurrentInstruction(); 
 
 void pushProgramCounterOnStack(Memory memory); 
+
+void popProgramCounterOffStack(Memory memory); 
 
 std::string getLastTwoNibbles(std::string currentInstruction); 
 
@@ -90,6 +91,9 @@ std::string getLastThreeNibbles(std::string currentInstruction);
 
 // 00e0 
 void clearScreenInstruction(Screen screen);  
+
+//00ee 
+void returnToAddressFromStack(Memory memory); 
 
 // 1nnn 
 void jumpToAddress(std::string address); 

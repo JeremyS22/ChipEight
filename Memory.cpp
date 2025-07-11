@@ -30,18 +30,14 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu)
     else {
         cout << "Status: (Memory) OPENED ROM" << endl; 
 
-        int i = 0x200; 
-        while (getline(rom, romParser)){
+        ifstream file(romFileLocation, ios::binary | ios::in); 
 
-            istringstream iStreamObject(romParser);
+        char lineOfRomData; 
 
-            for (char& romData : romParser) {
-                    // converts binary file data into hexadecimal 
-                    cout << hex << setw(2) << setfill('0') << (int)(unsigned char)romData << " \n"; 
-                    
-                    memory.systemMemory[i] = romData; 
-                    i++; 
-            }
+        // prevents i from superceeding system's 4096 bytes of memory 
+        for(int i = 0x200; file.get(lineOfRomData) || i < 4096; i++){
+            cout << hex << setw(2) << setfill('0') << (int)(unsigned char)lineOfRomData << " \n"; 
+            memory.systemMemory[i] = (uint8_t)lineOfRomData; 
         }
 
         cpu.setProgramCounter(cpu.getProgramCounterPointer(),0x200); 
