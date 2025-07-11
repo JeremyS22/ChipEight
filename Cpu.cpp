@@ -57,6 +57,10 @@ void Cpu::pushProgramCounterOnStack(Memory memory){
     memory.systemStack.push(getProgramCounter());  
 }
 
+void Cpu::popProgramCounterOffStack(Memory memory){
+    memory.systemStack.pop();  
+}
+
 string Cpu::getLastTwoNibbles (string currentInstruction){
     stringstream nibbleParser;
 
@@ -90,6 +94,16 @@ void Cpu::clearScreenInstruction(Screen screen){
     SDL_RenderClear(screen.renderer); 
     screen.turnOffAllPixels(); 
     SDL_RenderPresent(screen.renderer); 
+}
+
+//00ee 
+void Cpu::returnToAddressFromStack(Memory memory){
+
+    uint16_t address = memory.systemStack.top(); 
+
+    cout << "PROGRAM COUNTER FROM STACK "<< address << endl; 
+    setProgramCounter(getProgramCounterPointer(), address); 
+    popProgramCounterOffStack(memory); 
 }
 
 // 1nnn 
@@ -224,6 +238,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     break; 
                     case 'e':
                     // call return function 00ee
+                    returnToAddressFromStack(memory); 
                     break; 
                 } 
                 break;

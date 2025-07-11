@@ -21,7 +21,7 @@ int main (int argv, char** args){
     bool windowIsRunning = true; 
     SDL_Event windowEvent; 
 
-    string romFileLocation = "ROMS/test_opcode.ch8"; 
+    string romFileLocation = "ROMS/3-corax+.ch8"; 
 
     screen.initializeScreen(); 
 
