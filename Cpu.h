@@ -116,6 +116,9 @@ void setValueInRegisterVX(char secondNibble, std::string value);
 // 7xnn
 void addValueToRegisterVX(char secondNibble, std::string value); 
 
+// 9xyn 
+void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble); 
+
 // annn 
 void loadAddressInRegisterI(std::string address); 
 

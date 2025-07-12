@@ -141,7 +141,7 @@ void Cpu::skipInstructionIfVXNotEqualsNN(char secondNibble, string value){
     }
 }
 
-// 5xnn 
+// 5xyn 
 void Cpu::skipInstructionIfVXEqualsVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
@@ -164,6 +164,17 @@ void Cpu::addValueToRegisterVX (char secondNibble, string value){
     int originalVXValue = regist_V[X]; 
     regist_V[X] = originalVXValue + stoi(value, nullptr, 16);     
 }
+
+// 9xyn 
+void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
+    int X = convertCharToHex(secondNibble); 
+    int Y = convertCharToHex(thirdNibble); 
+    if(regist_V[X] != regist_V[Y]){
+        incrementProgramCounter(getProgramCounterPointer(), 2); 
+        cout << "TRUE, VX != VY Incremented Program Counter to " << getProgramCounter() << endl; 
+    }
+}
+
 
 // annn 
 void Cpu::loadAddressInRegisterI(string address){
@@ -299,7 +310,8 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 getCurrentInstruction(); // call function 
                 break;
             case '9': 
-                getCurrentInstruction(); // call function 
+                // call skip next instruction if VX != VY 9xy0 
+                skipInstructionIfVXNotEqualsVY(secondNibble, thirdNibble); 
                 break;
             case 'a': 
                 // call set index to register I function  
