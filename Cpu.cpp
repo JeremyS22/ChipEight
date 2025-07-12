@@ -53,12 +53,17 @@ string Cpu::getCurrentInstruction(){
     return currentInstruction; 
 }
 
-void Cpu::pushProgramCounterOnStack(Memory memory){
+void Cpu::pushProgramCounterOnStack(Memory& memory){
     memory.systemStack.push(getProgramCounter());  
+
+    cout << "STACK SIZE " <<  memory.systemStack.size() << endl; 
 }
 
-void Cpu::popProgramCounterOffStack(Memory memory){
+void Cpu::popProgramCounterOffStack(Memory& memory){
+    cout << "STACK SIZE (before pop) " <<  memory.systemStack.size() << endl; 
+
     memory.systemStack.pop();  
+
 }
 
 string Cpu::getLastTwoNibbles (string currentInstruction){
@@ -97,7 +102,7 @@ void Cpu::clearScreenInstruction(Screen screen){
 }
 
 //00ee 
-void Cpu::returnToAddressFromStack(Memory memory){
+void Cpu::returnToAddressFromStack(Memory& memory){
 
     uint16_t address = memory.systemStack.top(); 
 
@@ -112,7 +117,7 @@ void Cpu::jumpToAddress(string address){
 }
 
 // 2nnn
-void Cpu::putAddressOnStack(string address, Memory memory){
+void Cpu::putAddressOnStack(string address, Memory& memory){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     
@@ -163,6 +168,13 @@ void Cpu::addValueToRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int originalVXValue = regist_V[X]; 
     regist_V[X] = originalVXValue + stoi(value, nullptr, 16);     
+}
+
+// 8xy0 
+void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
+    int X = convertCharToHex(secondNibble); 
+    int Y = convertCharToHex(thirdNibble); 
+    regist_V[X] = regist_V[Y]; 
 }
 
 // 9xyn 
@@ -255,7 +267,7 @@ void Cpu::fetchInstructions(Memory memory){
     
 }
 
-void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory memory){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory& memory){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
@@ -307,7 +319,15 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 addValueToRegisterVX(secondNibble, getLastTwoNibbles(currentInstruction)); 
                 break;
             case '8': 
-                getCurrentInstruction(); // call function 
+                switch (fourthNibble){
+                    case '0':
+                    // 8XY0 
+                    setVXToValueOfVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
+                    break; 
+                    case '1':
+                    getCurrentInstruction(); // call function 
+                    break; 
+                } 
                 break;
             case '9': 
                 // call skip next instruction if VX != VY 9xy0 

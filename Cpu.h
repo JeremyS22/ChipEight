@@ -79,9 +79,9 @@ void setCurrentInstruction (std::string Instruction);
 
 std::string getCurrentInstruction(); 
 
-void pushProgramCounterOnStack(Memory memory); 
+void pushProgramCounterOnStack(Memory& memory); 
 
-void popProgramCounterOffStack(Memory memory); 
+void popProgramCounterOffStack(Memory& memory); 
 
 std::string getLastTwoNibbles(std::string currentInstruction); 
 
@@ -93,13 +93,13 @@ std::string getLastThreeNibbles(std::string currentInstruction);
 void clearScreenInstruction(Screen screen);  
 
 //00ee 
-void returnToAddressFromStack(Memory memory); 
+void returnToAddressFromStack(Memory& memory); 
 
 // 1nnn 
 void jumpToAddress(std::string address); 
 
 // 2nnn
-void putAddressOnStack(std::string address, Memory memory); 
+void putAddressOnStack(std::string address, Memory& memory); 
 
 // 3xnn 
 void skipInstructionIfVXEqualsNN(char secondNibble, std::string value); 
@@ -116,6 +116,9 @@ void setValueInRegisterVX(char secondNibble, std::string value);
 // 7xnn
 void addValueToRegisterVX(char secondNibble, std::string value); 
 
+// 8xy0 
+void setVXToValueOfVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
+
 // 9xyn 
 void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble); 
 
@@ -131,7 +134,7 @@ void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FL
 
 void fetchInstructions(Memory memory); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory memory); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory& memory); 
 
 int convertCharToHex(char Value); 
  
