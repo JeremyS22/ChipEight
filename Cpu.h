@@ -107,6 +107,9 @@ void skipInstructionIfVXEqualsNN(char secondNibble, std::string value);
 // 4xnn 
 void skipInstructionIfVXNotEqualsNN(char secondNibble, std::string value); 
 
+// 5xnn 
+void skipInstructionIfVXEqualsVY(char secondNibble, char thirdNibble); 
+
 // 6xnn 
 void setValueInRegisterVX(char secondNibble, std::string value); 
 

@@ -141,6 +141,16 @@ void Cpu::skipInstructionIfVXNotEqualsNN(char secondNibble, string value){
     }
 }
 
+// 5xnn 
+void Cpu::skipInstructionIfVXEqualsVY(char secondNibble, char thirdNibble){
+    int X = convertCharToHex(secondNibble); 
+    int Y = convertCharToHex(thirdNibble); 
+    if(regist_V[X] == regist_V[Y]){
+        incrementProgramCounter(getProgramCounterPointer(), 2); 
+        cout << "TRUE, VX == VY Incremented Program Counter to " << getProgramCounter() << endl; 
+    }
+}
+
 // 6xnn 
 void Cpu::setValueInRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
@@ -225,10 +235,13 @@ void Cpu::fetchInstructions(Memory memory){
 
     setCurrentInstruction(instructionString.str()); 
 
-    incrementProgramCounter(getProgramCounterPointer(), 2); 
-    cout << "Program Counter " << getProgramCounter() << endl; 
-
     debug_printCurrentInstruction(getCurrentInstruction());  
+
+    cout << "Pre-Increment Program Counter " << getProgramCounter() << endl; 
+    incrementProgramCounter(getProgramCounterPointer(), 2); 
+    cout << "Post-Increment Program Counter " << getProgramCounter() << endl; 
+
+    
 }
 
 void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory memory){
@@ -262,15 +275,16 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
                 break;
             case '3': 
-                // call skip next instruction if VX == NN  3xkk 
+                // call skip next instruction if VX == NN  3xnn  
                 skipInstructionIfVXEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '4': 
-                // call skip next instruction 4xkk if VX != NN 
+                // call skip next instruction if VX != NN 4xnn 
                 skipInstructionIfVXNotEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '5': 
-                getCurrentInstruction(); // call function 
+                // call skip next instruction if VX == VY 5xy0 
+                skipInstructionIfVXEqualsVY(secondNibble, thirdNibble); 
                 break;
             case '6': 
                 // 600c 
