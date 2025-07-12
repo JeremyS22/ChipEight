@@ -18,6 +18,7 @@ void Memory::loadFontDataIntoMemory(Cpu cpu, Memory& memory){
         memory.systemMemory[tempMemLocation]= cpu.fontData[i]; 
         tempMemLocation++; 
     }
+    cout << "Status: (Memory) Font data loaded into memory" << endl; 
 } 
 
 void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu){    

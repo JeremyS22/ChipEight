@@ -127,7 +127,17 @@ void Cpu::skipInstructionIfVXEqualsNN(char secondNibble, string value){
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     if(regist_V[X] == lastTwoNibbles){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
-        cout << "Program Counter " << getProgramCounter() << endl; 
+        cout << "TRUE, VX == NN Incremented Program Counter to " << getProgramCounter() << endl; 
+    }
+}
+
+// 4xnn 
+void Cpu::skipInstructionIfVXNotEqualsNN(char secondNibble, string value){
+    int X = convertCharToHex(secondNibble); 
+    int lastTwoNibbles = stoi(value, nullptr, 16); 
+    if(regist_V[X] != lastTwoNibbles){
+        incrementProgramCounter(getProgramCounterPointer(), 2); 
+        cout << "TRUE, VX != NN Incremented Program Counter to " << getProgramCounter() << endl; 
     }
 }
 
@@ -252,11 +262,12 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
                 break;
             case '3': 
-                // call skip next instruction 3xkk 
+                // call skip next instruction if VX == NN  3xkk 
                 skipInstructionIfVXEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '4': 
-                getCurrentInstruction(); // call function 
+                // call skip next instruction 4xkk if VX != NN 
+                skipInstructionIfVXNotEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '5': 
                 getCurrentInstruction(); // call function 

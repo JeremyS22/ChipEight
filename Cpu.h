@@ -104,6 +104,9 @@ void putAddressOnStack(std::string address, Memory memory);
 // 3xnn 
 void skipInstructionIfVXEqualsNN(char secondNibble, std::string value); 
 
+// 4xnn 
+void skipInstructionIfVXNotEqualsNN(char secondNibble, std::string value); 
+
 // 6xnn 
 void setValueInRegisterVX(char secondNibble, std::string value); 
 
