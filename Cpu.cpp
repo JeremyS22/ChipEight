@@ -171,18 +171,26 @@ void Cpu::addValueToRegisterVX (char secondNibble, string value){
 }
 
 // 8xy0 
-void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
+void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[Y]; 
 }
 
 // 8xy1 
-void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
+void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
-    regist_V[X] = regist_V[X] | regist_V[Y]; 
+    regist_V[X] |= regist_V[Y]; 
     cout << "AFTER BITWISE OR " << regist_V[X] << endl; 
+}
+
+// 8xy2  
+void Cpu::bitwiseANDVXAndVY(int secondNibble, int thirdNibble){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    regist_V[X] = regist_V[X] & regist_V[Y]; 
+    cout << "AFTER BITWISE AND " << regist_V[X] << endl; 
 }
 
 // 9xyn 
@@ -330,15 +338,15 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 switch (fourthNibble){
                     case '0':
                     // 8XY0 
-                    setVXToValueOfVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
+                    setVXToValueOfVY(secondNibble, thirdNibble); 
                     break; 
                     case '1':
                     // 8xy1 
-                    bitwiseOrVXAndVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
+                    bitwiseOrVXAndVY(secondNibble, thirdNibble); 
                     break; 
                     case '2':
-                    // 8xy1 
-                    getCurrentInstruction(); // call function 
+                    // 8xy2 
+                    bitwiseANDVXAndVY(secondNibble, thirdNibble); 
                     break; 
                 } 
                 break;
