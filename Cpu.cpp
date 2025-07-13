@@ -177,6 +177,14 @@ void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FL
     regist_V[X] = regist_V[Y]; 
 }
 
+// 8xy1 
+void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    regist_V[X] = regist_V[X] | regist_V[Y]; 
+    cout << "AFTER BITWISE OR " << regist_V[X] << endl; 
+}
+
 // 9xyn 
 void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
@@ -325,6 +333,11 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     setVXToValueOfVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                     case '1':
+                    // 8xy1 
+                    bitwiseOrVXAndVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
+                    break; 
+                    case '2':
+                    // 8xy1 
                     getCurrentInstruction(); // call function 
                     break; 
                 } 
