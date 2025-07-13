@@ -119,6 +119,9 @@ void addValueToRegisterVX(char secondNibble, std::string value);
 // 8xy0 
 void setVXToValueOfVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
 
+// 8xy1 
+void bitwiseOrVXAndVY(int secondNibble, int thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
+
 // 9xyn 
 void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble); 
 
