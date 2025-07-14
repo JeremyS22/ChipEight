@@ -186,11 +186,19 @@ void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy2  
-void Cpu::bitwiseANDVXAndVY(int secondNibble, int thirdNibble){
+void Cpu::bitwiseAndVXAndVY(int secondNibble, int thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] & regist_V[Y]; 
     cout << "AFTER BITWISE AND " << regist_V[X] << endl; 
+}
+
+// 8xy3   
+void Cpu::bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    regist_V[X] = regist_V[X] ^ regist_V[Y]; 
+    cout << "AFTER BITWISE XOR " << regist_V[X] << endl; 
 }
 
 // 9xyn 
@@ -346,7 +354,11 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     break; 
                     case '2':
                     // 8xy2 
-                    bitwiseANDVXAndVY(secondNibble, thirdNibble); 
+                    bitwiseAndVXAndVY(secondNibble, thirdNibble); 
+                    break; 
+                    case '3':
+                    // 8xy3  
+                    bitwiseExclusiveOrVXAndVY(secondNibble, thirdNibble); 
                     break; 
                 } 
                 break;
