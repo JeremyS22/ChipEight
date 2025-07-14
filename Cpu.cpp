@@ -201,6 +201,25 @@ void Cpu::bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble){
     cout << "AFTER BITWISE XOR " << regist_V[X] << endl; 
 }
 
+// 8xy4    
+void Cpu::addVXToVY(int secondNibble, int thirdNibble){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    int result = regist_V[X] + regist_V[Y]; 
+    if(result > 255){
+        // subtracting 1 to compensate for uint8_t's range starting on 0 [0,255] 
+        regist_V[X] = (result % 255) - 1; 
+
+        // set carry flag in register VF 
+        regist_V[0xF] = 1; 
+    }
+    else {
+        regist_V[0xF] = 0; 
+    }
+
+    cout << "AFTER adding VX and VY " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
+}
+
 // 9xyn 
 void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
@@ -210,7 +229,6 @@ void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
         cout << "TRUE, VX != VY Incremented Program Counter to " << getProgramCounter() << endl; 
     }
 }
-
 
 // annn 
 void Cpu::loadAddressInRegisterI(string address){
@@ -359,6 +377,10 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     case '3':
                     // 8xy3  
                     bitwiseExclusiveOrVXAndVY(secondNibble, thirdNibble); 
+                    break; 
+                    case '4':
+                    // 8xy4   
+                    addVXToVY(secondNibble, thirdNibble); 
                     break; 
                 } 
                 break;

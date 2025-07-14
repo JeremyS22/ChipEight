@@ -128,6 +128,9 @@ void bitwiseAndVXAndVY(int secondNibble, int thirdNibble);
 // 8xy3   
 void bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble); 
 
+// 8xy4    
+void addVXToVY(int secondNibble, int thirdNibble); 
+
 // 9xyn 
 void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble); 
 
