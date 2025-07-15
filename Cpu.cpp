@@ -237,6 +237,23 @@ void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
     cout << "AFTER VX - VY! " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
 }
 
+// 8xy7      
+void Cpu::subtractVYFromVX(int secondNibble, int thirdNibble){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    if(regist_V[X] > regist_V[Y]){
+        regist_V[0xF] = 1; 
+        cout << "VX > VY! Register VF is " << regist_V[0xF]<< endl; 
+    }
+    else {
+        regist_V[0xF] = 0; 
+        cout << "VX < VY! Register VF is " << regist_V[0xF]<< endl; 
+    }
+    regist_V[X] = regist_V[Y] - regist_V[X];  
+
+    cout << "AFTER VX - VY! " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
+}
+
 // 9xyn 
 void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
@@ -402,6 +419,10 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     case '5':
                     // 8xy5   
                     subtractVXFromVY(secondNibble, thirdNibble); 
+                    break; 
+                    case '7':
+                    // 8xy7    
+                    subtractVYFromVX(secondNibble, thirdNibble); 
                     break; 
                 } 
                 break;
