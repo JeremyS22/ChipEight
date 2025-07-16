@@ -8,6 +8,7 @@
 #include "Screen.h" 
 #include "Memory.h"  
 class Memory;
+class Screen; 
 
 // 0x000 to 0x1FF are reserved for interpreter 
 // font data at 0x050 - 0x09F  
@@ -21,19 +22,19 @@ class Cpu {
 
         uint16_t programCounter; 
 
-    public:
-        
         uint8_t delayTimer; 
 
         uint8_t soundTimer; 
 
         uint8_t stackPointer; 
 
-        // TODO: set constructor to intialize this to 0 
         // points at locations in memory 
         uint16_t regist_I; 
 
         uint8_t regist_V[16]; 
+
+
+    public:
 
         // TODO: set this as a private member 
         std::string currentInstruction; 
@@ -79,6 +80,26 @@ void setCurrentInstruction (std::string Instruction);
 
 std::string getCurrentInstruction(); 
 
+uint8_t setDelayTimer(); 
+
+uint8_t getDelayTimer(); 
+
+uint8_t setSoundTimer(); 
+
+uint8_t getSoundTimer(); 
+
+uint8_t setStackPointer(); 
+
+uint8_t getStackPointer(); 
+
+uint16_t setRegist_I(); 
+
+uint16_t getRegist_I(); 
+
+void setRegist_V(int name, uint8_t value); 
+
+uint8_t getRegist_V(int name); 
+
 void pushProgramCounterOnStack(Memory& memory); 
 
 void popProgramCounterOffStack(Memory& memory); 
@@ -90,7 +111,7 @@ std::string getLastThreeNibbles(std::string currentInstruction);
 // 0nnn (Not implementing)
 
 // 00e0 
-void clearScreenInstruction(Screen screen);  
+void clearScreenInstruction(Screen screen, Cpu& cpu);  
 
 //00ee 
 void returnToAddressFromStack(Memory& memory); 
@@ -145,14 +166,14 @@ void loadAddressInRegisterI(std::string address);
 
 // dxyn 
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
-                            Memory memory); 
+                            Memory memory, Cpu& cpu); 
 
 // fx55 
 void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON); 
 
 void fetchInstructions(Memory memory); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory& memory); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory& memory, Cpu& cpu); 
 
 int convertCharToHex(char Value); 
  

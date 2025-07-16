@@ -53,6 +53,14 @@ string Cpu::getCurrentInstruction(){
     return currentInstruction; 
 }
 
+void Cpu::setRegist_V(int name, uint8_t value){
+    regist_V[name] = value; 
+}
+
+uint8_t Cpu::getRegist_V(int name){
+    return regist_V[name];  
+}
+
 void Cpu::pushProgramCounterOnStack(Memory& memory){
     memory.systemStack.push(getProgramCounter());  
 
@@ -95,9 +103,9 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 /*Instruction to execute machine language routine (Not implementing)*/
 
 // 00e0
-void Cpu::clearScreenInstruction(Screen screen){
+void Cpu::clearScreenInstruction(Screen screen, Cpu& cpu){
     SDL_RenderClear(screen.renderer); 
-    screen.turnOffAllPixels(); 
+    screen.turnOffAllPixels(cpu); 
     SDL_RenderPresent(screen.renderer); 
 }
 
@@ -217,7 +225,7 @@ void Cpu::addVXToVY(int secondNibble, int thirdNibble){
         regist_V[0xF] = 0; 
     }
 
-    cout << "AFTER adding VX and VY " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
+    cout << "AFTER adding VX and VY " << regist_V[X] << "also register VF is " << getRegist_V(0xF) << endl; 
 }
 
 // 8xy5     
@@ -234,7 +242,7 @@ void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
     }
     regist_V[X] -= regist_V[Y]; 
 
-    cout << "AFTER VX - VY! " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
+    cout << "AFTER VX - VY! " << regist_V[X] << " also register VF is " << regist_V[0xF]<< endl; 
 }
 
 // 8xy7      
@@ -273,7 +281,7 @@ void Cpu::loadAddressInRegisterI(string address){
 
 // dxyn 
 void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
-                            Memory memory){
+                            Memory memory, Cpu& cpu){
 
     // secondNibble = VX, thirdNibble = VY 
     int X = convertCharToHex(secondNibble);  
@@ -301,7 +309,7 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
                 SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1); 
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
             }
-            screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j]); 
+            screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 
             coordinateX++; 
         }
         spriteDataAddress++; 
@@ -343,7 +351,7 @@ void Cpu::fetchInstructions(Memory memory){
     
 }
 
-void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory& memory){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory& memory, Cpu& cpu){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
@@ -356,7 +364,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 switch (fourthNibble){
                     case '0':
                     // call clear screen function 00e0 
-                    clearScreenInstruction(screen); 
+                    clearScreenInstruction(screen, cpu); 
                     break; 
                     case 'e':
                     // call return function 00ee
@@ -442,7 +450,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 break;
             case 'd': 
                 // call display/draw fucntion  
-                drawSpriteAtVXAndVY(secondNibble, thirdNibble, fourthNibble, screen, memory);  
+                drawSpriteAtVXAndVY(secondNibble, thirdNibble, fourthNibble, screen, memory, cpu);  
                 break;
             case 'e':       
                 getCurrentInstruction(); // call function 
