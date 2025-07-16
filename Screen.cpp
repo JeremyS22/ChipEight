@@ -19,12 +19,12 @@ void Screen::initializeScreen(){
         cout << "Status: (Screen) Created Window and Redenerer " << endl; 
 } 
 
-void Screen::turnOffAllPixels(){
+void Screen::turnOffAllPixels(Cpu& cpu){
         for (int i = 0; i < 64; i++){
                 for (int j = 0; j < 32; j++){
                         // initialized to FALSE by default to represent turned off pixels 
                         // pixelStatus[i][j] = 0; 
-                        setPixelStatus(i, j, 0); 
+                        setPixelStatus(i, j, 0, cpu); 
                 }
         }   
 }
@@ -37,14 +37,14 @@ int Screen::getScalingMultipiler(){
         return scalingMultipiler; 
 }
 
-void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value){
-        Cpu cpu; 
+void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu){
+        // Cpu cpu; 
         if (value == 1 && pixelStatus[coordinateX][coordinateY] == 0){
                 pixelStatus[coordinateX][coordinateY] = value; 
         }
         else if (value == 1 && pixelStatus[coordinateX][coordinateY] == 1){
                 pixelStatus[coordinateX][coordinateY] = 0; 
-                cpu.regist_V[0xF] = 1; 
+                cpu.setRegist_V(0xF, 1); 
         }
         
 }

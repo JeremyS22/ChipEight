@@ -44,7 +44,7 @@ int main (int argv, char** args){
 
             for(int instructionCounter = 0; instructionCounter < instructionsPerSecond; instructionCounter++){
                 cpu.fetchInstructions(memory); 
-                cpu.decodeAndExecuteInstructions(cpu.currentInstruction, screen, memory); 
+                cpu.decodeAndExecuteInstructions(cpu.currentInstruction, screen, memory, cpu); 
             }
             this_thread::sleep_for(chrono::seconds(1)); 
         }
