@@ -5,6 +5,7 @@
 #include <cstdint> 
 #include <stack>  
 #include <string> 
+#include <cstring> 
 class Cpu; 
 
 class Memory {
@@ -22,7 +23,7 @@ class Memory {
     std::stack<uint16_t> systemStack; 
 
     Memory(){
-        systemMemory[4096]; 
+        memset(systemMemory, 0, sizeof(systemMemory)); 
     };  
     ~Memory(){}; 
 
