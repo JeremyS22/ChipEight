@@ -38,7 +38,7 @@ int main (int argv, char** args){
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){
             if(windowEvent.type == SDL_QUIT){
-                windowIsRunning == false; 
+                windowIsRunning = false; 
                 break; 
             }
 
