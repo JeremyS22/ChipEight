@@ -5,6 +5,7 @@
 #include <iomanip> 
 #include <bitset> 
 #include <stack> 
+#include <cstring> 
 
 #include "Cpu.h"
 #include "Screen.h" 
@@ -16,7 +17,11 @@ using namespace std;
 bool COSMAC_VIP_FLAG_IS_ON = false; 
 
 Cpu::Cpu(){
+    programCounter = 0; 
     regist_I = 0; 
+    memset(regist_V, 0, sizeof(regist_V)); 
+    delayTimer = 0; 
+    soundTimer = 0; 
 }
 
 void Cpu::setProgramCounter(uint16_t * programCounter, int value){
@@ -63,15 +68,24 @@ uint8_t Cpu::getRegist_V(int name){
 
 void Cpu::pushProgramCounterOnStack(Memory& memory){
     memory.systemStack.push(getProgramCounter());  
-
-    cout << "STACK SIZE " <<  memory.systemStack.size() << endl; 
+    memory.setStackPointer(memory.systemStack.top()); 
+    
+    cout << "STACK SIZE " <<  memory.systemStack.size() << " top of stack " << memory.getStackPointer() << endl; 
 }
 
 void Cpu::popProgramCounterOffStack(Memory& memory){
     cout << "STACK SIZE (before pop) " <<  memory.systemStack.size() << endl; 
-
     memory.systemStack.pop();  
-
+    
+    if(!memory.systemStack.empty()){
+        memory.setStackPointer(memory.systemStack.top()); 
+        cout << "Top of stack " << memory.getStackPointer() << endl; 
+    }
+    else {
+        // to avoid setting stack pointer to random place in memory when the stack is empty 
+        memory.setStackPointer(0); 
+        cout << "Stack empty, stack pointer set to 0 " << endl; 
+    } 
 }
 
 string Cpu::getLastTwoNibbles (string currentInstruction){
@@ -112,7 +126,7 @@ void Cpu::clearScreenInstruction(Screen screen, Cpu& cpu){
 //00ee 
 void Cpu::returnToAddressFromStack(Memory& memory){
 
-    uint16_t address = memory.systemStack.top(); 
+    uint16_t address = memory.getStackPointer(); 
 
     cout << "PROGRAM COUNTER FROM STACK "<< address << endl; 
     setProgramCounter(getProgramCounterPointer(), address); 

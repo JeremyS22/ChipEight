@@ -8,6 +8,11 @@
 
 using namespace std;  
 
+Memory::Memory(){
+    memset(systemMemory, 0, sizeof(systemMemory)); 
+    stackPointer = 0; 
+}
+
 void Memory::loadFontDataIntoMemory(Cpu cpu, Memory& memory){
 
     cout << "Status: (Memory) Loading font data into memory" << endl; 
@@ -47,11 +52,19 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu)
     }
 }
 
+void Memory::setStackPointer(uint16_t addressAtTopOfStack){
+    stackPointer = addressAtTopOfStack; 
+}
+
+uint16_t Memory::getStackPointer(){
+    return stackPointer; 
+}
+
 // Use for debugging ------------------------------------------------------------------------------- 
 
 void Memory::debug_printMemory(Memory memory, bool spaceEveryFourNibbles){
 // Note: font data at 0x050, program data at 0x200 
-// Note: 2000 set for brevity's sake, for loop range can be higher than 2000 (up to 4096)     
+// Note: memory can go up to 4096 
     for (int i = 0x050; i < 4096; i++){
         cout << "Address " << i << ": ";  
         cout << hex << setw(2) << setfill('0') << int(memory.systemMemory[i]) << " " << endl; 
