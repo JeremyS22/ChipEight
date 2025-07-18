@@ -26,8 +26,6 @@ class Cpu {
 
         uint8_t soundTimer; 
 
-        uint8_t stackPointer; 
-
         // points at locations in memory 
         uint16_t regist_I; 
 
@@ -80,19 +78,15 @@ void setCurrentInstruction (std::string Instruction);
 
 std::string getCurrentInstruction(); 
 
-uint8_t setDelayTimer(); 
+void setDelayTimer(); 
 
 uint8_t getDelayTimer(); 
 
-uint8_t setSoundTimer(); 
+void setSoundTimer(); 
 
 uint8_t getSoundTimer(); 
 
-uint8_t setStackPointer(); 
-
-uint8_t getStackPointer(); 
-
-uint16_t setRegist_I(); 
+void setRegist_I(); 
 
 uint16_t getRegist_I(); 
 

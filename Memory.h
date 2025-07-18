@@ -12,6 +12,8 @@ class Memory {
     
     private:
 
+    uint16_t stackPointer; 
+
     // Use for debugging ------------------------------------------------------------------------------- 
 
     void debug_addSpacing(int i, bool spaceEveryFourNibbles); 
@@ -22,14 +24,17 @@ class Memory {
     // have stack big enough for 16 2 byte address, may make bigger later 
     std::stack<uint16_t> systemStack; 
 
-    Memory(){
-        memset(systemMemory, 0, sizeof(systemMemory)); 
-    };  
+    Memory();  
     ~Memory(){}; 
 
+    
     void loadFontDataIntoMemory(Cpu cpu, Memory& memory); 
-
+    
     void loadRomIntoMemory(Memory& memory, std::string romFileLocation, Cpu& cpu); 
+    
+    void setStackPointer(uint16_t addressAtTopOfStack); 
+
+    uint16_t getStackPointer(); 
 
     // Use for debugging ------------------------------------------------------------------------------- 
 
