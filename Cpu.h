@@ -155,6 +155,9 @@ void shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG
 // 8xy7      
 void subtractVYFromVX(int secondNibble, int thirdNibble); 
 
+// 8xyE 
+void shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
+
 // 9xyn 
 void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble); 
 
