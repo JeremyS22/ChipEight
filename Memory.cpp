@@ -47,6 +47,7 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu)
         }
 
         cpu.setProgramCounter(cpu.getProgramCounterPointer(),0x200); 
+        cout << "Status: (Memory) PROGRAM COUNTER after loading roms in Memory " << cpu.getProgramCounter() << endl; 
         cout << "Status: (Memory) Contents read, Closing rom" << endl; 
         rom.close(); 
     }
