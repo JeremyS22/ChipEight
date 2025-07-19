@@ -259,6 +259,29 @@ void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
     cout << "AFTER VX - VY! " << regist_V[X] << " also register VF is " << regist_V[0xF]<< endl; 
 }
 
+// 8xy6 
+void Cpu::shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    
+    if (COSMAC_VIP_FLAG_IS_ON == true){
+        regist_V[X] = regist_V[Y];     
+    }
+
+    bitset<8> binaryValueOfVX (regist_V[X]); 
+    regist_V[0xF] = binaryValueOfVX[7]; 
+    
+    regist_V[X] >>= 1; 
+
+
+
+    /* uint8_t tempVXValue = valueFromVY 
+    
+    
+    regist_V[X] = valueFromVY;  */
+
+}
+
 // 8xy7      
 void Cpu::subtractVYFromVX(int secondNibble, int thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
@@ -317,6 +340,7 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
         // TODO: add to debugger 
         cout << "Binary value from memory address of register I " << binaryValue << endl; 
 
+        // starting from 7 because LSB 
         for(int j = 7; j >= 0; j--){
             if(binaryValue[j] == 1){
                 // TODO: add custom renderer color 
@@ -441,6 +465,10 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     case '5':
                     // 8xy5   
                     subtractVXFromVY(secondNibble, thirdNibble); 
+                    break; 
+                    case '6':
+                    // 8xy6   
+                    shiftVXValueRight(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                     case '7':
                     // 8xy7    

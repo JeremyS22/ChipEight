@@ -16,7 +16,7 @@ int main (int argv, char** args){
     Memory memory; 
     Cpu cpu; 
     
-    int instructionsPerSecond = 700; 
+    int instructionsPerSecond = 540; 
     
     bool windowIsRunning = true; 
     SDL_Event windowEvent; 
@@ -26,12 +26,8 @@ int main (int argv, char** args){
     screen.initializeScreen(); 
 
     memory.loadFontDataIntoMemory(cpu, memory); 
-    
-    cout << "Status: (Main) PROGRAM COUNTER after loading font data in Memory " << cpu.getProgramCounter() << endl; 
 
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
-
-    cout << "Status: (Main) PROGRAM COUNTER after loading roms in Memory " << cpu.getProgramCounter() << endl; 
 
     memory.debug_printMemory(memory, true); 
 
