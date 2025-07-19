@@ -269,17 +269,9 @@ void Cpu::shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP
     }
 
     bitset<8> binaryValueOfVX (regist_V[X]); 
-    regist_V[0xF] = binaryValueOfVX[7]; 
+    regist_V[0xF] = binaryValueOfVX[0]; 
     
     regist_V[X] >>= 1; 
-
-
-
-    /* uint8_t tempVXValue = valueFromVY 
-    
-    
-    regist_V[X] = valueFromVY;  */
-
 }
 
 // 8xy7      
@@ -297,6 +289,21 @@ void Cpu::subtractVYFromVX(int secondNibble, int thirdNibble){
     regist_V[X] = regist_V[Y] - regist_V[X];  
 
     cout << "AFTER VX - VY! " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
+}
+
+// 8xyE 
+void Cpu::shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
+    uint8_t X = convertCharToHex(secondNibble); 
+    uint8_t Y = convertCharToHex(thirdNibble); 
+    
+    if (COSMAC_VIP_FLAG_IS_ON == true){
+        regist_V[X] = regist_V[Y];     
+    }
+
+    bitset<8> binaryValueOfVX (regist_V[X]); 
+    regist_V[0xF] = binaryValueOfVX[0]; 
+    
+    regist_V[X] <<= 1; 
 }
 
 // 9xyn 
@@ -473,6 +480,10 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     case '7':
                     // 8xy7    
                     subtractVYFromVX(secondNibble, thirdNibble); 
+                    break; 
+                    case 'e':
+                    // 8xyE 
+                    shiftVXValueLeft(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                 } 
                 break;
