@@ -366,16 +366,30 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
 }
 
 // fx55 
-void Cpu::storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON){
+void Cpu::storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
     uint16_t tempAddress = regist_I; 
-    for (int i = 0; i < X; i++){
+    for (int i = 0; i <= X; i++){
         memory.systemMemory[tempAddress] = regist_V[i]; 
         tempAddress++; 
+        
+        if (COSMAC_VIP_FLAG_IS_ON == true){
+            regist_I = tempAddress; 
+        }
     }
+}  
 
-    if (COSMAC_VIP_FLAG_IS_ON == true){
-        regist_I = tempAddress; 
+// fx65 
+void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON){
+    int X = convertCharToHex(secondNibble); 
+    uint16_t tempAddress = regist_I; 
+    for (int i = 0; i <= X; i++){
+        regist_V[i] = memory.systemMemory[tempAddress]; 
+        tempAddress++; 
+        
+        if (COSMAC_VIP_FLAG_IS_ON == true){
+            regist_I = tempAddress; 
+        }
     }
 } 
 
@@ -525,7 +539,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                     break; 
                     case '6':
                         // call fx65 
-                        getCurrentInstruction(); // call function 
+                        storeMemoryToRegisters(secondNibble, memory, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                 } 
                 break;

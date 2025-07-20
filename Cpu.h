@@ -169,7 +169,10 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
                             Memory memory, Cpu& cpu); 
 
 // fx55 
-void storeRegistersToMemory(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON); 
+void storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_VIP_FLAG_IS_ON); 
+
+// fx65 
+void storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON); 
 
 void fetchInstructions(Memory memory); 
 
