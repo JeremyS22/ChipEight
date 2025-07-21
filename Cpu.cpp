@@ -365,6 +365,26 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
     SDL_RenderPresent(screen.renderer); 
 }
 
+// fx33 
+void Cpu::storeEachVXDigitInMemory(char secondNibble, Memory& memory){
+    int X = convertCharToHex(secondNibble); 
+    uint8_t digitOfVX = 0; 
+    uint8_t tempVXValue = regist_V[X]; 
+    
+    // adding 2 to compensate for modulus 10 and getting the right most digit  
+    for (uint16_t currentAddress = regist_I + 2; currentAddress >= regist_I; currentAddress--){
+        if (tempVXValue != 0){
+            digitOfVX = tempVXValue % 10; 
+            // storing float result in int to truncate decimal 
+            tempVXValue /= 10; 
+        }
+        else {
+            digitOfVX = 0; 
+        }
+        memory.systemMemory[currentAddress] = digitOfVX; 
+    }
+}  
+
 // fx55 
 void Cpu::storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
@@ -526,19 +546,19 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 getCurrentInstruction(); // call function 
                 switch (thirdNibble){
                     case '1':
-                        // call fx1e  
+                        // fx1e  
                         getCurrentInstruction(); // call function 
                         break; 
                     case '3':
-                        // call fx33 
-                        getCurrentInstruction(); // call function 
+                        // fx33 
+                        storeEachVXDigitInMemory(secondNibble, memory); 
                     break; 
                     case '5':
-                        // call fx55  
+                        // fx55  
                         storeRegistersToMemory(secondNibble, memory, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                     case '6':
-                        // call fx65 
+                        // fx65 
                         storeMemoryToRegisters(secondNibble, memory, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                 } 
