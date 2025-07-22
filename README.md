@@ -26,9 +26,17 @@ https://github.com/corax89/chip8-test-rom
 ![Screenshot 2025-07-05 ](https://github.com/user-attachments/assets/80045ea2-452f-48b2-ba56-1c59406104b8)
 <p align = "center"><strong><em>Timendus' Chip 8 splash screen rom</em></strong></p>
 
-Thanks to Timendus and Corax for these very helpful resources 😊<br>  
+<img width="1103" height="553" alt="Screenshot 2025-07-22 163218" src="https://github.com/user-attachments/assets/cd95e96c-50c3-45b5-99dd-6565d06c38bd" />
+<p align = "center"><strong><em>Timendus' Opcode Test ROM </em></strong></p> 
+This is Timendus' version of Corax's original Opcode test ROM.  (The "r" next to the opcodes are checkmarks) 
+
 <strong>ROM source:</strong><br>
 https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file 
+
+
+
+Thanks to Timendus and Corax for these very helpful resources 😊<br>  
+
 
 
 
