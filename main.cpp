@@ -33,14 +33,32 @@ int main (int argv, char** args){
 
     while(windowIsRunning){
         if (SDL_PollEvent(&windowEvent)){
+            
             if(windowEvent.type == SDL_QUIT){
-                windowIsRunning = false; 
-                break; 
+                        windowIsRunning = false; 
+                        cout << "Clicked closed, EXITING " << endl; 
+                        return 0; 
             }
-
-            for(int instructionCounter = 0; instructionCounter < instructionsPerSecond; instructionCounter++){
-                cpu.fetchInstructions(memory); 
-                cpu.decodeAndExecuteInstructions(cpu.currentInstruction, screen, memory, cpu); 
+            else if (windowEvent.type == SDL_KEYDOWN){
+                   switch (windowEvent.key.keysym.sym){
+                        case SDLK_q: case SDLK_ESCAPE: 
+                            windowIsRunning = false;
+                            cout << "q or ESC PRESSED, EXITING " << endl; 
+                            return 0; 
+                   }
+            }
+            else if (windowEvent.type == SDL_KEYUP){
+                   switch (windowEvent.key.keysym.sym){
+                       case SDLK_q:
+                           cout << "q RELEASED, EXITING " << endl;  
+                           return 0; 
+                   }
+            }
+            else {
+                for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; instructionCounter++){
+                        cpu.fetchInstructions(memory); 
+                        cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu); 
+                }
             }
             this_thread::sleep_for(chrono::seconds(1)); 
         }
