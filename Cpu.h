@@ -168,6 +168,9 @@ void loadAddressInRegisterI(std::string address);
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
                             Memory memory, Cpu& cpu); 
 
+// fx1e 
+void addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON); 
+
 // fx33 
 void storeEachVXDigitInMemory(char secondNibble, Memory& memory); 
 

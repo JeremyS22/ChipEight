@@ -365,6 +365,18 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
     SDL_RenderPresent(screen.renderer); 
 }
 
+// fx1e 
+void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
+    int X = convertCharToHex(secondNibble); 
+    regist_I += regist_V[X]; 
+
+    if(COSMAC_VIP_FLAG_IS_ON == false){
+        if (regist_I > 0x0FFF){ // 0x0FFF is regist_I's limit (0000-0FFF) 
+            regist_V[0xF] = 1; 
+        }
+    }
+}
+
 // fx33 
 void Cpu::storeEachVXDigitInMemory(char secondNibble, Memory& memory){
     int X = convertCharToHex(secondNibble); 
@@ -547,7 +559,8 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 switch (thirdNibble){
                     case '1':
                         // fx1e  
-                        getCurrentInstruction(); // call function 
+                        // fx1e 
+                        addVXToRegisterI(secondNibble, COSMAC_VIP_FLAG_IS_ON); 
                         break; 
                     case '3':
                         // fx33 
@@ -562,7 +575,6 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                         storeMemoryToRegisters(secondNibble, memory, COSMAC_VIP_FLAG_IS_ON); 
                     break; 
                 } 
-                break;
                 break;
             default: 
                 cout << "Status: (CPU) Error, Opcode not found " << endl; 
