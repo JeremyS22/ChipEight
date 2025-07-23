@@ -31,12 +31,10 @@ class Cpu {
 
         uint8_t regist_V[16]; 
 
-
-    public:
-
         // TODO: set this as a private member 
         std::string currentInstruction; 
 
+    public:
 
         uint8_t fontData[80] =  {
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
