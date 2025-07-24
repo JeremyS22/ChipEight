@@ -6,9 +6,11 @@
 #include <string> 
 
 #include "Screen.h" 
-#include "Memory.h"  
+#include "Memory.h" 
+#include "Keypad.h" 
 class Memory;
 class Screen; 
+class Keypad; 
 
 // 0x000 to 0x1FF are reserved for interpreter 
 // font data at 0x050 - 0x09F  
@@ -31,7 +33,6 @@ class Cpu {
 
         uint8_t regist_V[16]; 
 
-        // TODO: set this as a private member 
         std::string currentInstruction; 
 
     public:
@@ -180,7 +181,7 @@ void storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FL
 
 void fetchInstructions(Memory memory); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory& memory, Cpu& cpu); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory& memory, Cpu& cpu, Keypad keypad); 
 
 int convertCharToHex(char Value); 
  

@@ -442,7 +442,7 @@ void Cpu::fetchInstructions(Memory memory){
     
 }
 
-void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory& memory, Cpu& cpu){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory& memory, Cpu& cpu, Keypad keypad){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
@@ -552,14 +552,23 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 drawSpriteAtVXAndVY(secondNibble, thirdNibble, fourthNibble, screen, memory, cpu);  
                 break;
             case 'e':       
-                getCurrentInstruction(); // call function 
+                switch (thirdNibble){
+                    case '9':
+                        // ex9e 
+                        keypad.getKeypadInput(screen);  
+                        getCurrentInstruction(); // call function 
+                        break; 
+                    case 'a':
+                        // exa1 
+                        getCurrentInstruction(); // call function 
+                    break; 
+                } 
+                break;
                 break;
             case 'f': 
-                getCurrentInstruction(); // call function 
                 switch (thirdNibble){
                     case '1':
                         // fx1e  
-                        // fx1e 
                         addVXToRegisterI(secondNibble, COSMAC_VIP_FLAG_IS_ON); 
                         break; 
                     case '3':

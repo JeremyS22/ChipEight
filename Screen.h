@@ -9,10 +9,12 @@ class Screen {
 private: 
     int scalingMultipiler; 
     bool pixelStatus[64][32]; 
+    bool windowStatus; 
 
 public: 
     SDL_Window* window; 
     SDL_Renderer* renderer; 
+    SDL_Event windowEvent; 
 
     Screen(){}; 
     Screen(int scalingMultipiler, SDL_Window* window, SDL_Renderer* renderer, Cpu& cpu){
@@ -29,6 +31,8 @@ public:
     void setScalingMultipiler(int ScalingMultipiler); 
     int getScalingMultipiler();  
     void setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu); 
+    void setWindowIsOpen(bool IsRunning); 
+    bool getWindowIsOpen(); 
     void destroyCreatedWindow(); 
 }; 
 

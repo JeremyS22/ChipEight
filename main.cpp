@@ -3,6 +3,7 @@
 #include "Screen.h"
 #include "Memory.h" 
 #include "Cpu.h"
+#include "Keypad.h" 
 #include "Debugger.h"
 
 #include "src/include/SDL2/SDL.h" 
@@ -16,15 +17,14 @@ int main (int argv, char** args){
     Screen screen;  
     Memory memory; 
     Cpu cpu; 
+    Keypad keypad; 
     Debugger debugger; 
     
     int instructionsPerSecond = 540; 
     
-    bool windowIsRunning = true; 
     bool debuggerIsOn = true; 
-    SDL_Event windowEvent; 
 
-    string romFileLocation = "ROMS/Pong 2 (Pong hack) [David Winter, 1997].ch8"; 
+    string romFileLocation = "ROMS/6-keypad.ch8"; 
 
     screen.initializeScreen(); 
 
@@ -33,42 +33,34 @@ int main (int argv, char** args){
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 
     if (debuggerIsOn == true){
-        debugger.runDebugger(windowEvent, cpu, memory, screen); 
+        debugger.runDebugger(cpu, memory, screen, keypad); 
     }
     else {
-        while(windowIsRunning){
-            if (SDL_PollEvent(&windowEvent)){
-
-                
+        while(screen.getWindowIsOpen()){
+            /* if (SDL_PollEvent(&windowEvent)){
 
                 if(windowEvent.type == SDL_QUIT){
-                            windowIsRunning = false; 
-                            cout << "Clicked closed, EXITING " << endl; 
-                            return 0; 
+                    windowIsRunning = false; 
+                    cout << "Clicked closed, EXITING " << endl; 
+                    return 0; 
                 }
-                else if (windowEvent.type == SDL_KEYDOWN){
+                else if (windowEvent.type == SDL_KEYDOWN || windowEvent.type == SDL_KEYUP){
                     switch (windowEvent.key.keysym.sym){
                             case SDLK_q: case SDLK_ESCAPE: 
                                 windowIsRunning = false;
-                                cout << "q or ESC PRESSED, EXITING " << endl; 
+                                cout << "q or ESC pressed or Released, EXITING " << endl; 
                                 return 0; 
                     }
-                }
-                else if (windowEvent.type == SDL_KEYUP){
-                    switch (windowEvent.key.keysym.sym){
-                        case SDLK_q:
-                            cout << "q RELEASED, EXITING " << endl;  
-                            return 0; 
-                    }
-                }
-                else {
+                } 
+                else {*/
                     for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; instructionCounter++){
-                            cpu.fetchInstructions(memory); 
-                            cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu); 
+                        cpu.fetchInstructions(memory); 
+                        cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
+                        keypad.getKeypadInput(screen); 
                     }
-                }
+                // }
                 this_thread::sleep_for(chrono::seconds(1)); 
-            }
+            // }
         }    
     }
 

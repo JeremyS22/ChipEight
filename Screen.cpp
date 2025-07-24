@@ -12,6 +12,8 @@ void Screen::initializeScreen(){
         setScalingMultipiler(16); 
         SDL_CreateWindowAndRenderer(64 * getScalingMultipiler(), 32 * getScalingMultipiler(), 0, &window, &renderer); 
 
+        setWindowIsOpen(true); 
+
         // TODO: Add customizable color background 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);  
         SDL_RenderClear(renderer); 
@@ -47,6 +49,14 @@ void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& c
                 cpu.setRegist_V(0xF, 1); 
         }
         
+}
+
+void Screen::setWindowIsOpen(bool passedInWindowStatus){
+        windowStatus = passedInWindowStatus; 
+}
+
+bool Screen::getWindowIsOpen(){
+        return windowStatus; 
 }
 
 void Screen::destroyCreatedWindow(){
