@@ -367,16 +367,16 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
 
 // ex9e 
 void Cpu::skipInstructionIfKeyIsPressed(char secondNibble, Screen& screen, Keypad keypad){
-    int keyFromVX = convertCharToHex(secondNibble); 
-   if(keypad.checkIfKeyIsPressed(screen, keyFromVX)){
+    int X = convertCharToHex(secondNibble); 
+   if(keypad.checkIfKeyIsPressed(screen, regist_V[X])){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
    }
 }
 
 // exa1 
 void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Screen& screen, Keypad keypad){
-    int keyFromVX = convertCharToHex(secondNibble); 
-    if(keypad.checkIfKeyIsNotPressed(screen, keyFromVX)){
+    int X = convertCharToHex(secondNibble); 
+    if(keypad.checkIfKeyIsNotPressed(screen, regist_V[X])){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
     }
 }
@@ -578,7 +578,6 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                         skipInstructionIfKeyNotPressed(secondNibble, screen, keypad);  
                     break; 
                 } 
-                break;
                 break;
             case 'f': 
                 switch (thirdNibble){

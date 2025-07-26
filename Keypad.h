@@ -8,7 +8,7 @@ class Screen;
 
 class Keypad {
     private: 
-    std::map<int, SDL_KeyCode> keypadMap; 
+    std::map<int, SDL_Scancode> keypadMap; 
     
     public: 
 

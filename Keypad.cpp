@@ -6,22 +6,22 @@
 using namespace std; 
 
 Keypad::Keypad() : keypadMap({
-    {0x0, SDLK_0},
-    {0x1, SDLK_1},
-    {0x2, SDLK_2},
-    {0x3, SDLK_3},
-    {0x4, SDLK_4},
-    {0x5, SDLK_5},
-    {0x6, SDLK_6},
-    {0x7, SDLK_7},
-    {0x8, SDLK_8},
-    {0x9, SDLK_9},
-    {0xa, SDLK_a},
-    {0xb, SDLK_b},
-    {0xc, SDLK_c},
-    {0xd, SDLK_d},
-    {0xe, SDLK_e},
-    {0xf, SDLK_f}
+    {0x0, SDL_SCANCODE_0},
+    {0x1, SDL_SCANCODE_1},
+    {0x2, SDL_SCANCODE_2},
+    {0x3, SDL_SCANCODE_3},
+    {0x4, SDL_SCANCODE_4},
+    {0x5, SDL_SCANCODE_5},
+    {0x6, SDL_SCANCODE_6},
+    {0x7, SDL_SCANCODE_7},
+    {0x8, SDL_SCANCODE_8},
+    {0x9, SDL_SCANCODE_9},
+    {0xa, SDL_SCANCODE_A},
+    {0xb, SDL_SCANCODE_B},
+    {0xc, SDL_SCANCODE_C},
+    {0xd, SDL_SCANCODE_D},
+    {0xe, SDL_SCANCODE_E},
+    {0xf, SDL_SCANCODE_F}
 }){}
 
 
@@ -47,25 +47,19 @@ char Keypad::getKeypadInput(Screen& screen){
 }
 
 bool Keypad::checkIfKeyIsPressed(Screen& screen, int keyFromVX){
-    while(SDL_PollEvent(&screen.windowEvent)){
-        if(screen.windowEvent.type == SDL_KEYDOWN){
-            if(screen.windowEvent.key.keysym.sym == keypadMap[keyFromVX]){
-                cout << "KEY FOUND, IS PRESSED " << endl; 
-                return true; 
-            }
-        }
+    const Uint8* state = SDL_GetKeyboardState(NULL); 
+
+    if(state[keypadMap[keyFromVX]] == true){
+        return true; 
     }
     return false; 
 }
 
 bool Keypad::checkIfKeyIsNotPressed(Screen& screen, int keyFromVX){
-    while(SDL_PollEvent(&screen.windowEvent)){
-        if(screen.windowEvent.type == SDL_KEYUP){
-            if(screen.windowEvent.key.keysym.sym == keypadMap[keyFromVX]){
-                cout << "KEY FOUND, IS RELEASED" << endl; 
-                return true; 
-            }
-        }
+    const Uint8* state = SDL_GetKeyboardState(NULL); 
+
+    if(state[keypadMap[keyFromVX]] == false){
+        return true; 
     }
     return false; 
 }
