@@ -167,6 +167,12 @@ void loadAddressInRegisterI(std::string address);
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
                             Memory memory, Cpu& cpu); 
 
+// ex9e 
+void skipInstructionIfKeyIsPressed(char secondNibble, Screen& screen, Keypad keypad); 
+
+// exa1 
+void skipInstructionIfKeyNotPressed(char secondNibble, Screen& screen, Keypad keypad); 
+
 // fx1e 
 void addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON); 
 
@@ -181,10 +187,9 @@ void storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FL
 
 void fetchInstructions(Memory memory); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen screen, Memory& memory, Cpu& cpu, Keypad keypad); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad); 
 
 int convertCharToHex(char Value); 
- 
 
 // Use for debugging ------------------------------------------------------------------------------- 
 

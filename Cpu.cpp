@@ -365,6 +365,22 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
     SDL_RenderPresent(screen.renderer); 
 }
 
+// ex9e 
+void Cpu::skipInstructionIfKeyIsPressed(char secondNibble, Screen& screen, Keypad keypad){
+    int keyFromVX = convertCharToHex(secondNibble); 
+   if(keypad.checkIfKeyIsPressed(screen, keyFromVX)){
+        incrementProgramCounter(getProgramCounterPointer(), 2); 
+   }
+}
+
+// exa1 
+void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Screen& screen, Keypad keypad){
+    int keyFromVX = convertCharToHex(secondNibble); 
+    if(keypad.checkIfKeyIsNotPressed(screen, keyFromVX)){
+        incrementProgramCounter(getProgramCounterPointer(), 2); 
+    }
+}
+
 // fx1e 
 void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
@@ -442,7 +458,7 @@ void Cpu::fetchInstructions(Memory memory){
     
 }
 
-void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen, Memory& memory, Cpu& cpu, Keypad keypad){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
@@ -555,12 +571,11 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen screen,
                 switch (thirdNibble){
                     case '9':
                         // ex9e 
-                        keypad.getKeypadInput(screen);  
-                        getCurrentInstruction(); // call function 
+                        skipInstructionIfKeyIsPressed(secondNibble, screen, keypad);  
                         break; 
                     case 'a':
                         // exa1 
-                        getCurrentInstruction(); // call function 
+                        skipInstructionIfKeyNotPressed(secondNibble, screen, keypad);  
                     break; 
                 } 
                 break;

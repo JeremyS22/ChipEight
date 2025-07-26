@@ -20,9 +20,10 @@ int main (int argv, char** args){
     Keypad keypad; 
     Debugger debugger; 
     
-    int instructionsPerSecond = 540; 
+    // int instructionsPerSecond = 540; 
+    int instructionsPerSecond = 20; 
     
-    bool debuggerIsOn = true; 
+    bool debuggerIsOn = false; 
 
     string romFileLocation = "ROMS/6-keypad.ch8"; 
 
@@ -37,30 +38,29 @@ int main (int argv, char** args){
     }
     else {
         while(screen.getWindowIsOpen()){
-            /* if (SDL_PollEvent(&windowEvent)){
+            if (SDL_PollEvent(&screen.windowEvent)){
 
-                if(windowEvent.type == SDL_QUIT){
-                    windowIsRunning = false; 
+                if(screen.windowEvent.type == SDL_QUIT){
+                    screen.setWindowIsOpen(false); 
                     cout << "Clicked closed, EXITING " << endl; 
                     return 0; 
                 }
-                else if (windowEvent.type == SDL_KEYDOWN || windowEvent.type == SDL_KEYUP){
-                    switch (windowEvent.key.keysym.sym){
+                else if (screen.windowEvent.type == SDL_KEYDOWN || screen.windowEvent.type == SDL_KEYUP){
+                    switch (screen.windowEvent.key.keysym.sym){
                             case SDLK_q: case SDLK_ESCAPE: 
-                                windowIsRunning = false;
+                                screen.setWindowIsOpen(false);  
                                 cout << "q or ESC pressed or Released, EXITING " << endl; 
                                 return 0; 
                     }
                 } 
-                else {*/
-                    for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; instructionCounter++){
+                else {
+                    for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; instructionCounter++){ 
                         cpu.fetchInstructions(memory); 
                         cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
-                        keypad.getKeypadInput(screen); 
                     }
-                // }
+                }
                 this_thread::sleep_for(chrono::seconds(1)); 
-            // }
+            }
         }    
     }
 

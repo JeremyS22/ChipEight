@@ -19,20 +19,20 @@ void Debugger::runDebugger(Cpu cpu, Memory memory, Screen& screen, Keypad keypad
                 }
                 else if (screen.windowEvent.type == SDL_KEYDOWN){
                     switch (screen.windowEvent.key.keysym.sym){
-                            case SDLK_ESCAPE: 
-                                screen.setWindowIsOpen(false); 
-                                cout << "[DEBUGGER] ESC PRESSED, exiting debugging mode" << endl; 
-                                return; 
-                            case SDLK_RIGHT:
+                        case SDLK_ESCAPE: 
+                            screen.setWindowIsOpen(false); 
+                            cout << "[DEBUGGER] ESC PRESSED, exiting debugging mode" << endl; 
+                            return; 
+                        case SDLK_RIGHT:
+                            cpu.fetchInstructions(memory); 
+                            cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
+                            break; 
+                        case  SDLK_UP:
+                            for (int i = 0; i < 5; i++){
                                 cpu.fetchInstructions(memory); 
-                                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
-                                break; 
-                            case  SDLK_UP:
-                                for (int i = 0; i < 5; i++){
-                                    cpu.fetchInstructions(memory); 
-                                    cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad);    
-                                }
-                                break; 
+                                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad);    
+                            }
+                            break; 
                     }
                 }
                 this_thread::sleep_for(chrono::seconds(1)); 
