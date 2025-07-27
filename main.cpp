@@ -20,8 +20,8 @@ int main (int argv, char** args){
     Keypad keypad; 
     Debugger debugger; 
     
-    // int instructionsPerSecond = 540; 
-    int instructionsPerSecond = 20; 
+    int instructionsPerSecond = 540; 
+    // int instructionsPerSecond = 20; 
     
     bool debuggerIsOn = false; 
 
@@ -49,7 +49,7 @@ int main (int argv, char** args){
                     switch (screen.windowEvent.key.keysym.sym){
                         case SDLK_ESCAPE: 
                             screen.setWindowIsOpen(false);  
-                            cout << "q or ESC pressed or Released, EXITING " << endl; 
+                            cout << "ESC pressed or Released, EXITING " << endl; 
                             return 0; 
                     }
                 } 

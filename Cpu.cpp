@@ -366,18 +366,33 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
 }
 
 // ex9e 
-void Cpu::skipInstructionIfKeyIsPressed(char secondNibble, Screen& screen, Keypad keypad){
+void Cpu::skipInstructionIfKeyIsPressed(char secondNibble, Keypad keypad){
     int X = convertCharToHex(secondNibble); 
-   if(keypad.checkIfKeyIsPressed(screen, regist_V[X])){
+   if(keypad.checkIfKeyIsPressed(regist_V[X])){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
    }
 }
 
 // exa1 
-void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Screen& screen, Keypad keypad){
+void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad){
     int X = convertCharToHex(secondNibble); 
-    if(keypad.checkIfKeyIsNotPressed(screen, regist_V[X])){
+    cout << "Looking for key " << regist_V[X] << endl; 
+    if(keypad.checkIfKeyIsNotPressed(regist_V[X])){
+        cout << "Key " << regist_V[X] << "NOT PRESSED " << endl;  
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+    }
+}
+
+// fx0a 
+void Cpu::loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad){
+    int X = convertCharToHex(secondNibble); 
+    uint8_t returnedResult = keypad.getPressedKey(screen); 
+
+    if(returnedResult == '\0'){
+        decrementProgramCounter(getProgramCounterPointer(), 2); 
+    }
+    else {
+        regist_V[X] = returnedResult; 
     }
 }
 
@@ -571,19 +586,47 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                 switch (thirdNibble){
                     case '9':
                         // ex9e 
-                        skipInstructionIfKeyIsPressed(secondNibble, screen, keypad);  
+                        skipInstructionIfKeyIsPressed(secondNibble, keypad);  
                         break; 
                     case 'a':
                         // exa1 
-                        skipInstructionIfKeyNotPressed(secondNibble, screen, keypad);  
+                        skipInstructionIfKeyNotPressed(secondNibble, keypad);  
                     break; 
                 } 
                 break;
             case 'f': 
                 switch (thirdNibble){
+                    case '0':
+                        switch (fourthNibble){
+                            case '7':
+                                // fx07 
+                                getCurrentInstruction(); 
+                                break; 
+                            case 'a':
+                                // fx0a   
+                                loopUntilKeyPressed(secondNibble, screen, keypad);     
+                                break; 
+                        } 
+                        break;
                     case '1':
-                        // fx1e  
-                        addVXToRegisterI(secondNibble, COSMAC_VIP_FLAG_IS_ON); 
+                        switch (fourthNibble){
+                            case '5':
+                                // fx15 
+                                getCurrentInstruction(); 
+                                break; 
+                            case '8':
+                                // fx18   
+                                getCurrentInstruction();   
+                                break; 
+                            case 'e':
+                                // fx1e  
+                                addVXToRegisterI(secondNibble, COSMAC_VIP_FLAG_IS_ON); 
+                                break;
+                        }     
+                        break; 
+                    case '2':
+                        // fx29 
+                        getCurrentInstruction(); 
                         break; 
                     case '3':
                         // fx33 

@@ -13,8 +13,9 @@ class Keypad {
     public: 
 
     char getKeypadInput(Screen& screen); 
-    bool checkIfKeyIsPressed(Screen& screen, int keyFromVX); 
-    bool checkIfKeyIsNotPressed(Screen& screen, int value); 
+    bool checkIfKeyIsPressed(int keyFromVX); 
+    bool checkIfKeyIsNotPressed(int value); 
+    uint8_t getPressedKey(Screen& screen); 
     
     Keypad(); 
     ~Keypad(){} 

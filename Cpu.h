@@ -168,10 +168,13 @@ void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble,
                             Memory memory, Cpu& cpu); 
 
 // ex9e 
-void skipInstructionIfKeyIsPressed(char secondNibble, Screen& screen, Keypad keypad); 
+void skipInstructionIfKeyIsPressed(char secondNibble, Keypad keypad); 
 
 // exa1 
-void skipInstructionIfKeyNotPressed(char secondNibble, Screen& screen, Keypad keypad); 
+void skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad); 
+
+// fx0a 
+void loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad); 
 
 // fx1e 
 void addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON); 

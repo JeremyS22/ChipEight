@@ -46,7 +46,7 @@ char Keypad::getKeypadInput(Screen& screen){
     return '\0'; 
 }
 
-bool Keypad::checkIfKeyIsPressed(Screen& screen, int keyFromVX){
+bool Keypad::checkIfKeyIsPressed(int keyFromVX){
     const Uint8* state = SDL_GetKeyboardState(NULL); 
 
     if(state[keypadMap[keyFromVX]] == true){
@@ -55,12 +55,29 @@ bool Keypad::checkIfKeyIsPressed(Screen& screen, int keyFromVX){
     return false; 
 }
 
-bool Keypad::checkIfKeyIsNotPressed(Screen& screen, int keyFromVX){
+bool Keypad::checkIfKeyIsNotPressed(int keyFromVX){
     const Uint8* state = SDL_GetKeyboardState(NULL); 
 
     if(state[keypadMap[keyFromVX]] == false){
         return true; 
     }
     return false; 
+}
+
+uint8_t Keypad::getPressedKey(Screen& screen){
+    if(SDL_PollEvent(&screen.windowEvent) && COSMAC_VIP_FLAG_IS_ON == false // for modern interpreters 
+        || COSMAC_VIP_FLAG_IS_ON == true && SDL_PollEvent(&screen.windowEvent) && screen.windowEvent.type == SDL_KEYUP){ // for COSMAC VIP interpreter 
+        cout << "WINDOW EVENT FOUND " << endl; 
+        const Uint8* state = SDL_GetKeyboardState(NULL); 
+        int keyPressed; 
+
+        for(auto mapIterator : keypadMap){
+            if(mapIterator.second == screen.windowEvent.key.keysym.scancode){
+                cout << "FOUND KEY, returning hexadecimal value " << endl; 
+                return mapIterator.first; 
+            }
+        }
+    }
+    return '\0'; 
 }
 
