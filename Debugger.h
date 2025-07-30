@@ -1,3 +1,6 @@
+#ifndef DEBUGGER_H
+#define DEBUGGER_H
+
 #include <iostream> 
 
 #include "src/include/SDL2/SDL.h" 
@@ -12,12 +15,17 @@ class Screen;
 class Keypad; 
 
 class Debugger {
+    private: 
+    bool debuggerIsOn; 
+    
     public: 
-
-    void runDebugger(Cpu cpu, Memory memory, Screen& screen, Keypad keypad); 
+    bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad); 
+    void setDebuggerIsOn(bool value); 
+    bool getDebuggerIsOn(); 
 
     Debugger(); 
     ~Debugger(){}; 
 
 }; 
 
+#endif 

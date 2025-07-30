@@ -2,6 +2,7 @@
 
 #include "Keypad.h" 
 #include "Screen.h" 
+#include "Debugger.h" 
 
 using namespace std; 
 
@@ -24,26 +25,32 @@ Keypad::Keypad() : keypadMap({
     {0xf, SDL_SCANCODE_F}
 }){}
 
-
-char Keypad::getKeypadInput(Screen& screen){
+/*
+*  return: The boolean status determining whether input was given to close emulator, true = close emulator, false = remain open 
+*/
+bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory& memory, Keypad& keypad){
     if (SDL_PollEvent(&screen.windowEvent)){
-        if (screen.windowEvent.type == SDL_KEYDOWN || screen.windowEvent.type == SDL_KEYUP){
+        if(screen.windowEvent.type == SDL_QUIT){
+            screen.setWindowIsOpen(false); 
+            cout << "Clicked closed, EXITING " << endl; 
+            return false; 
+        }
+        else if (screen.windowEvent.type == SDL_KEYDOWN){
             switch (screen.windowEvent.key.keysym.sym){
-                case SDLK_1: 
-                    cout << "1 read " << endl; 
-                    return'1'; 
-                case SDLK_2: 
-                    cout << "2 read " << endl; 
-                    return'2'; 
-                case SDLK_3: 
-                    cout << "3 read " << endl; 
-                    return'3'; 
+                case SDLK_BACKQUOTE: 
+                    if(debugger.runDebugger(cpu, memory, screen, keypad) == true){
+                        return true; 
+                    }
+                    break; 
+                case SDLK_ESCAPE: 
+                    cout << "ESC pressed or Released, EXITING " << endl; 
+                    return true; 
                 default:
-                    return '\0'; 
+                    return false; 
             }
         } 
     } 
-    return '\0'; 
+    return false; 
 }
 
 bool Keypad::checkIfKeyIsPressed(int keyFromVX){

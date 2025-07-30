@@ -5,6 +5,10 @@
 #include "src/include/SDL2/SDL.h" 
 #include "Screen.h"
 class Screen; 
+class Debugger; 
+class Cpu; 
+class Memory; 
+
 
 class Keypad {
     private: 
@@ -12,7 +16,7 @@ class Keypad {
     
     public: 
 
-    char getKeypadInput(Screen& screen); 
+    bool getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory& memory, Keypad& keypad); 
     bool checkIfKeyIsPressed(int keyFromVX); 
     bool checkIfKeyIsNotPressed(int value); 
     uint8_t getPressedKey(Screen& screen); 
