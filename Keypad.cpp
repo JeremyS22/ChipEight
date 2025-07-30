@@ -68,8 +68,7 @@ uint8_t Keypad::getPressedKey(Screen& screen){
     if(SDL_PollEvent(&screen.windowEvent) && COSMAC_VIP_FLAG_IS_ON == false // for modern interpreters 
         || COSMAC_VIP_FLAG_IS_ON == true && SDL_PollEvent(&screen.windowEvent) && screen.windowEvent.type == SDL_KEYUP){ // for COSMAC VIP interpreter 
         cout << "WINDOW EVENT FOUND " << endl; 
-        const Uint8* state = SDL_GetKeyboardState(NULL); 
-        int keyPressed; 
+        const Uint8* state = SDL_GetKeyboardState(NULL);  
 
         for(auto mapIterator : keypadMap){
             if(mapIterator.second == screen.windowEvent.key.keysym.scancode){

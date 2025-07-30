@@ -34,7 +34,7 @@ int main (int argv, char** args){
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 
     if (debuggerIsOn == true){
-        debugger.runDebugger(cpu, memory, screen, keypad); 
+        debugger.runDebugger(cpu, memory, screen, keypad);  
     }
     else {
         while(screen.getWindowIsOpen()){
@@ -47,7 +47,7 @@ int main (int argv, char** args){
                 }
                 else if (screen.windowEvent.type == SDL_KEYDOWN || screen.windowEvent.type == SDL_KEYUP){
                     switch (screen.windowEvent.key.keysym.sym){
-                        case SDLK_ESCAPE: 
+                        case SDL_SCANCODE_ESCAPE: 
                             screen.setWindowIsOpen(false);  
                             cout << "ESC pressed or Released, EXITING " << endl; 
                             return 0; 
@@ -59,9 +59,9 @@ int main (int argv, char** args){
                         cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
                     }
                 }
-                this_thread::sleep_for(chrono::seconds(1)); 
+                // this_thread::sleep_for(chrono::seconds(1)); 
             }
-        }    
+        }  
     }
 
     screen.destroyCreatedWindow(); 
