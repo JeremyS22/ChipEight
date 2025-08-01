@@ -57,3 +57,39 @@ void Debugger::setDebuggerIsOn(bool value){
 bool Debugger::getDebuggerIsOn(){
     return debuggerIsOn; 
 }
+
+bool Debugger::initializeDebugger(){
+
+    SDL_Window* debuggingWindow;  
+    SDL_Renderer* debuggingRenderer;
+
+    SDL_Init(SDL_INIT_VIDEO); 
+    SDL_Init(SDL_INIT_EVENTS); 
+
+    SDL_CreateWindowAndRenderer(1024, 512, (SDL_WINDOW_RESIZABLE), &debuggingWindow, &debuggingRenderer); 
+    SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0);  
+    SDL_RenderClear(debuggingRenderer); 
+    SDL_SetWindowTitle(debuggingWindow, "Debugger"); 
+
+    TTF_Init(); 
+    
+    TTF_Font* font = TTF_OpenFont("./assets/Inter_18pt-Regular.ttf", 18); 
+    
+    SDL_Color white = {255 ,255, 255}; 
+
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Testing the ttf ", white); 
+
+    SDL_Texture* message = SDL_CreateTextureFromSurface(debuggingRenderer, surfaceMessage); 
+
+    SDL_Rect messageTextbox; 
+    messageTextbox.x = 50; 
+    messageTextbox.y = 50; 
+    messageTextbox.w = 60; 
+    messageTextbox.h = 20; 
+
+    SDL_RenderCopy(debuggingRenderer, message, NULL, &messageTextbox); 
+
+    SDL_RenderPresent(debuggingRenderer); 
+
+    return false; 
+}

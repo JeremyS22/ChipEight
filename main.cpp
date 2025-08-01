@@ -25,8 +25,10 @@ int main (int argv, char** args){
     debugger.setDebuggerIsOn(false); 
 
     string romFileLocation = "ROMS/Pong 2 (Pong hack) [David Winter, 1997].ch8"; 
-
+        
     screen.initializeScreen(); 
+
+    debugger.initializeDebugger(); 
 
     memory.loadFontDataIntoMemory(cpu, memory); 
 
@@ -40,9 +42,8 @@ int main (int argv, char** args){
             auto startOfClock = chrono::steady_clock::now(); 
             for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; instructionCounter++){ 
                 bool inputToCloseEmulator = keypad.getKeypadInput(screen, debugger, cpu, memory, keypad); 
-                if(inputToCloseEmulator == true){
+                if(inputToCloseEmulator == true)
                     return 0; 
-                }
                 cpu.fetchInstructions(memory); 
                 cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
             }

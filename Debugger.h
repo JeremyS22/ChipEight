@@ -4,6 +4,7 @@
 #include <iostream> 
 
 #include "src/include/SDL2/SDL.h" 
+#include <SDL_ttf.h> 
 #include "Memory.h" 
 #include "Cpu.h"
 #include "Screen.h" 
@@ -22,6 +23,7 @@ class Debugger {
     bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad); 
     void setDebuggerIsOn(bool value); 
     bool getDebuggerIsOn(); 
+    bool initializeDebugger(); 
 
     Debugger(); 
     ~Debugger(){}; 

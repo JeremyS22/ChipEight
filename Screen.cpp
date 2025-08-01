@@ -6,18 +6,24 @@
 using namespace std; 
 
 void Screen::initializeScreen(){
-        SDL_Init(SDL_INIT_EVERYTHING); 
-
+             
+        SDL_Init(SDL_INIT_TIMER); 
+        SDL_Init(SDL_INIT_AUDIO); 
+        SDL_Init(SDL_INIT_VIDEO); 
+        SDL_Init(SDL_INIT_JOYSTICK); 
+        SDL_Init(SDL_INIT_GAMECONTROLLER); 
+        SDL_Init(SDL_INIT_EVENTS); 
+        
         // Initializing this to 16 by default since Chip 8 native's resoution is so small  
         setScalingMultipiler(16); 
         SDL_CreateWindowAndRenderer(64 * getScalingMultipiler(), 32 * getScalingMultipiler(), 0, &window, &renderer); 
+        SDL_SetWindowTitle(window, "ChipEight"); 
 
         setWindowIsOpen(true); 
-
+        
         // TODO: Add customizable color background 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);  
         SDL_RenderClear(renderer); 
-        
         cout << "Status: (Screen) Created Window and Redenerer " << endl; 
 } 
 
@@ -40,7 +46,6 @@ int Screen::getScalingMultipiler(){
 }
 
 void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu){
-        // Cpu cpu; 
         if (value == 1 && pixelStatus[coordinateX][coordinateY] == 0){
                 pixelStatus[coordinateX][coordinateY] = value; 
         }
@@ -60,6 +65,7 @@ bool Screen::getWindowIsOpen(){
 }
 
 void Screen::destroyCreatedWindow(){
+        setWindowIsOpen(false); 
         SDL_DestroyWindow(window); 
         SDL_DestroyRenderer(renderer); 
         SDL_Quit();  
