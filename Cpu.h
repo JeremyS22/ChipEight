@@ -8,13 +8,11 @@
 #include "Screen.h" 
 #include "Memory.h" 
 #include "Keypad.h" 
+#include "Debugger.h" 
 class Memory;
 class Screen; 
 class Keypad; 
-
-// 0x000 to 0x1FF are reserved for interpreter 
-// font data at 0x050 - 0x09F  
-// 0x200 to 0xFFF Chip 8 program/data space 
+class Debugger; 
 
 extern bool COSMAC_VIP_FLAG_IS_ON; 
 
@@ -64,7 +62,6 @@ void setProgramCounter(uint16_t * programCounter, int value);
 
 void incrementProgramCounter(uint16_t * programCounter, int value); 
 
-// including this just in case, may delete this later 
 void decrementProgramCounter(uint16_t * programCounter, int value); 
 
 uint16_t getProgramCounter(); 
@@ -188,9 +185,9 @@ void storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_VIP_F
 // fx65 
 void storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON); 
 
-void fetchInstructions(Memory memory); 
+void fetchInstructions(Memory memory, Debugger debugger); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad, Debugger debugger); 
 
 int convertCharToHex(char Value); 
 

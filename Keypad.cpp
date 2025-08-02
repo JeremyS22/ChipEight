@@ -25,8 +25,8 @@ Keypad::Keypad() : keypadMap({
     {0xf, SDL_SCANCODE_F}
 }){}
 
-/*
-*  return: The boolean status determining whether input was given to close emulator, true = close emulator, false = remain open 
+/**
+ *  \returns A boolean determining whether or not the input given was to close emulator, true = close emulator, false = remain open 
 */
 bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory& memory, Keypad& keypad){
     if (SDL_PollEvent(&screen.windowEvent)){
@@ -38,7 +38,7 @@ bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory
         else if (screen.windowEvent.type == SDL_KEYDOWN){
             switch (screen.windowEvent.key.keysym.sym){
                 case SDLK_BACKQUOTE: 
-                    if(debugger.runDebugger(cpu, memory, screen, keypad) == true){
+                    if(debugger.runDebugger(cpu, memory, screen, keypad, debugger) == true){
                         return true; 
                     }
                     break; 

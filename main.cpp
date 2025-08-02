@@ -35,17 +35,17 @@ int main (int argv, char** args){
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 
     if (debugger.getDebuggerIsOn() == true){
-        debugger.runDebugger(cpu, memory, screen, keypad);  
+        debugger.runDebugger(cpu, memory, screen, keypad, debugger);  
     }
     else {
         while(screen.getWindowIsOpen()){
             auto startOfClock = chrono::steady_clock::now(); 
-            for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; instructionCounter++){ 
+            for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; ++instructionCounter){ 
                 bool inputToCloseEmulator = keypad.getKeypadInput(screen, debugger, cpu, memory, keypad); 
                 if(inputToCloseEmulator == true)
                     return 0; 
-                cpu.fetchInstructions(memory); 
-                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
+                cpu.fetchInstructions(memory, debugger); 
+                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad, debugger); 
             }
             auto endOfClock = chrono::steady_clock::now(); 
             chrono::duration<double> timeElasped = startOfClock - endOfClock; 
@@ -60,6 +60,7 @@ int main (int argv, char** args){
             }
         }
     }
+    debugger.destroyDebuggerWindow(); 
     screen.destroyCreatedWindow(); 
     screen.setWindowIsOpen(false); 
 

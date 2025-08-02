@@ -3,9 +3,7 @@
 
 #include "src/include/SDL2/SDL.h" 
 #include "Cpu.h"
-#include "Debugger.h"
 class Cpu; 
-class Debugger; 
 
 class Screen {
 private: 

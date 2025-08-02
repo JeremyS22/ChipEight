@@ -20,8 +20,11 @@ class Memory {
     
     public: 
     
+    // 0x000 to 0x1FF are reserved for interpreter 
+    // font data at 0x050 - 0x09F  
+    // 0x200 to 0xFFF Chip 8 program/data space 
     uint8_t systemMemory[4096];
-    // have stack big enough for 16 2 byte address, may make bigger later 
+    // have stack big enough for 16 bit/2 byte address, may make bigger later 
     std::stack<uint16_t> systemStack; 
 
     Memory();  

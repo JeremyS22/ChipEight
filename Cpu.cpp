@@ -456,7 +456,7 @@ void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_V
     }
 } 
 
-void Cpu::fetchInstructions(Memory memory){
+void Cpu::fetchInstructions(Memory memory, Debugger debugger){
 
     stringstream instructionString;
     instructionString << hex << setw(2) << setfill('0') << (int)memory.systemMemory[getProgramCounter()];
@@ -464,7 +464,9 @@ void Cpu::fetchInstructions(Memory memory){
 
     setCurrentInstruction(instructionString.str()); 
 
-    debug_printCurrentInstruction(getCurrentInstruction());  
+    // debug_printCurrentInstruction(getCurrentInstruction());  
+
+    debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
 
     cout << "Pre-Increment Program Counter " << getProgramCounter() << endl; 
     incrementProgramCounter(getProgramCounterPointer(), 2); 
@@ -473,7 +475,7 @@ void Cpu::fetchInstructions(Memory memory){
     
 }
 
-void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad, Debugger debugger){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 

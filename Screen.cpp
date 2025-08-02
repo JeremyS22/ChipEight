@@ -24,14 +24,13 @@ void Screen::initializeScreen(){
         // TODO: Add customizable color background 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);  
         SDL_RenderClear(renderer); 
-        cout << "Status: (Screen) Created Window and Redenerer " << endl; 
+        cout << "Status: (Screen) Created Window and Renderer " << endl; 
 } 
 
 void Screen::turnOffAllPixels(Cpu& cpu){
-        for (int i = 0; i < 64; i++){
-                for (int j = 0; j < 32; j++){
+        for (int i = 0; i < 64; ++i){
+                for (int j = 0; j < 32; ++j){
                         // initialized to FALSE by default to represent turned off pixels 
-                        // pixelStatus[i][j] = 0; 
                         setPixelStatus(i, j, 0, cpu); 
                 }
         }   
