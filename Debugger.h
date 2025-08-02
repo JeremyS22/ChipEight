@@ -33,7 +33,7 @@ class Debugger {
     bool getDebuggerIsOn(); 
     bool initializeDebugger(); 
     bool destroyDebuggerWindow(); 
-    void createBoxAndAddText(const char* font, const char* messageText, int boxPositionX, int boxPositionY, int boxSizeWidth, int boxSizeHeight); 
+    void createBoxAndAddText(const char* font, const char* messageText, int boxPositionX, int boxPositionY, int boxSizeWidth, int boxSizeHeight, bool textIsStatic); 
     void outputCurrentInstructionToDebugger(std::string instruction); 
 
     Debugger(); 

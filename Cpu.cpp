@@ -139,12 +139,12 @@ void Cpu::jumpToAddress(string address){
 }
 
 // 2nnn
-void Cpu::putAddressOnStack(string address, Memory& memory){
+void Cpu::putAddressOnStack(string address, Memory& memory, Debugger debugger){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     
     cout << "Previous Program Counter on stack, new address for Program Counter " << getProgramCounter() << endl; 
-    debug_printCurrentInstruction(getCurrentInstruction()); 
+    debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
     cout << "\n" << endl;  
 }
 
@@ -464,8 +464,6 @@ void Cpu::fetchInstructions(Memory memory, Debugger debugger){
 
     setCurrentInstruction(instructionString.str()); 
 
-    // debug_printCurrentInstruction(getCurrentInstruction());  
-
     debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
 
     cout << "Pre-Increment Program Counter " << getProgramCounter() << endl; 
@@ -503,7 +501,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                 break;
             case '2': 
                 // call the subroutine call function 2nnn 
-                putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
+                putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory, debugger); 
                 break;
             case '3': 
                 // call skip next instruction if VX == NN  3xnn  
@@ -655,10 +653,3 @@ int Cpu::convertCharToHex(char Value){
     return stoi(hexString.str(), nullptr, 16);    
 }
 
-// Use for debugging ------------------------------------------------------------------------------- 
-
-// TODO: Expand this to include other registers 
-void Cpu::debug_printCurrentInstruction(string Instruction){
-    cout << "Current Instruction: " << Instruction << endl; 
-
-}

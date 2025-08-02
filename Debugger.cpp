@@ -69,20 +69,24 @@ bool Debugger::initializeDebugger(){
     SDL_SetWindowPosition(debuggingWindow, 0, 30); 
     SDL_SetWindowTitle(debuggingWindow, "Debugger"); 
 
-    TTF_Init(); 
+    // returns 0 if successful, -1 on any error 
+    if(TTF_Init() == -1){
+        cout << "Error initializing debugging window, closing SDL and window" << endl; 
+        return true; 
+    }    
 
-    createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20); 
+    createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20, true); 
 
     const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
     int height = 50;  
     for(int i = 0; i < 15; i+=2){
-        createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20); 
-        createBoxAndAddText(fontRegular, registerNames[i+1], 70, height, 20, 20); 
+        createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20, true); 
+        createBoxAndAddText(fontRegular, registerNames[i+1], 70, height, 20, 20, true); 
         height+=35; 
     }
     
-    createBoxAndAddText(fontSemiBold, "Current Instruction:", 10, 330, 140, 20); 
-    createBoxAndAddText(fontSemiBold, "Stack:", 160, 20, 50, 20); 
+    createBoxAndAddText(fontSemiBold, "Current Instruction:", 10, 330, 140, 20, true); 
+    createBoxAndAddText(fontSemiBold, "Stack:", 160, 20, 50, 20, true); 
 
     SDL_RenderPresent(debuggingRenderer); 
 
@@ -101,9 +105,15 @@ bool Debugger::destroyDebuggerWindow(){
     return false; 
 }
 
-void Debugger::createBoxAndAddText(const char* font, const char* messageText, int boxPositionX, int boxPositionY, int boxSizeWidth, int boxSizeHeight){
+void Debugger::createBoxAndAddText(const char* font, const char* messageText, int boxPositionX, int boxPositionY, int boxSizeWidth, int boxSizeHeight, 
+    bool textIsStatic){
 
     TTF_Font* messageFont = TTF_OpenFont(font, 28); 
+
+    if(!messageFont){
+        cout << "Error no TTF font not loaded, check your font file path " << endl;  
+        return;        
+    }
 
     SDL_Color white = {255, 255, 255}; 
 
@@ -118,6 +128,12 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     messageTextbox.w = boxSizeWidth; 
     messageTextbox.h = boxSizeHeight; 
 
+    if(textIsStatic == false){
+        // drawing black over previous texture to "clear" it 
+        SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0); 
+        SDL_RenderFillRect(debuggingRenderer, &messageTextbox); 
+    }
+
     SDL_RenderCopy(debuggingRenderer, message, NULL, &messageTextbox); 
     
     SDL_RenderPresent(debuggingRenderer); 
@@ -127,8 +143,6 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
 
 void Debugger::outputCurrentInstructionToDebugger(string instruction){
     const char* convertedInstruction = instruction.c_str(); 
-    createBoxAndAddText(fontRegular, convertedInstruction, 230, 330, 140, 20); 
-
-    SDL_RenderPresent(debuggingRenderer); 
+    createBoxAndAddText(fontExtraBold, convertedInstruction, 160, 329, 50, 22, false); 
 }
 

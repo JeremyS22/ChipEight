@@ -110,7 +110,7 @@ void returnToAddressFromStack(Memory& memory);
 void jumpToAddress(std::string address); 
 
 // 2nnn
-void putAddressOnStack(std::string address, Memory& memory); 
+void putAddressOnStack(std::string address, Memory& memory, Debugger debugger); 
 
 // 3xnn 
 void skipInstructionIfVXEqualsNN(char secondNibble, std::string value); 
@@ -191,10 +191,6 @@ void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen
 
 int convertCharToHex(char Value); 
 
-// Use for debugging ------------------------------------------------------------------------------- 
-
-// TODO: Expand this to include other registers 
-void debug_printCurrentInstruction(std::string Instruction); 
 
 }; 
 
