@@ -33,6 +33,8 @@ class Cpu {
 
         std::string currentInstruction; 
 
+        Debugger& debugger; 
+
     public:
 
         uint8_t fontData[80] =  {
@@ -55,9 +57,10 @@ class Cpu {
 
     }; 
 
-    Cpu(); 
+    // Cpu(); 
+    Cpu(Debugger& debugger); 
     ~Cpu(){}
-    
+
 void setProgramCounter(uint16_t * programCounter, int value); 
 
 void incrementProgramCounter(uint16_t * programCounter, int value); 
@@ -185,9 +188,9 @@ void storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_VIP_F
 // fx65 
 void storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON); 
 
-void fetchInstructions(Memory memory, Debugger debugger); 
+void fetchInstructions(Memory memory); 
 
-void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad, Debugger debugger); 
+void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad); 
 
 int convertCharToHex(char Value); 
 

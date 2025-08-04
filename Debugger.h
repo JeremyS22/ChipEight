@@ -35,7 +35,9 @@ class Debugger {
     bool destroyDebuggerWindow(); 
     void createBoxAndAddText(const char* font, const char* messageText, int boxPositionX, int boxPositionY, int boxSizeWidth, int boxSizeHeight, bool textIsStatic); 
     void outputCurrentInstructionToDebugger(std::string instruction); 
-
+    void outputRegistersToDebugger(uint8_t registerValue, int registerName); 
+    const char* convertIntToCharPointer(int value); 
+    
     Debugger(); 
     ~Debugger(){}; 
 

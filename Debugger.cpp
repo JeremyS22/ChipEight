@@ -1,6 +1,6 @@
 #include <iostream> 
-#include <chrono> 
-#include <thread> 
+#include <sstream> 
+#include <cmath>
 
 #include "Debugger.h" 
 
@@ -28,13 +28,13 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
                             cout << "[DEBUGGER] Grave/Tilde key PRESSED, exiting debugging mode " << endl; 
                             return false; 
                         case SDLK_RIGHT:
-                            cpu.fetchInstructions(memory, debugger); 
-                            cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad, debugger); 
+                            cpu.fetchInstructions(memory); 
+                            cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
                             break; 
                         case  SDLK_UP:
                             for (int i = 0; i < 5; ++i){
-                                cpu.fetchInstructions(memory, debugger); 
-                                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad, debugger);    
+                                cpu.fetchInstructions(memory); 
+                                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad);    
                             }
                             break; 
                         case SDLK_ESCAPE: 
@@ -79,9 +79,12 @@ bool Debugger::initializeDebugger(){
 
     const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
     int height = 50;  
+    const char* printRegisterValAsZero = "0"; 
     for(int i = 0; i < 15; i+=2){
         createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20, true); 
-        createBoxAndAddText(fontRegular, registerNames[i+1], 70, height, 20, 20, true); 
+        createBoxAndAddText(fontRegular, printRegisterValAsZero, 40, height, 18, 20, true); 
+        createBoxAndAddText(fontRegular, registerNames[i+1], 90, height, 20, 20, true); 
+        createBoxAndAddText(fontRegular, printRegisterValAsZero, 120, height, 18, 20, true); 
         height+=35; 
     }
     
@@ -129,8 +132,7 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     messageTextbox.h = boxSizeHeight; 
 
     if(textIsStatic == false){
-        // drawing black over previous texture to "clear" it 
-        SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0); 
+        // drawing with renderer's color (black) over previous texture to "clear" it 
         SDL_RenderFillRect(debuggingRenderer, &messageTextbox); 
     }
 
@@ -146,3 +148,84 @@ void Debugger::outputCurrentInstructionToDebugger(string instruction){
     createBoxAndAddText(fontExtraBold, convertedInstruction, 160, 329, 50, 22, false); 
 }
 
+void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName){
+    const char* convertedRegisterValue = convertIntToCharPointer(registerValue); 
+    int targetPositionX = (registerName % 2 == 0)  ? 40 : 120; 
+    int targetPositionY; 
+
+    // calling function for each to individually fix/readjust text size rendering issues 
+    switch(registerName){
+        case 0x0:
+            targetPositionY = 50; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x1:
+            targetPositionY = 50; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x2:
+            targetPositionY = 85; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x3:
+            targetPositionY = 85; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x4:
+            targetPositionY = 120; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x5:
+            targetPositionY = 120; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x6:
+            targetPositionY = 155; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x7:
+            targetPositionY = 155; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x8:
+            targetPositionY = 190; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0x9:
+            targetPositionY = 190; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0xA:
+            targetPositionY = 225; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0xB:
+            targetPositionY = 225; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0xC:
+            targetPositionY = 260; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0xD:
+            targetPositionY = 260; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0xE:
+            targetPositionY = 295; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        case 0xF:
+            targetPositionY = 295; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
+            break; 
+        }
+} 
+
+const char* Debugger::convertIntToCharPointer(int value){
+    stringstream stringStreamObj; 
+    stringStreamObj << value; 
+    const char* convertedValue = stringStreamObj.str().c_str();    
+    
+    return  convertedValue; 
+}

@@ -16,15 +16,15 @@ int main (int argv, char** args){
 
     Screen screen;  
     Memory memory; 
-    Cpu cpu; 
-    Keypad keypad; 
     Debugger debugger; 
+    Cpu cpu(debugger); 
+    Keypad keypad; 
     
     int instructionsPerSecond = 540; 
     
     debugger.setDebuggerIsOn(false); 
 
-    string romFileLocation = "ROMS/Pong 2 (Pong hack) [David Winter, 1997].ch8"; 
+    string romFileLocation = "ROMS/3-corax+.ch8"; 
         
     screen.initializeScreen(); 
 
@@ -44,8 +44,8 @@ int main (int argv, char** args){
                 bool inputToCloseEmulator = keypad.getKeypadInput(screen, debugger, cpu, memory, keypad); 
                 if(inputToCloseEmulator == true)
                     return 0; 
-                cpu.fetchInstructions(memory, debugger); 
-                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad, debugger); 
+                cpu.fetchInstructions(memory); 
+                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
             }
             auto endOfClock = chrono::steady_clock::now(); 
             chrono::duration<double> timeElasped = startOfClock - endOfClock; 

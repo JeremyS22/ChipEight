@@ -13,16 +13,18 @@
 
 using namespace std; 
 
-// for run older ROMs from 1980s and 1970s 
+// for running older ROMs from 1980s and 1970s 
 bool COSMAC_VIP_FLAG_IS_ON = false; 
 
-Cpu::Cpu(){
+// injecting this debugger instance to avoid passing it 
+//      in the majority of function arguments in this class 
+Cpu::Cpu(Debugger& debugger) : debugger(debugger){ 
     programCounter = 0; 
     regist_I = 0; 
     memset(regist_V, 0, sizeof(regist_V)); 
     delayTimer = 0; 
     soundTimer = 0; 
-}
+}; 
 
 void Cpu::setProgramCounter(uint16_t * programCounter, int value){
     *programCounter = value;  
@@ -183,6 +185,7 @@ void Cpu::setValueInRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     regist_V[X] = lastTwoNibbles; 
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
 // 7xnn
@@ -190,6 +193,8 @@ void Cpu::addValueToRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int originalVXValue = regist_V[X]; 
     regist_V[X] = originalVXValue + stoi(value, nullptr, 16);     
+
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
 // 8xy0 
@@ -197,6 +202,8 @@ void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[Y]; 
+
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
 // 8xy1 
@@ -205,6 +212,8 @@ void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble){
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] |= regist_V[Y]; 
     cout << "AFTER BITWISE OR " << regist_V[X] << endl; 
+
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
 // 8xy2  
@@ -213,6 +222,8 @@ void Cpu::bitwiseAndVXAndVY(int secondNibble, int thirdNibble){
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] & regist_V[Y]; 
     cout << "AFTER BITWISE AND " << regist_V[X] << endl; 
+
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
 // 8xy3   
@@ -221,6 +232,8 @@ void Cpu::bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble){
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] ^ regist_V[Y]; 
     cout << "AFTER BITWISE XOR " << regist_V[X] << endl; 
+
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
 // 8xy4    
@@ -240,23 +253,35 @@ void Cpu::addVXToVY(int secondNibble, int thirdNibble){
     }
 
     cout << "AFTER adding VX and VY " << regist_V[X] << "also register VF is " << getRegist_V(0xF) << endl; 
+
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
+    debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
 }
 
 // 8xy5     
 void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
+    debugger.outputRegistersToDebugger(getRegist_V(Y), Y); 
+
     if(regist_V[X] > regist_V[Y]){
         regist_V[0xF] = 1; 
+        debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+
         cout << "VX > VY! Register VF is " << regist_V[0xF]<< endl; 
     }
     else {
         regist_V[0xF] = 0; 
+        debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+
         cout << "VX < VY! Register VF is " << regist_V[0xF]<< endl; 
     }
     regist_V[X] -= regist_V[Y]; 
+    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 
     cout << "AFTER VX - VY! " << regist_V[X] << " also register VF is " << regist_V[0xF]<< endl; 
+
 }
 
 // 8xy6 
@@ -456,7 +481,7 @@ void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_V
     }
 } 
 
-void Cpu::fetchInstructions(Memory memory, Debugger debugger){
+void Cpu::fetchInstructions(Memory memory){
 
     stringstream instructionString;
     instructionString << hex << setw(2) << setfill('0') << (int)memory.systemMemory[getProgramCounter()];
@@ -473,7 +498,7 @@ void Cpu::fetchInstructions(Memory memory, Debugger debugger){
     
 }
 
-void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad, Debugger debugger){
+void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad){
     char firstNibble = currentInstruction[0]; 
     char secondNibble = currentInstruction[1]; 
     char thirdNibble = currentInstruction[2]; 
