@@ -14,6 +14,9 @@ Additional Features I may add:
 - A full GUI
 - Customizations to Graphics and Sounds
 
+### Installation, Documentation and Blog Site 
+[I also created a blog/docs website for this emulator ](https://jeremys22.github.io/ChipEightDocs/docs/installation)to track the progress and chronicle some of the lessons I've learned from creating this emulator
+
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 <p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
 
@@ -32,8 +35,6 @@ This is Timendus' version of Corax's original Opcode test ROM.  (The "r" next to
 
 <strong>ROM source:</strong><br>
 https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file 
-
-
 
 Thanks to Timendus and Corax for these very helpful resources 😊<br>  
 
