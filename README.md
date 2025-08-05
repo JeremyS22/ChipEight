@@ -20,6 +20,9 @@ Additional Features I may add:
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 <p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
 
+<img width="1600" height="590" alt="Screenshot 2025-08-05 162648" src="https://github.com/user-attachments/assets/c5663715-1ab9-4025-9584-013c2f1f4771" />
+<p align = "center"><strong><em>Debugger Partially Implemented Previewing CPU Opcode and Registers </em></strong></p> 
+
 <img width="1065" height="548" alt="Screenshot 2025-07-20 163218" src="https://github.com/user-attachments/assets/15543fcc-9069-4d85-8850-3ddeb20cd6db" />
 <p align = "center"><strong><em>Corax's Opcode Test ROM that Test a good Portion of the Chip 8's Instruction Set</em></strong></p>
 
