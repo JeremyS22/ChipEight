@@ -156,69 +156,37 @@ void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName
     // calling function for each to individually fix/readjust text size rendering issues 
     switch(registerName){
         case 0x0:
-            targetPositionY = 50; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 30, 22, false); break; 
         case 0x1:
-            targetPositionY = 50; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 30, 22, false); break; 
         case 0x2:
-            targetPositionY = 85; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 30, 22, false); break; 
         case 0x3:
-            targetPositionY = 85; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 30, 22, false); break; 
         case 0x4:
-            targetPositionY = 120; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 30, 22, false); break; 
         case 0x5:
-            targetPositionY = 120; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 30, 22, false); break; 
         case 0x6:
-            targetPositionY = 155; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 30, 22, false); break; 
         case 0x7:
-            targetPositionY = 155; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 30, 22, false); break; 
         case 0x8:
-            targetPositionY = 190; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 30, 22, false); break; 
         case 0x9:
-            targetPositionY = 190; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 30, 22, false); break; 
         case 0xA:
-            targetPositionY = 225; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 30, 22, false); break; 
         case 0xB:
-            targetPositionY = 225; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 30, 22, false); break; 
         case 0xC:
-            targetPositionY = 260; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 30, 22, false); break; 
         case 0xD:
-            targetPositionY = 260; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 30, 22, false); break; 
         case 0xE:
-            targetPositionY = 295; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 30, 22, false); break; 
         case 0xF:
-            targetPositionY = 295; 
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, targetPositionY, 50, 22, false); 
-            break; 
+           createBoxAndAddText(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 30, 22, false); break; 
         }
 } 
 

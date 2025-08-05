@@ -146,13 +146,13 @@ void bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble);
 void addVXToVY(int secondNibble, int thirdNibble); 
 
 // 8xy5     
-void subtractVXFromVY(int secondNibble, int thirdNibble); 
+void subtractVYFromVX(int secondNibble, int thirdNibble); 
 
 //8xy6 
 void shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
 
 // 8xy7      
-void subtractVYFromVX(int secondNibble, int thirdNibble); 
+void subtractVXFromVY(int secondNibble, int thirdNibble); 
 
 // 8xyE 
 void shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 

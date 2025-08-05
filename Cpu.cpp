@@ -193,7 +193,6 @@ void Cpu::addValueToRegisterVX (char secondNibble, string value){
     int X = convertCharToHex(secondNibble); 
     int originalVXValue = regist_V[X]; 
     regist_V[X] = originalVXValue + stoi(value, nullptr, 16);     
-
     debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
@@ -202,7 +201,6 @@ void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[Y]; 
-
     debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
@@ -212,7 +210,6 @@ void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble){
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] |= regist_V[Y]; 
     cout << "AFTER BITWISE OR " << regist_V[X] << endl; 
-
     debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
@@ -222,7 +219,6 @@ void Cpu::bitwiseAndVXAndVY(int secondNibble, int thirdNibble){
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] & regist_V[Y]; 
     cout << "AFTER BITWISE AND " << regist_V[X] << endl; 
-
     debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
@@ -232,7 +228,6 @@ void Cpu::bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble){
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] ^ regist_V[Y]; 
     cout << "AFTER BITWISE XOR " << regist_V[X] << endl; 
-
     debugger.outputRegistersToDebugger(getRegist_V(X), X); 
 }
 
@@ -259,11 +254,9 @@ void Cpu::addVXToVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy5     
-void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
+void Cpu::subtractVYFromVX(int secondNibble, int thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
-    debugger.outputRegistersToDebugger(getRegist_V(X), X); 
-    debugger.outputRegistersToDebugger(getRegist_V(Y), Y); 
 
     if(regist_V[X] > regist_V[Y]){
         regist_V[0xF] = 1; 
@@ -290,29 +283,34 @@ void Cpu::shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP
     uint8_t Y = convertCharToHex(thirdNibble); 
     
     if (COSMAC_VIP_FLAG_IS_ON == true){
-        regist_V[X] = regist_V[Y];     
+        regist_V[X] = regist_V[Y];   
+        debugger.outputRegistersToDebugger(getRegist_V(X), X);   
     }
 
     bitset<8> binaryValueOfVX (regist_V[X]); 
     regist_V[0xF] = binaryValueOfVX[0]; 
+    debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
     
     regist_V[X] >>= 1; 
+    debugger.outputRegistersToDebugger(getRegist_V(X), X);   
 }
 
 // 8xy7      
-void Cpu::subtractVYFromVX(int secondNibble, int thirdNibble){
+void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     if(regist_V[X] > regist_V[Y]){
         regist_V[0xF] = 1; 
+        debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         cout << "VX > VY! Register VF is " << regist_V[0xF]<< endl; 
     }
     else {
         regist_V[0xF] = 0; 
+        debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         cout << "VX < VY! Register VF is " << regist_V[0xF]<< endl; 
     }
     regist_V[X] = regist_V[Y] - regist_V[X];  
-
+    debugger.outputRegistersToDebugger(getRegist_V(X), X);   
     cout << "AFTER VX - VY! " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
 }
 
@@ -323,12 +321,15 @@ void Cpu::shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_
     
     if (COSMAC_VIP_FLAG_IS_ON == true){
         regist_V[X] = regist_V[Y];     
+        debugger.outputRegistersToDebugger(getRegist_V(X), X);   
     }
 
     bitset<8> binaryValueOfVX (regist_V[X]); 
     regist_V[0xF] = binaryValueOfVX[0]; 
-    
+    debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+
     regist_V[X] <<= 1; 
+    debugger.outputRegistersToDebugger(getRegist_V(X), X);   
 }
 
 // 9xyn 
@@ -429,6 +430,7 @@ void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
     if(COSMAC_VIP_FLAG_IS_ON == false){
         if (regist_I > 0x0FFF){ // 0x0FFF is regist_I's limit (0000-0FFF) 
             regist_V[0xF] = 1; 
+            debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF);   
         }
     }
 }
@@ -473,6 +475,7 @@ void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_V
     uint16_t tempAddress = regist_I; 
     for (int i = 0; i <= X; i++){
         regist_V[i] = memory.systemMemory[tempAddress]; 
+        debugger.outputRegistersToDebugger(getRegist_V(i), i);   
         tempAddress++; 
         
         if (COSMAC_VIP_FLAG_IS_ON == true){
@@ -573,7 +576,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                     break; 
                     case '5':
                     // 8xy5   
-                    subtractVXFromVY(secondNibble, thirdNibble); 
+                    subtractVYFromVX(secondNibble, thirdNibble); 
                     break; 
                     case '6':
                     // 8xy6   
@@ -581,7 +584,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                     break; 
                     case '7':
                     // 8xy7    
-                    subtractVYFromVX(secondNibble, thirdNibble); 
+                    subtractVXFromVY(secondNibble, thirdNibble); 
                     break; 
                     case 'e':
                     // 8xyE 
