@@ -6,7 +6,8 @@
 
 using namespace std; 
 
-Debugger::Debugger(){} 
+Debugger::Debugger() : debuggerIsOn (false), debuggingWindow (nullptr), debuggingRenderer (nullptr), messageFont (nullptr),
+    fontRegular("./assets/Inter_28pt-Regular.ttf"), fontExtraBold("./assets/Inter_28pt-ExtraBold.ttf"), fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"){} 
 
 bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger){
     if (getDebuggerIsOn() == false){
@@ -56,6 +57,10 @@ void Debugger::setDebuggerIsOn(bool value){
 
 bool Debugger::getDebuggerIsOn(){
     return debuggerIsOn; 
+}
+
+SDL_Renderer* Debugger::getDebuggingRenderer(){
+    return debuggingRenderer; 
 }
 
 bool Debugger::initializeDebugger(){
