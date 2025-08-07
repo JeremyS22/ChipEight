@@ -19,7 +19,8 @@ int main (int argv, char** args){
     Debugger debugger; 
     Cpu cpu(debugger); 
     Keypad keypad; 
-    
+    DebuggingTextbox debuggingTextbox; 
+
     int instructionsPerSecond = 540; 
     
     debugger.setDebuggerIsOn(false); 
@@ -31,7 +32,7 @@ int main (int argv, char** args){
     debugger.initializeDebugger(); 
 
     memory.loadFontDataIntoMemory(cpu, memory); 
-
+ 
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 
     if (debugger.getDebuggerIsOn() == true){
@@ -40,7 +41,7 @@ int main (int argv, char** args){
     else {
         while(screen.getWindowIsOpen()){
             auto startOfClock = chrono::steady_clock::now(); 
-            for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] == 'd'; ++instructionCounter){ 
+            for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] != 'd'; ++instructionCounter){ 
                 bool inputToCloseEmulator = keypad.getKeypadInput(screen, debugger, cpu, memory, keypad); 
                 if(inputToCloseEmulator == true)
                     return 0; 
@@ -60,7 +61,7 @@ int main (int argv, char** args){
             }
         }
     }
-    debugger.destroyDebuggerWindow(); 
+    debugger.destroyDebuggerWindow(debuggingTextbox); 
     screen.destroyCreatedWindow(); 
     screen.setWindowIsOpen(false); 
 
