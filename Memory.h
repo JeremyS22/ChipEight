@@ -24,21 +24,17 @@ class Memory {
     // font data at 0x050 - 0x09F  
     // 0x200 to 0xFFF Chip 8 program/data space 
     uint8_t systemMemory[4096];
-    // have stack big enough for 16 bit/2 byte address, may make bigger later 
     std::stack<uint16_t> systemStack; 
 
     Memory();  
     ~Memory(){}; 
 
-    
     void loadFontDataIntoMemory(Cpu cpu, Memory& memory); 
-    
     void loadRomIntoMemory(Memory& memory, std::string romFileLocation, Cpu& cpu); 
-    
     void setStackPointer(uint16_t addressAtTopOfStack); 
-
     uint16_t getStackPointer(); 
-
+    int getStackSize(); 
+    
     // Use for debugging ------------------------------------------------------------------------------- 
 
     void debug_printMemory(Memory memory, bool spaceEveryFourNibbles); 

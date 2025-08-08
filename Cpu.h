@@ -113,7 +113,7 @@ void returnToAddressFromStack(Memory& memory);
 void jumpToAddress(std::string address); 
 
 // 2nnn
-void putAddressOnStack(std::string address, Memory& memory, Debugger debugger); 
+void putAddressOnStack(std::string address, Memory& memory); 
 
 // 3xnn 
 void skipInstructionIfVXEqualsNN(char secondNibble, std::string value); 

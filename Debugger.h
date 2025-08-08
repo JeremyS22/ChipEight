@@ -4,6 +4,7 @@
 #include <iostream> 
 #include "src/include/SDL2/SDL.h" 
 #include <SDL_ttf.h> 
+#include <vector> 
 #include "Memory.h" 
 #include "Cpu.h"
 #include "Screen.h" 
@@ -24,6 +25,7 @@ class Debugger {
     const char* fontRegular;
     const char* fontExtraBold; 
     const char* fontSemiBold;
+    std::vector <std::string> stackPrintingVector; 
     
 
     public: 
@@ -35,8 +37,9 @@ class Debugger {
     bool destroyDebuggerWindow(DebuggingTextbox debuggingTextbox); 
     void outputCurrentInstructionToDebugger(std::string instruction); 
     void outputRegistersToDebugger(uint8_t registerValue, int registerName); 
-    std::string convertIntToCharPointer(int value); 
-    
+    std::string convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits); 
+    void outputStackToDebugger(Memory memory); 
+
     Debugger(); 
     ~Debugger(){}; 
 

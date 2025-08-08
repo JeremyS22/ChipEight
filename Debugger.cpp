@@ -96,6 +96,9 @@ bool Debugger::initializeDebugger(){
     DebuggingTextbox(fontSemiBold, "Current Instruction:", 10, 330, 140, 20, true, getDebuggingRenderer()); 
     DebuggingTextbox(fontSemiBold, "Stack:", 160, 20, 50, 20, true, getDebuggingRenderer()); 
 
+    DebuggingTextbox(fontRegular, "0x0", 190, 50, 36, 22, true, getDebuggingRenderer()); 
+    DebuggingTextbox(fontRegular, "---", 240, 50, 60, 22, true, getDebuggingRenderer()); 
+
     SDL_RenderPresent(debuggingRenderer); 
 
     cout << "Status: (Debugger) Debugging Window and Renderer Created " << endl; 
@@ -114,54 +117,96 @@ bool Debugger::destroyDebuggerWindow(DebuggingTextbox debuggingTextbox){
 }
 
 void Debugger::outputCurrentInstructionToDebugger(string instruction){
-    const char* convertedInstruction = instruction.c_str(); 
-    DebuggingTextbox(fontExtraBold, convertedInstruction, 160, 329, 50, 22, false, getDebuggingRenderer()); 
+    DebuggingTextbox(fontExtraBold, instruction, 160, 329, 50, 22, false, getDebuggingRenderer()); 
 }
 
 void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName){
-    string convertedRegisterValue = convertIntToCharPointer(registerValue); 
+    string convertedRegisterValue = convertIntToString(registerValue, false, false); 
     int targetPositionX = (registerName % 2 == 0)  ? 40 : 120; 
 
     // calling function for each register  individually to fix/readjust text size rendering issues 
     switch(registerName){
         case 0x0:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 30, 22, false, getDebuggingRenderer()); break; 
+            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x1:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 30, 22, false, getDebuggingRenderer()); break; 
+            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x2:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 30, 22, false, getDebuggingRenderer()); break; 
+            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x3:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 30, 22, false, getDebuggingRenderer()); break; 
+            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x4:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 30, 22, false, getDebuggingRenderer()); break; 
+            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x5:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x6:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x7:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x8:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 20, 22, false, getDebuggingRenderer()); break; 
         case 0x9:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 20, 22, false, getDebuggingRenderer()); break; 
         case 0xA:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 20, 22, false, getDebuggingRenderer()); break; 
         case 0xB:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 20, 22, false, getDebuggingRenderer()); break; 
         case 0xC:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 20, 22, false, getDebuggingRenderer()); break; 
         case 0xD:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 20, 22, false, getDebuggingRenderer()); break; 
         case 0xE:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 20, 22, false, getDebuggingRenderer()); break; 
         case 0xF:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 30, 22, false, getDebuggingRenderer()); break; 
+           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 20, 22, false, getDebuggingRenderer()); break; 
     }
 } 
 
-string Debugger::convertIntToCharPointer(int value){
+void Debugger::outputStackToDebugger(Memory memory){
+    string topOfStack = convertIntToString(memory.getStackPointer(), true, false); 
+    if(memory.getStackSize() > stackPrintingVector.size()){
+        stackPrintingVector.emplace(stackPrintingVector.begin(), topOfStack); 
+    }
+    else {
+        stackPrintingVector.erase(stackPrintingVector.begin()); 
+    }
+
+    int positionY = 50; 
+    int secondPositionY = 50; 
+    if(stackPrintingVector.size() == 0){
+        DebuggingTextbox(fontRegular, "0x0", 190, positionY, 36, 22, false, getDebuggingRenderer()); 
+        DebuggingTextbox(fontRegular, "---", 240, positionY, 60, 22, false, getDebuggingRenderer()); 
+    }
+    else {
+        for(int i = 0; i < stackPrintingVector.size(); ++i){
+            if(i > 7){
+                DebuggingTextbox(fontRegular, convertIntToString(i, true, true), 330, secondPositionY, 36, 22, false, getDebuggingRenderer()); 
+                DebuggingTextbox(fontExtraBold, stackPrintingVector.at(i), 380, secondPositionY, 60, 22, false, getDebuggingRenderer()); 
+                secondPositionY+=35; 
+            }
+            else {
+                DebuggingTextbox(fontRegular, convertIntToString(i, true, true), 190, positionY, 36, 22, false, getDebuggingRenderer()); 
+                DebuggingTextbox(fontExtraBold, stackPrintingVector.at(i), 240, positionY, 60, 22, false, getDebuggingRenderer()); 
+                positionY+=35; 
+            }       
+        }
+    }
+}
+
+string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits){
     stringstream stringStreamObj; 
-    stringStreamObj << value; 
+    if (add0xPrefix == true){
+        if(value > 9 && convertToHexDigits == true){
+            value+=55; 
+            stringStreamObj << "0x" << char(value); 
+        }
+        else {
+            stringStreamObj << "0x" << value; 
+        }
+    }
+    else {
+        stringStreamObj << value; 
+    }
+    
     string convertedValue = stringStreamObj.str();    
     
     return  convertedValue; 

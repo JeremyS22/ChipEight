@@ -61,6 +61,10 @@ uint16_t Memory::getStackPointer(){
     return stackPointer; 
 }
 
+int Memory::getStackSize(){
+    return systemStack.size(); 
+}
+
 // Use for debugging ------------------------------------------------------------------------------- 
 
 void Memory::debug_printMemory(Memory memory, bool spaceEveryFourNibbles){

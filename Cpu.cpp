@@ -133,6 +133,7 @@ void Cpu::returnToAddressFromStack(Memory& memory){
     cout << "PROGRAM COUNTER FROM STACK "<< address << endl; 
     setProgramCounter(getProgramCounterPointer(), address); 
     popProgramCounterOffStack(memory); 
+    debugger.outputStackToDebugger(memory); 
 }
 
 // 1nnn 
@@ -141,12 +142,13 @@ void Cpu::jumpToAddress(string address){
 }
 
 // 2nnn
-void Cpu::putAddressOnStack(string address, Memory& memory, Debugger debugger){
+void Cpu::putAddressOnStack(string address, Memory& memory){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     
     cout << "Previous Program Counter on stack, new address for Program Counter " << getProgramCounter() << endl; 
     debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
+    debugger.outputStackToDebugger(memory); 
     cout << "\n" << endl;  
 }
 
@@ -529,7 +531,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                 break;
             case '2': 
                 // call the subroutine call function 2nnn 
-                putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory, debugger); 
+                putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
                 break;
             case '3': 
                 // call skip next instruction if VX == NN  3xnn  
