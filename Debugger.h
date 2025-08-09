@@ -39,6 +39,7 @@ class Debugger {
     void outputRegistersToDebugger(uint8_t registerValue, int registerName); 
     std::string convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits); 
     void outputStackToDebugger(Memory memory); 
+    std::string convertIntToHexString(int value); 
 
     Debugger(); 
     ~Debugger(){}; 

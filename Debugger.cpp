@@ -162,17 +162,20 @@ void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName
 } 
 
 void Debugger::outputStackToDebugger(Memory memory){
-    string topOfStack = convertIntToString(memory.getStackPointer(), true, false); 
+    string topOfStack = convertIntToHexString(memory.getStackPointer()); 
     if(memory.getStackSize() > stackPrintingVector.size()){
         stackPrintingVector.emplace(stackPrintingVector.begin(), topOfStack); 
     }
     else {
+        // deletes text left on screen of popped off stack address  
+        int printOverTextY = 50 + ((stackPrintingVector.size() - 1) * 35); 
+        DebuggingTextbox(fontExtraBold, "", 190, printOverTextY, 110, 22, false, getDebuggingRenderer()); 
         stackPrintingVector.erase(stackPrintingVector.begin()); 
     }
 
     int positionY = 50; 
     int secondPositionY = 50; 
-    if(stackPrintingVector.size() == 0){
+    if(stackPrintingVector.size() == 0){ 
         DebuggingTextbox(fontRegular, "0x0", 190, positionY, 36, 22, false, getDebuggingRenderer()); 
         DebuggingTextbox(fontRegular, "---", 240, positionY, 60, 22, false, getDebuggingRenderer()); 
     }
@@ -211,3 +214,11 @@ string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToH
     
     return  convertedValue; 
 }
+
+string Debugger::convertIntToHexString(int value){
+    stringstream hexadecimalVal; 
+    hexadecimalVal << "0x" << hex << value; 
+
+    return hexadecimalVal.str(); 
+}
+
