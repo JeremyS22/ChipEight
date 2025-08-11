@@ -93,7 +93,8 @@ bool Debugger::initializeDebugger(){
         height+=35; 
     }
     
-    DebuggingTextbox(fontSemiBold, "Current Instruction:", 10, 330, 140, 20, true, getDebuggingRenderer()); 
+    DebuggingTextbox(fontSemiBold, "Program Counter:", 10, 330, 140, 20, true, getDebuggingRenderer()); 
+    DebuggingTextbox(fontSemiBold, "Current Instr.:", 10, 350, 130, 20, true, getDebuggingRenderer()); 
     DebuggingTextbox(fontSemiBold, "Stack:", 160, 20, 50, 20, true, getDebuggingRenderer()); 
 
     DebuggingTextbox(fontRegular, "0x0", 190, 50, 36, 22, true, getDebuggingRenderer()); 
@@ -117,7 +118,11 @@ bool Debugger::destroyDebuggerWindow(DebuggingTextbox debuggingTextbox){
 }
 
 void Debugger::outputCurrentInstructionToDebugger(string instruction){
-    DebuggingTextbox(fontExtraBold, instruction, 160, 329, 50, 22, false, getDebuggingRenderer()); 
+    DebuggingTextbox(fontExtraBold, instruction, 160, 350, 50, 22, false, getDebuggingRenderer()); 
+}
+
+void Debugger::outputProgramCounterToDebugger(uint16_t programCounter){
+    DebuggingTextbox(fontExtraBold, convertIntToHexString(programCounter), 160, 329, 50, 22, false, getDebuggingRenderer()); 
 }
 
 void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName){

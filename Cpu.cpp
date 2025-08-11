@@ -132,6 +132,7 @@ void Cpu::returnToAddressFromStack(Memory& memory){
 
     cout << "PROGRAM COUNTER FROM STACK "<< address << endl; 
     setProgramCounter(getProgramCounterPointer(), address); 
+    debugger.outputProgramCounterToDebugger(getProgramCounter()); 
     popProgramCounterOffStack(memory); 
     debugger.outputStackToDebugger(memory); 
 }
@@ -139,17 +140,16 @@ void Cpu::returnToAddressFromStack(Memory& memory){
 // 1nnn 
 void Cpu::jumpToAddress(string address){
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16));   
+    debugger.outputProgramCounterToDebugger(getProgramCounter()); 
 }
 
 // 2nnn
 void Cpu::putAddressOnStack(string address, Memory& memory){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
-    
-    cout << "Previous Program Counter on stack, new address for Program Counter " << getProgramCounter() << endl; 
+    debugger.outputProgramCounterToDebugger(getProgramCounter()); 
     debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
     debugger.outputStackToDebugger(memory); 
-    cout << "\n" << endl;  
 }
 
 // 3xnn 
@@ -158,6 +158,7 @@ void Cpu::skipInstructionIfVXEqualsNN(char secondNibble, string value){
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     if(regist_V[X] == lastTwoNibbles){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
         cout << "TRUE, VX == NN Incremented Program Counter to " << getProgramCounter() << endl; 
     }
 }
@@ -168,6 +169,7 @@ void Cpu::skipInstructionIfVXNotEqualsNN(char secondNibble, string value){
     int lastTwoNibbles = stoi(value, nullptr, 16); 
     if(regist_V[X] != lastTwoNibbles){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
         cout << "TRUE, VX != NN Incremented Program Counter to " << getProgramCounter() << endl; 
     }
 }
@@ -178,6 +180,7 @@ void Cpu::skipInstructionIfVXEqualsVY(char secondNibble, char thirdNibble){
     int Y = convertCharToHex(thirdNibble); 
     if(regist_V[X] == regist_V[Y]){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
         cout << "TRUE, VX == VY Incremented Program Counter to " << getProgramCounter() << endl; 
     }
 }
@@ -340,6 +343,7 @@ void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
     int Y = convertCharToHex(thirdNibble); 
     if(regist_V[X] != regist_V[Y]){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
         cout << "TRUE, VX != VY Incremented Program Counter to " << getProgramCounter() << endl; 
     }
 }
@@ -398,6 +402,7 @@ void Cpu::skipInstructionIfKeyIsPressed(char secondNibble, Keypad keypad){
     int X = convertCharToHex(secondNibble); 
    if(keypad.checkIfKeyIsPressed(regist_V[X])){
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
    }
 }
 
@@ -408,6 +413,7 @@ void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad){
     if(keypad.checkIfKeyIsNotPressed(regist_V[X])){
         cout << "Key " << regist_V[X] << "NOT PRESSED " << endl;  
         incrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
     }
 }
 
@@ -418,6 +424,7 @@ void Cpu::loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad){
 
     if(returnedResult == '\0'){
         decrementProgramCounter(getProgramCounterPointer(), 2); 
+        debugger.outputProgramCounterToDebugger(getProgramCounter()); 
     }
     else {
         regist_V[X] = returnedResult; 
@@ -493,14 +500,13 @@ void Cpu::fetchInstructions(Memory memory){
     instructionString << hex << setw(2) << setfill('0') << (int)memory.systemMemory[getProgramCounter()+1];
 
     setCurrentInstruction(instructionString.str()); 
-
+    
     debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
+    debugger.outputProgramCounterToDebugger(getProgramCounter()); 
 
     cout << "Pre-Increment Program Counter " << getProgramCounter() << endl; 
     incrementProgramCounter(getProgramCounterPointer(), 2); 
     cout << "Post-Increment Program Counter " << getProgramCounter() << endl; 
-
-    
 }
 
 void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad){

@@ -37,6 +37,7 @@ class Debugger {
     bool destroyDebuggerWindow(DebuggingTextbox debuggingTextbox); 
     void outputCurrentInstructionToDebugger(std::string instruction); 
     void outputRegistersToDebugger(uint8_t registerValue, int registerName); 
+    void outputProgramCounterToDebugger(uint16_t programCounter); 
     std::string convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits); 
     void outputStackToDebugger(Memory memory); 
     std::string convertIntToHexString(int value); 
