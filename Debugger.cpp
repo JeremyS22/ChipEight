@@ -97,6 +97,9 @@ bool Debugger::initializeDebugger(){
     DebuggingTextbox(fontSemiBold, "Current Instr.:", 10, 350, 130, 20, true, getDebuggingRenderer()); 
     DebuggingTextbox(fontSemiBold, "Stack:", 160, 20, 50, 20, true, getDebuggingRenderer()); 
 
+    DebuggingTextbox(fontRegular, "Register I:", 10, 372, 90, 22, true, getDebuggingRenderer()); 
+    DebuggingTextbox(fontExtraBold, "0", 105, 372, 20, 22, false, getDebuggingRenderer()); 
+
     DebuggingTextbox(fontRegular, "0x0", 190, 50, 36, 22, true, getDebuggingRenderer()); 
     DebuggingTextbox(fontRegular, "---", 240, 50, 60, 22, true, getDebuggingRenderer()); 
 
@@ -123,6 +126,13 @@ void Debugger::outputCurrentInstructionToDebugger(string instruction){
 
 void Debugger::outputProgramCounterToDebugger(uint16_t programCounter){
     DebuggingTextbox(fontExtraBold, convertIntToHexString(programCounter), 160, 329, 50, 22, false, getDebuggingRenderer()); 
+}
+
+void Debugger::outputRegisterIToDebugger(string address){
+    stringstream sstreamObj; 
+    sstreamObj << "0x" << address;
+    string convertedAddress = sstreamObj.str(); 
+    DebuggingTextbox(fontExtraBold, convertedAddress, 105, 372, 60, 22, false, getDebuggingRenderer()); 
 }
 
 void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName){

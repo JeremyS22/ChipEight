@@ -353,6 +353,7 @@ void Cpu::loadAddressInRegisterI(string address){
     // add to debugger 
     cout << address << "Address being stored in Register I " << hex << setw(2) << setfill('0') << stoi(address, nullptr, 16) << endl; 
     regist_I = stoi(address, nullptr, 16); 
+    debugger.outputRegisterIToDebugger(address); 
 }
 
 // dxyn 
@@ -436,6 +437,8 @@ void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
     regist_I += regist_V[X]; 
 
+    debugger.outputRegisterIToDebugger(convertIntToHexString(regist_I)); 
+
     if(COSMAC_VIP_FLAG_IS_ON == false){
         if (regist_I > 0x0FFF){ // 0x0FFF is regist_I's limit (0000-0FFF) 
             regist_V[0xF] = 1; 
@@ -474,6 +477,7 @@ void Cpu::storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_
         
         if (COSMAC_VIP_FLAG_IS_ON == true){
             regist_I = tempAddress; 
+            debugger.outputRegisterIToDebugger(convertIntToHexString(regist_I)); 
         }
     }
 }  
@@ -489,6 +493,7 @@ void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_V
         
         if (COSMAC_VIP_FLAG_IS_ON == true){
             regist_I = tempAddress; 
+            debugger.outputRegisterIToDebugger(convertIntToHexString(regist_I)); 
         }
     }
 } 
@@ -684,8 +689,14 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
 }
  
 int Cpu::convertCharToHex(char Value){
-        stringstream hexString; 
-        hexString << "0x" << Value;     
+    stringstream hexString; 
+    hexString << "0x" << Value;     
     return stoi(hexString.str(), nullptr, 16);    
+}
+
+string Cpu::convertIntToHexString(int value){
+    stringstream convertedString; 
+    convertedString << hex << value;     
+    return convertedString.str();    
 }
 

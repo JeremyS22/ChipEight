@@ -194,6 +194,8 @@ void decodeAndExecuteInstructions(std::string currentInstruction, Screen& screen
 
 int convertCharToHex(char Value); 
 
+std::string convertIntToHexString(int value); 
+
 
 }; 
 

@@ -25,7 +25,7 @@ int main (int argv, char** args){
     
     debugger.setDebuggerIsOn(false); 
 
-    string romFileLocation = "ROMS/6-keypad.ch8"; 
+    string romFileLocation = "ROMS/3-corax+.ch8"; 
     
     screen.initializeScreen(); 
 

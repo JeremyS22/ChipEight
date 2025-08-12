@@ -41,6 +41,7 @@ class Debugger {
     std::string convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits); 
     void outputStackToDebugger(Memory memory); 
     std::string convertIntToHexString(int value); 
+    void outputRegisterIToDebugger(std::string address); 
 
     Debugger(); 
     ~Debugger(){}; 
