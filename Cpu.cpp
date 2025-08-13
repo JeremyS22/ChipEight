@@ -148,7 +148,7 @@ void Cpu::putAddressOnStack(string address, Memory& memory){
     pushProgramCounterOnStack(memory); 
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     debugger.outputProgramCounterToDebugger(getProgramCounter()); 
-    debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
+    // debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
     debugger.outputStackToDebugger(memory); 
 }
 

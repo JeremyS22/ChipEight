@@ -15,6 +15,7 @@ class DebuggingTextbox {
         int width;
         int height; 
         bool textIsStatic; 
+        std::string textColor;
 
         TTF_Font* messageFont; 
         
@@ -27,7 +28,8 @@ class DebuggingTextbox {
         DebuggingTextbox();
         DebuggingTextbox(const char* font, const char* text, int x, int y, int width, int height, bool textIsStatic); 
         // DebuggingTextbox(const char* font, const char* text, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* DebuggingRenderer) 
-        DebuggingTextbox(const char* font, std::string text, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* DebuggingRenderer); 
+        DebuggingTextbox(const char* font, std::string text, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* DebuggingRenderer, 
+            std::string textColor); 
         ~DebuggingTextbox(){};
 };
 

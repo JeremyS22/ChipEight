@@ -26,7 +26,7 @@ class Debugger {
     const char* fontExtraBold; 
     const char* fontSemiBold;
     std::vector <std::string> stackPrintingVector; 
-    
+    std::vector <std::string> pastInstructionVector; 
 
     public: 
     bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger); 
@@ -42,7 +42,8 @@ class Debugger {
     void outputStackToDebugger(Memory memory); 
     std::string convertIntToHexString(int value); 
     void outputRegisterIToDebugger(std::string address); 
-
+    void outputPastInstructionsToDebugger(std::string instruction); 
+    
     Debugger(); 
     ~Debugger(){}; 
 
