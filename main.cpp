@@ -19,13 +19,12 @@ int main (int argv, char** args){
     Debugger debugger; 
     Cpu cpu(debugger); 
     Keypad keypad; 
-    DebuggingTextbox debuggingTextbox; 
 
     int instructionsPerSecond = 540; 
     
     debugger.setDebuggerIsOn(false); 
 
-    string romFileLocation = "ROMS/3-corax+.ch8"; 
+    string romFileLocation = "ROMS/6-keypad.ch8"; 
     
     screen.initializeScreen(); 
 
@@ -61,7 +60,7 @@ int main (int argv, char** args){
             }
         }
     }
-    debugger.destroyDebuggerWindow(debuggingTextbox); 
+    debugger.destroyDebuggerWindow();
     screen.destroyCreatedWindow(); 
     screen.setWindowIsOpen(false); 
 

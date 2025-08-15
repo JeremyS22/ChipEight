@@ -6,9 +6,29 @@
 
 using namespace std; 
 
-Debugger::Debugger() : debuggerIsOn (false), debuggingWindow (nullptr), debuggingRenderer (nullptr), fontRegular("./assets/Inter_28pt-Regular.ttf"), 
-    fontExtraBold("./assets/Inter_28pt-ExtraBold.ttf"), fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"){} 
+/* Debugger::Debugger() : debuggerIsOn (false), debuggingWindow (nullptr), debuggingRenderer (nullptr), fontRegular("./assets/Inter_28pt-Regular.ttf"), 
+    fontExtraBold("./assets/Inter_28pt-ExtraBold.ttf"), fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"){}  */
 
+
+Debugger::Debugger() : 
+    debuggerIsOn (false), 
+    debuggingWindow (nullptr), 
+    debuggingRenderer (nullptr), 
+    fontRegular("./assets/Inter_28pt-Regular.ttf"), 
+    fontExtraBold("./assets/Inter_28pt-ExtraBold.ttf"), 
+    fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"), 
+    font(nullptr), 
+    messageText(nullptr), 
+    x(0), 
+    y(0), 
+    width(0), 
+    height(0), 
+    textIsStatic(false), 
+    textColor(""){
+        vector<std::string> pastInstructionVector(6,"0"); 
+        vector<std::string> pastProgramCounterVector(6,"0"); 
+    } 
+    
 bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger){
     if (getDebuggerIsOn() == false){
         setDebuggerIsOn(true);
@@ -80,28 +100,31 @@ bool Debugger::initializeDebugger(){
         return true; 
     }    
 
-    DebuggingTextbox(fontSemiBold, "Registers", 10, 20, 70, 20, true, getDebuggingRenderer(), "white"); 
+    createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20, true, debuggingRenderer, "white"); 
 
     const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
     int height = 50;  
     const char* printRegisterValAsZero = "0"; 
     for(int i = 0; i < 15; i+=2){
-        DebuggingTextbox(fontRegular, registerNames[i], 10, height, 20, 20, true, getDebuggingRenderer(), "white"); 
-        DebuggingTextbox(fontRegular, printRegisterValAsZero, 40, height, 18, 20, true, getDebuggingRenderer(), "white"); 
-        DebuggingTextbox(fontRegular, registerNames[i+1], 90, height, 20, 20, true, getDebuggingRenderer(), "white"); 
-        DebuggingTextbox(fontRegular, printRegisterValAsZero, 120, height, 18, 20, true, getDebuggingRenderer(), "white"); 
+        createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20, true, debuggingRenderer, "white"); 
+        createBoxAndAddText(fontRegular, printRegisterValAsZero, 40, height, 18, 20, true, debuggingRenderer, "white"); 
+        createBoxAndAddText(fontRegular, registerNames[i+1], 90, height, 20, 20, true, debuggingRenderer, "white"); 
+        createBoxAndAddText(fontRegular, printRegisterValAsZero, 120, height, 18, 20, true, debuggingRenderer, "white");
+        
         height+=35; 
     }
     
-    DebuggingTextbox(fontSemiBold, "PC:", 10, 330, 30, 20, true, getDebuggingRenderer(), "white"); 
-    DebuggingTextbox(fontSemiBold, "Instr:", 10, 350, 50, 20, true, getDebuggingRenderer(), "white"); 
-    DebuggingTextbox(fontSemiBold, "Stack:", 160, 20, 50, 20, true, getDebuggingRenderer(), "white"); 
+    
 
-    DebuggingTextbox(fontRegular, "Register I:", 10, 372, 90, 22, true, getDebuggingRenderer(), "white"); 
-    DebuggingTextbox(fontExtraBold, "0", 105, 372, 20, 22, false, getDebuggingRenderer(), "white"); 
+    createBoxAndAddText(fontSemiBold, "PC:", 10, 330, 30, 20, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontSemiBold, "Instr:", 10, 350, 50, 20, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontSemiBold, "Stack:", 160, 20, 50, 20, true, debuggingRenderer, "white"); 
 
-    DebuggingTextbox(fontRegular, "0x0", 190, 50, 36, 22, true, getDebuggingRenderer(), "white"); 
-    DebuggingTextbox(fontRegular, "---", 240, 50, 60, 22, true, getDebuggingRenderer(), "white"); 
+    createBoxAndAddText(fontRegular, "Register I:", 10, 372, 90, 22, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontExtraBold, "0", 105, 372, 20, 22, false, debuggingRenderer, "white"); 
+
+    createBoxAndAddText(fontRegular, "0x0", 190, 50, 36, 22, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontRegular, "---", 240, 50, 60, 22, true, debuggingRenderer, "white");  
 
     SDL_RenderPresent(debuggingRenderer); 
 
@@ -110,10 +133,10 @@ bool Debugger::initializeDebugger(){
     return false; 
 }
 
-bool Debugger::destroyDebuggerWindow(DebuggingTextbox debuggingTextbox){
+bool Debugger::destroyDebuggerWindow(){
     SDL_DestroyWindow(debuggingWindow); 
     SDL_DestroyRenderer(debuggingRenderer); 
-    debuggingTextbox.destroyMessageFont(); 
+    TTF_CloseFont((messageFont)); 
     TTF_Quit(); 
     SDL_Quit();  
     
@@ -121,13 +144,13 @@ bool Debugger::destroyDebuggerWindow(DebuggingTextbox debuggingTextbox){
 }
 
 void Debugger::outputCurrentInstructionToDebugger(string instruction){
-    DebuggingTextbox(fontExtraBold, instruction, 90, 350, 50, 22, false, getDebuggingRenderer(), "white"); 
+    createBoxAndAddText(fontExtraBold, instruction.c_str(), 90, 350, 50, 22, false, debuggingRenderer, "white");  
     outputPastInstructionsToDebugger(instruction); 
 }
 
 void Debugger::outputProgramCounterToDebugger(uint16_t programCounter){
-    string convertedProgramCounter = convertIntToHexString(programCounter);  
-    DebuggingTextbox(fontExtraBold, convertedProgramCounter, 90, 329, 50, 22, false, getDebuggingRenderer(), "white"); 
+    string convertedProgramCounter = convertIntToHexString(programCounter).c_str();  
+    createBoxAndAddText(fontExtraBold, convertedProgramCounter.c_str(), 90, 329, 50, 22, false, debuggingRenderer, "white"); 
     outputPastPCToDebugger(convertedProgramCounter); 
 }
 
@@ -141,10 +164,10 @@ void Debugger::outputPastInstructionsToDebugger(string currentInstruction){
     int xCoordinate = 150; 
     for(int i = 1; i < pastInstructionVector.size(); i++){
         if(i >= 4){
-            DebuggingTextbox(fontExtraBold, pastInstructionVector[i], xCoordinate, 350, 50, 22, false, getDebuggingRenderer(), "dark gray");     
+            createBoxAndAddText(fontExtraBold, pastInstructionVector[i].c_str(), xCoordinate, 350, 50, 22, false, debuggingRenderer, "dark gray");     
         }
         else {
-            DebuggingTextbox(fontExtraBold, pastInstructionVector[i], xCoordinate, 350, 50, 22, false, getDebuggingRenderer(), "gray"); 
+            createBoxAndAddText(fontExtraBold, pastInstructionVector[i].c_str(), xCoordinate, 350, 50, 22, false, debuggingRenderer, "gray"); 
         }
         xCoordinate+=60; 
     }
@@ -160,10 +183,10 @@ void Debugger::outputPastPCToDebugger(string programCounter){
     int xCoordinate = 150; 
     for(int i = 1; i < pastProgramCounterVector.size(); i++){
         if(i >= 4){
-            DebuggingTextbox(fontExtraBold, pastProgramCounterVector[i], xCoordinate, 329, 50, 22, false, getDebuggingRenderer(), "dark gray");     
+            createBoxAndAddText(fontExtraBold, pastProgramCounterVector[i].c_str(), xCoordinate, 329, 50, 22, false, debuggingRenderer, "dark gray");     
         }
         else {
-            DebuggingTextbox(fontExtraBold, pastProgramCounterVector[i], xCoordinate, 329, 50, 22, false, getDebuggingRenderer(), "gray"); 
+            createBoxAndAddText(fontExtraBold, pastProgramCounterVector[i].c_str(), xCoordinate, 329, 50, 22, false, debuggingRenderer, "gray"); 
         }
         xCoordinate+=60; 
     }
@@ -173,47 +196,47 @@ void Debugger::outputRegisterIToDebugger(string address){
     stringstream sstreamObj; 
     sstreamObj << "0x" << address;
     string convertedAddress = sstreamObj.str(); 
-    DebuggingTextbox(fontExtraBold, convertedAddress, 105, 372, 60, 22, false, getDebuggingRenderer(), "white"); 
+    createBoxAndAddText(fontExtraBold, convertedAddress.c_str(), 105, 372, 60, 22, false, debuggingRenderer, "white"); 
 }
 
 void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName){
     string convertedRegisterValue = convertIntToString(registerValue, false, false); 
     int targetPositionX = (registerName % 2 == 0)  ? 40 : 120; 
 
-    // calling function for each register  individually to fix/readjust text size rendering issues 
+    // calling function for each register individually to fix/readjust text size rendering issues 
     switch(registerName){
         case 0x0:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 50, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x1:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 50, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 50, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x2:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 85, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x3:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 85, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 85, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x4:
-            DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 120, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x5:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 120, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 120, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x6:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 155, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x7:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 155, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 155, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x8:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 190, 20, 22, false, debuggingRenderer, "white"); break;
         case 0x9:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 190, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 190, 20, 22, false, debuggingRenderer, "white"); break;
         case 0xA:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 225, 20, 22, false, debuggingRenderer, "white"); break;
         case 0xB:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 225, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 225, 20, 22, false, debuggingRenderer, "white"); break;
         case 0xC:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 260, 20, 22, false, debuggingRenderer, "white"); break;
         case 0xD:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 260, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 260, 20, 22, false, debuggingRenderer, "white"); break;
         case 0xE:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 295, 20, 22, false, debuggingRenderer, "white"); break;
         case 0xF:
-           DebuggingTextbox(fontExtraBold, convertedRegisterValue, targetPositionX, 295, 20, 22, false, getDebuggingRenderer(), "white"); break; 
+            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 295, 20, 22, false, debuggingRenderer, "white"); break;
     }
 } 
 
@@ -225,26 +248,26 @@ void Debugger::outputStackToDebugger(Memory memory){
     else {
         // deletes text left on screen of popped off stack address  
         int printOverTextY = 50 + ((stackPrintingVector.size() - 1) * 35); 
-        DebuggingTextbox(fontExtraBold, "", 190, printOverTextY, 110, 22, false, getDebuggingRenderer(), "white"); 
+        createBoxAndAddText(fontExtraBold, "", 190, printOverTextY, 110, 22, false, debuggingRenderer, "white"); 
         stackPrintingVector.erase(stackPrintingVector.begin()); 
     }
 
     int positionY = 50; 
     int secondPositionY = 50; 
     if(stackPrintingVector.size() == 0){ 
-        DebuggingTextbox(fontRegular, "0x0", 190, positionY, 36, 22, false, getDebuggingRenderer(), "white"); 
-        DebuggingTextbox(fontRegular, "---", 240, positionY, 60, 22, false, getDebuggingRenderer(), "white"); 
+        createBoxAndAddText(fontRegular, "0x0", 190, positionY, 36, 22, false, debuggingRenderer, "white"); 
+        createBoxAndAddText(fontRegular, "---", 240, positionY, 60, 22, false, debuggingRenderer, "white"); 
     }
     else {
         for(int i = 0; i < stackPrintingVector.size(); ++i){
             if(i > 7){
-                DebuggingTextbox(fontRegular, convertIntToString(i, true, true), 330, secondPositionY, 36, 22, false, getDebuggingRenderer(), "white"); 
-                DebuggingTextbox(fontExtraBold, stackPrintingVector.at(i), 380, secondPositionY, 60, 22, false, getDebuggingRenderer(), "white"); 
+                createBoxAndAddText(fontRegular, convertIntToString(i, true, true).c_str(), 330, secondPositionY, 36, 22, false, debuggingRenderer, "white"); 
+                createBoxAndAddText(fontExtraBold, stackPrintingVector.at(i).c_str(), 380, secondPositionY, 60, 22, false, debuggingRenderer, "white"); 
                 secondPositionY+=35; 
             }
             else {
-                DebuggingTextbox(fontRegular, convertIntToString(i, true, true), 190, positionY, 36, 22, false, getDebuggingRenderer(), "white"); 
-                DebuggingTextbox(fontExtraBold, stackPrintingVector.at(i), 240, positionY, 60, 22, false, getDebuggingRenderer(), "white"); 
+                createBoxAndAddText(fontRegular, convertIntToString(i, true, true).c_str(), 190, positionY, 36, 22, false, debuggingRenderer, "white"); 
+                createBoxAndAddText(fontExtraBold, stackPrintingVector.at(i).c_str(), 240, positionY, 60, 22, false, debuggingRenderer, "white"); 
                 positionY+=35; 
             }       
         }
@@ -276,5 +299,50 @@ string Debugger::convertIntToHexString(int value){
     hexadecimalVal << "0x" << hex << value; 
 
     return hexadecimalVal.str(); 
+}
+
+void Debugger::createBoxAndAddText(const char* font, const char* messageText, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* debuggingRenderer, 
+    string textColor){
+
+    SDL_Color pickedColor; 
+
+    TTF_Font* messageFont = TTF_OpenFont(font, 28); 
+
+    if(!messageFont){
+        cout << "Error no TTF font not loaded, check your font file path " << endl;  
+        return;        
+    }
+
+    if(textColor == "gray"){
+        pickedColor = {128, 128, 128}; 
+    }
+    else if (textColor == "dark gray"){
+        pickedColor = {64, 64, 64}; 
+    }
+    else {
+        pickedColor = {255, 255, 255}; 
+    }
+
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(messageFont, messageText, pickedColor); 
+
+    SDL_Texture* message = SDL_CreateTextureFromSurface(debuggingRenderer, surfaceMessage); 
+    SDL_FreeSurface(surfaceMessage); 
+
+    SDL_Rect messageTextbox; 
+    messageTextbox.x = x; 
+    messageTextbox.y = y; 
+    messageTextbox.w = width; 
+    messageTextbox.h = height; 
+
+    if(textIsStatic == false){
+        // drawing with renderer's color (black) over previous texture to "clear" it 
+        SDL_RenderFillRect(debuggingRenderer, &messageTextbox); 
+    }
+
+    SDL_RenderCopy(debuggingRenderer, message, NULL, &messageTextbox); 
+    
+    SDL_RenderPresent(debuggingRenderer); 
+    
+    SDL_DestroyTexture(message);  
 }
 
