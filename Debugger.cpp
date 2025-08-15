@@ -126,12 +126,13 @@ void Debugger::outputCurrentInstructionToDebugger(string instruction){
 }
 
 void Debugger::outputProgramCounterToDebugger(uint16_t programCounter){
-    DebuggingTextbox(fontExtraBold, convertIntToHexString(programCounter), 90, 329, 50, 22, false, getDebuggingRenderer(), "white"); 
+    string convertedProgramCounter = convertIntToHexString(programCounter);  
+    DebuggingTextbox(fontExtraBold, convertedProgramCounter, 90, 329, 50, 22, false, getDebuggingRenderer(), "white"); 
+    outputPastPCToDebugger(convertedProgramCounter); 
 }
 
 void Debugger::outputPastInstructionsToDebugger(string currentInstruction){
     pastInstructionVector.emplace(pastInstructionVector.begin(), currentInstruction); 
-    // DebuggingTextbox(fontExtraBold, convertIntToHexString(programCounter), 160, 329, 50, 22, false, getDebuggingRenderer()); 
     
     if(pastInstructionVector.size() > 6){
         pastInstructionVector.pop_back(); 
@@ -144,6 +145,25 @@ void Debugger::outputPastInstructionsToDebugger(string currentInstruction){
         }
         else {
             DebuggingTextbox(fontExtraBold, pastInstructionVector[i], xCoordinate, 350, 50, 22, false, getDebuggingRenderer(), "gray"); 
+        }
+        xCoordinate+=60; 
+    }
+}
+
+void Debugger::outputPastPCToDebugger(string programCounter){
+    pastProgramCounterVector.emplace(pastProgramCounterVector.begin(), programCounter); 
+
+    if(pastProgramCounterVector.size() > 6){
+        pastProgramCounterVector.pop_back(); 
+    }
+        
+    int xCoordinate = 150; 
+    for(int i = 1; i < pastProgramCounterVector.size(); i++){
+        if(i >= 4){
+            DebuggingTextbox(fontExtraBold, pastProgramCounterVector[i], xCoordinate, 329, 50, 22, false, getDebuggingRenderer(), "dark gray");     
+        }
+        else {
+            DebuggingTextbox(fontExtraBold, pastProgramCounterVector[i], xCoordinate, 329, 50, 22, false, getDebuggingRenderer(), "gray"); 
         }
         xCoordinate+=60; 
     }

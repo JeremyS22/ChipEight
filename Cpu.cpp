@@ -140,15 +140,13 @@ void Cpu::returnToAddressFromStack(Memory& memory){
 // 1nnn 
 void Cpu::jumpToAddress(string address){
     setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16));   
-    debugger.outputProgramCounterToDebugger(getProgramCounter()); 
 }
 
 // 2nnn
 void Cpu::putAddressOnStack(string address, Memory& memory){
     pushProgramCounterOnStack(memory); 
-    setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     debugger.outputProgramCounterToDebugger(getProgramCounter()); 
-    // debugger.outputCurrentInstructionToDebugger(getCurrentInstruction()); 
+    setProgramCounter(getProgramCounterPointer(), stoi(address, nullptr, 16)); 
     debugger.outputStackToDebugger(memory); 
 }
 

@@ -25,7 +25,7 @@ int main (int argv, char** args){
     
     debugger.setDebuggerIsOn(false); 
 
-    string romFileLocation = "ROMS/6-keypad.ch8"; 
+    string romFileLocation = "ROMS/3-corax+.ch8"; 
     
     screen.initializeScreen(); 
 
@@ -33,7 +33,7 @@ int main (int argv, char** args){
 
     memory.loadFontDataIntoMemory(cpu, memory); 
  
-    memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
+    memory.loadRomIntoMemory(memory, romFileLocation, cpu);
 
     if (debugger.getDebuggerIsOn() == true){
         debugger.runDebugger(cpu, memory, screen, keypad, debugger);  
