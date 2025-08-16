@@ -37,36 +37,37 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 
     cout << "[DEBUGGER]   Press Escape key to close emulator" << endl; 
     while(screen.getWindowIsOpen()){
-            if (SDL_PollEvent(&screen.windowEvent)){
-                if(screen.windowEvent.type == SDL_QUIT){
-                    setDebuggerIsOn(false); 
-                    cout << "[DEBUGGER] Clicked closed, exiting debugging mode" << endl; 
-                    return true; 
-                }
-                else if (screen.windowEvent.type == SDL_KEYDOWN){
-                    switch (screen.windowEvent.key.keysym.sym){
-                        case SDLK_BACKQUOTE: 
-                            cout << "[DEBUGGER] Grave/Tilde key PRESSED, exiting debugging mode " << endl; 
-                            return false; 
-                        case SDLK_RIGHT:
+        if (SDL_PollEvent(&screen.windowEvent)){
+            if(screen.windowEvent.type == SDL_QUIT){
+                setDebuggerIsOn(false); 
+                cout << "[DEBUGGER] Clicked closed, exiting debugging mode" << endl; 
+                return true; 
+            }
+            else if (screen.windowEvent.type == SDL_KEYDOWN){
+                switch (screen.windowEvent.key.keysym.sym){
+                    case SDLK_BACKQUOTE: 
+                        cout << "[DEBUGGER] Grave/Tilde key PRESSED, exiting debugging mode " << endl; 
+                        setDebuggerIsOn(false); 
+                        return false; 
+                    case SDLK_RIGHT:
+                        cpu.fetchInstructions(memory); 
+                        cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
+                        break; 
+                    case  SDLK_UP:
+                        for (int i = 0; i < 5; ++i){
                             cpu.fetchInstructions(memory); 
-                            cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
-                            break; 
-                        case  SDLK_UP:
-                            for (int i = 0; i < 5; ++i){
-                                cpu.fetchInstructions(memory); 
-                                cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad);    
-                            }
-                            break; 
-                        case SDLK_ESCAPE: 
-                            setDebuggerIsOn(false); 
-                            cout << "[DEBUGGER] ESC PRESSED, exiting emulation" << endl; 
-                            return true; 
-                        default:
-                            break; 
-                    }
+                            cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad);    
+                        }
+                        break; 
+                    case SDLK_ESCAPE: 
+                        setDebuggerIsOn(false); 
+                        cout << "[DEBUGGER] ESC PRESSED, exiting emulation" << endl; 
+                        return true; 
+                    default:
+                        break; 
                 }
             }
+        }
     }
     return false;   
 }

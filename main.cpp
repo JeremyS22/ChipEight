@@ -55,9 +55,6 @@ int main (int argv, char** args){
                 cout << "SLEEPING FOR TIME " << endl; 
                 this_thread::sleep_for(chrono::duration<double>(secondsToWait));     
             }
-            else {
-                debugger.setDebuggerIsOn(false); 
-            }
         }
     }
     debugger.destroyDebuggerWindow();
