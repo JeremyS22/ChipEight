@@ -14,8 +14,8 @@ Additional Features I may add:
 - A full GUI
 - Customizations to Graphics and Sounds
 
-### Installation, Documentation and Blog Site 
-[I also created a blog/docs website for this emulator ](https://jeremys22.github.io/ChipEightDocs/)to track the progress and chronicle some of the lessons I've learned from creating this emulator
+### Installation
+[So far only linux is listed](https://jeremys22.github.io/ChipEightDocs/docs/installation), but more will be added later. 
 
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 <p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
