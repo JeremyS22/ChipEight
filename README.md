@@ -15,7 +15,7 @@ Additional Features I may add:
 - Customizations to Graphics and Sounds
 
 ### Installation
-[So far only linux is listed](https://jeremys22.github.io/ChipEightDocs/docs/installation), but more will be added later. 
+<a href = "https://jeremys22.github.io/ChipEightDocs/docs/installation" target = "_blank"> So far only linux is listed </a>, but more will be added later. 
 
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 <p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
