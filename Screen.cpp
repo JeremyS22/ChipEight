@@ -25,6 +25,8 @@ void Screen::initializeScreen(){
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);  
         SDL_RenderClear(renderer); 
         cout << "Status: (Screen) Created Window and Renderer " << endl; 
+
+        SDL_RenderPresent(renderer); 
 } 
 
 void Screen::turnOffAllPixels(Cpu& cpu){

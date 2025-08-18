@@ -120,6 +120,7 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 
 // 00e0
 void Cpu::clearScreenInstruction(Screen screen, Cpu& cpu){
+    SDL_SetRenderDrawColor(screen.renderer, 0, 0, 0, 0); 
     SDL_RenderClear(screen.renderer); 
     screen.turnOffAllPixels(cpu); 
     SDL_RenderPresent(screen.renderer); 
