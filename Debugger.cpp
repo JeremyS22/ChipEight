@@ -6,10 +6,6 @@
 
 using namespace std; 
 
-/* Debugger::Debugger() : debuggerIsOn (false), debuggingWindow (nullptr), debuggingRenderer (nullptr), fontRegular("./assets/Inter_28pt-Regular.ttf"), 
-    fontExtraBold("./assets/Inter_28pt-ExtraBold.ttf"), fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"){}  */
-
-
 Debugger::Debugger() : 
     debuggerIsOn (false), 
     debuggingWindow (nullptr), 
@@ -33,6 +29,8 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
     if (getDebuggerIsOn() == false){
         setDebuggerIsOn(true);
     }
+
+    resetDataOnDebuggerScreen(); 
     cout << "[DEBUGGER] Press right arrow key to step 1 instruction, up arrow key to step by 5 instructions" << endl; 
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 
     cout << "[DEBUGGER]   Press Escape key to close emulator" << endl; 
@@ -105,27 +103,17 @@ bool Debugger::initializeDebugger(){
 
     const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
     int height = 50;  
-    const char* printRegisterValAsZero = "0"; 
     for(int i = 0; i < 15; i+=2){
         createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20, true, debuggingRenderer, "white"); 
-        createBoxAndAddText(fontRegular, printRegisterValAsZero, 40, height, 18, 20, true, debuggingRenderer, "white"); 
         createBoxAndAddText(fontRegular, registerNames[i+1], 90, height, 20, 20, true, debuggingRenderer, "white"); 
-        createBoxAndAddText(fontRegular, printRegisterValAsZero, 120, height, 18, 20, true, debuggingRenderer, "white");
-        
         height+=35; 
     }
     
-    
-
     createBoxAndAddText(fontSemiBold, "PC:", 10, 330, 30, 20, true, debuggingRenderer, "white"); 
     createBoxAndAddText(fontSemiBold, "Instr:", 10, 350, 50, 20, true, debuggingRenderer, "white"); 
     createBoxAndAddText(fontSemiBold, "Stack:", 160, 20, 50, 20, true, debuggingRenderer, "white"); 
 
     createBoxAndAddText(fontRegular, "Register I:", 10, 372, 90, 22, true, debuggingRenderer, "white"); 
-    createBoxAndAddText(fontExtraBold, "0", 105, 372, 20, 22, false, debuggingRenderer, "white"); 
-
-    createBoxAndAddText(fontRegular, "0x0", 190, 50, 36, 22, true, debuggingRenderer, "white"); 
-    createBoxAndAddText(fontRegular, "---", 240, 50, 60, 22, true, debuggingRenderer, "white");  
 
     SDL_RenderPresent(debuggingRenderer); 
 
@@ -275,33 +263,6 @@ void Debugger::outputStackToDebugger(Memory memory){
     }
 }
 
-string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits){
-    stringstream stringStreamObj; 
-    if (add0xPrefix == true){
-        if(value > 9 && convertToHexDigits == true){
-            value+=55; 
-            stringStreamObj << "0x" << char(value); 
-        }
-        else {
-            stringStreamObj << "0x" << value; 
-        }
-    }
-    else {
-        stringStreamObj << value; 
-    }
-    
-    string convertedValue = stringStreamObj.str();    
-    
-    return  convertedValue; 
-}
-
-string Debugger::convertIntToHexString(int value){
-    stringstream hexadecimalVal; 
-    hexadecimalVal << "0x" << hex << value; 
-
-    return hexadecimalVal.str(); 
-}
-
 void Debugger::createBoxAndAddText(const char* font, const char* messageText, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* debuggingRenderer, 
     string textColor){
 
@@ -347,3 +308,73 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     SDL_DestroyTexture(message);  
 }
 
+void Debugger::resetDataOnDebuggerScreen(){
+    resetRegisterData(); 
+    resetPCAndInstructionData();     
+    resetStackData(); 
+    resetRegisterIData(); 
+}
+
+void Debugger::resetRegisterData(){
+    createBoxAndAddText(fontExtraBold, "", 40, 50, 20, 280, false, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontExtraBold, "", 120, 50, 20, 280, false, debuggingRenderer, "white"); 
+
+    const char* printRegisterValAsZero = "0";
+    int height = 50; 
+    for(int i = 0; i < 15; i+=2){
+        createBoxAndAddText(fontRegular, printRegisterValAsZero, 40, height, 18, 20, true, debuggingRenderer, "white"); 
+        createBoxAndAddText(fontRegular, printRegisterValAsZero, 120, height, 18, 20, true, debuggingRenderer, "white");
+        
+        height+=35; 
+    }
+}
+
+void Debugger::resetPCAndInstructionData(){
+    pastInstructionVector.clear(); 
+    pastProgramCounterVector.clear(); 
+
+    createBoxAndAddText(fontExtraBold, "", 90, 329, 350, 44, false, debuggingRenderer, "white");  
+
+    createBoxAndAddText(fontExtraBold, "0x0", 90, 329, 50, 22, false, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontExtraBold, "---", 90, 350, 50, 22, false, debuggingRenderer, "white");  
+}
+
+void Debugger::resetStackData(){
+    createBoxAndAddText(fontExtraBold, "", 190, 50, 280, 276, false, debuggingRenderer, "white");
+     
+    createBoxAndAddText(fontRegular, "0x0", 190, 50, 36, 22, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontRegular, "---", 240, 50, 60, 22, true, debuggingRenderer, "white");  
+}
+
+void Debugger::resetRegisterIData(){
+    createBoxAndAddText(fontExtraBold, "", 105, 372, 60, 22, false, debuggingRenderer, "white"); 
+
+    createBoxAndAddText(fontExtraBold, "0x0", 105, 372, 60, 22, false, debuggingRenderer, "white"); 
+}
+
+string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits){
+    stringstream stringStreamObj; 
+    if (add0xPrefix == true){
+        if(value > 9 && convertToHexDigits == true){
+            value+=55; 
+            stringStreamObj << "0x" << char(value); 
+        }
+        else {
+            stringStreamObj << "0x" << value; 
+        }
+    }
+    else {
+        stringStreamObj << value; 
+    }
+    
+    string convertedValue = stringStreamObj.str();    
+    
+    return  convertedValue; 
+}
+
+string Debugger::convertIntToHexString(int value){
+    stringstream hexadecimalVal; 
+    hexadecimalVal << "0x" << hex << value; 
+
+    return hexadecimalVal.str(); 
+}

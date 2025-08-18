@@ -54,9 +54,13 @@ class Debugger {
     void outputRegisterIToDebugger(std::string address); 
     void outputPastInstructionsToDebugger(std::string currentInstruction); 
     void outputPastPCToDebugger(std::string programCounter); 
-
     void createBoxAndAddText(const char* font, const char* text, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* DebuggingRenderer, 
         std::string textColor); 
+    void resetDataOnDebuggerScreen(); 
+    void resetRegisterData(); 
+    void resetPCAndInstructionData(); 
+    void resetStackData(); 
+    void resetRegisterIData(); 
 
     Debugger(); 
 
