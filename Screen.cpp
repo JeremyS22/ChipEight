@@ -5,6 +5,10 @@
 
 using namespace std; 
 
+Screen::Screen() : scalingMultipiler(0), windowStatus(false), window(nullptr), renderer(nullptr){
+        memset(pixelStatus, false, sizeof(pixelStatus)); 
+}
+
 void Screen::initializeScreen(){
              
         SDL_Init(SDL_INIT_TIMER); 
@@ -49,10 +53,14 @@ int Screen::getScalingMultipiler(){
 void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu){
         if (value == 1 && pixelStatus[coordinateX][coordinateY] == 0){
                 pixelStatus[coordinateX][coordinateY] = value; 
+
+                
         }
         else if (value == 1 && pixelStatus[coordinateX][coordinateY] == 1){
                 pixelStatus[coordinateX][coordinateY] = 0; 
                 cpu.setRegist_V(0xF, 1); 
+
+                
         }
         
 }

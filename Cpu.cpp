@@ -405,7 +405,7 @@ void Cpu::loadAddressInRegisterI(string address){
 void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
                             Memory memory, Cpu& cpu){
 
-    // secondNibble = VX, thirdNibble = VY 
+    // secondNibble is VX, thirdNibble is VY 
     int X = convertCharToHex(secondNibble);  
     int Y = convertCharToHex(thirdNibble); 
     int spriteHeight = convertCharToHex(fourthNibble); 
@@ -414,6 +414,7 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
     int coordinateY = regist_V[Y];  
 
     
+    SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1); 
 
     SDL_RenderSetScale(screen.renderer, screen.getScalingMultipiler(), screen.getScalingMultipiler());    
     uint16_t spriteDataAddress = regist_I; 
@@ -429,7 +430,6 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
         for(int j = 7; j >= 0; j--){
             if(binaryValue[j] == 1){
                 // TODO: add custom renderer color 
-                SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1); 
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
             }
             screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 

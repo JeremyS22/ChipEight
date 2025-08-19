@@ -16,14 +16,7 @@ public:
     SDL_Renderer* renderer; 
     SDL_Event windowEvent; 
 
-    Screen(){}; 
-    Screen(int scalingMultipiler, SDL_Window* window, SDL_Renderer* renderer, Cpu& cpu){
-        this->scalingMultipiler = scalingMultipiler; 
-        this->window = window; 
-        this->renderer = renderer; 
-
-        turnOffAllPixels(cpu); 
-    }
+    Screen(); 
     ~Screen(){}; 
 
     void initializeScreen(); 

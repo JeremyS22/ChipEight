@@ -22,7 +22,7 @@ int main (int argv, char** args){
 
     int instructionsPerSecond = 540; 
     
-    debugger.setDebuggerIsOn(true); 
+    debugger.setDebuggerIsOn(false); 
 
     string romFileLocation = "ROMS/6-keypad.ch8"; 
     
@@ -52,10 +52,10 @@ int main (int argv, char** args){
         chrono::duration<double> timeElasped = startOfClock - endOfClock; 
 
         double secondsToWait = 1.0 - timeElasped.count();  
-        if (secondsToWait > 0.0 && debugger.getDebuggerIsOn() == false){
+        /* if (secondsToWait > 0.0 && debugger.getDebuggerIsOn() == false){
             cout << "SLEEPING FOR TIME " << endl; 
             this_thread::sleep_for(chrono::duration<double>(secondsToWait));     
-        }
+        } */
     }
 
     debugger.destroyDebuggerWindow();
