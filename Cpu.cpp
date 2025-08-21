@@ -119,7 +119,7 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 /*Instruction to execute machine language routine (Not implementing)*/
 
 // 00e0
-void Cpu::clearScreenInstruction(Screen screen, Cpu& cpu){
+void Cpu::clearScreenInstruction(Screen& screen, Cpu& cpu){
     SDL_SetRenderDrawColor(screen.renderer, 0, 0, 0, 0); 
     SDL_RenderClear(screen.renderer); 
     screen.turnOffAllPixels(cpu); 
@@ -402,7 +402,7 @@ void Cpu::loadAddressInRegisterI(string address){
 }
 
 // dxyn 
-void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
+void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen& screen, 
                             Memory memory, Cpu& cpu){
 
     // secondNibble is VX, thirdNibble is VY 
@@ -412,9 +412,6 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
 
     int coordinateX = regist_V[X];
     int coordinateY = regist_V[Y];  
-
-    
-    SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1); 
 
     SDL_RenderSetScale(screen.renderer, screen.getScalingMultipiler(), screen.getScalingMultipiler());    
     uint16_t spriteDataAddress = regist_I; 
@@ -428,9 +425,16 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
 
         // starting from 7 because LSB 
         for(int j = 7; j >= 0; j--){
-            if(binaryValue[j] == 1){
-                // TODO: add custom renderer color 
-                SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);    
+           bool pixelIsPresent = screen.getPixelStatus(coordinateX, coordinateY);
+           if(binaryValue[j] == 1 && pixelIsPresent == false){
+                SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1);     
+                // TODO: add custom renderer color, specifically this color as primary 
+                SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
+            }
+            else if (binaryValue[j] == 1 && pixelIsPresent == true){
+                // TODO: set color as secondary 
+                SDL_SetRenderDrawColor(screen.renderer, 0, 0, 0, 0);                
+                SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
             }
             screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 
             coordinateX++; 

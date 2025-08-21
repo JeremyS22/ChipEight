@@ -34,12 +34,13 @@ void Screen::initializeScreen(){
 } 
 
 void Screen::turnOffAllPixels(Cpu& cpu){
-        for (int i = 0; i < 64; ++i){
+        /* for (int i = 0; i < 64; ++i){
                 for (int j = 0; j < 32; ++j){
                         // initialized to FALSE by default to represent turned off pixels 
                         setPixelStatus(i, j, 0, cpu); 
                 }
-        }   
+        }    */
+      memset(pixelStatus, false, sizeof(pixelStatus));  
 }
 
 void Screen::setScalingMultipiler(int ScalingMultipiler){
@@ -53,16 +54,18 @@ int Screen::getScalingMultipiler(){
 void Screen::setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu){
         if (value == 1 && pixelStatus[coordinateX][coordinateY] == 0){
                 pixelStatus[coordinateX][coordinateY] = value; 
-
-                
         }
         else if (value == 1 && pixelStatus[coordinateX][coordinateY] == 1){
                 pixelStatus[coordinateX][coordinateY] = 0; 
                 cpu.setRegist_V(0xF, 1); 
-
-                
         }
-        
+}
+
+bool Screen::getPixelStatus(int coordinateX, int coordinateY){
+        if (pixelStatus[coordinateX][coordinateY] == 0) 
+            return false; 
+        else
+            return true; 
 }
 
 void Screen::setWindowIsOpen(bool passedInWindowStatus){

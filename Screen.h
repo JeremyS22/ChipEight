@@ -24,6 +24,7 @@ public:
     void setScalingMultipiler(int ScalingMultipiler); 
     int getScalingMultipiler();  
     void setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu); 
+    bool getPixelStatus(int coordinateX, int coordinateY); 
     void setWindowIsOpen(bool IsRunning); 
     bool getWindowIsOpen(); 
     void destroyCreatedWindow(); 

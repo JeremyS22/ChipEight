@@ -104,7 +104,7 @@ std::string getLastThreeNibbles(std::string currentInstruction);
 // 0nnn (Not implementing)
 
 // 00e0 
-void clearScreenInstruction(Screen screen, Cpu& cpu);  
+void clearScreenInstruction(Screen& screen, Cpu& cpu);  
 
 //00ee 
 void returnToAddressFromStack(Memory& memory); 
@@ -164,7 +164,7 @@ void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble);
 void loadAddressInRegisterI(std::string address); 
 
 // dxyn 
-void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen screen, 
+void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen& screen, 
                             Memory memory, Cpu& cpu); 
 
 // ex9e 
