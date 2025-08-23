@@ -1,7 +1,12 @@
 #include <gtest/gtest.h> 
 #include <Cpu.h> 
 #include <Debugger.h>
+#include <Memory.h> 
+#include <Screen.h> 
+#include <Keypad.h> 
 
+#include "src/include/SDL2/SDL.h" 
+#include <SDL_ttf.h> 
  
 
 TEST(testingSuite1, test1){
