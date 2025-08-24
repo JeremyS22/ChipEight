@@ -4,7 +4,6 @@
 #include <iomanip>
 
 #include "Memory.h"
-#include "Cpu.h"
 
 using namespace std;  
 

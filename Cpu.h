@@ -9,6 +9,7 @@
 #include "Memory.h" 
 #include "Keypad.h" 
 #include "Debugger.h" 
+
 class Memory;
 class Screen; 
 class Keypad; 
@@ -172,6 +173,10 @@ void skipInstructionIfKeyIsPressed(char secondNibble, Keypad keypad);
 
 // exa1 
 void skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad); 
+
+// fx07 
+
+void setVXToDelayTimer(char secondNibble); 
 
 // fx0a 
 void loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad); 

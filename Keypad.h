@@ -4,6 +4,8 @@
 
 #include "src/include/SDL2/SDL.h" 
 #include "Screen.h"
+#include "Debugger.h" 
+
 class Screen; 
 class Debugger; 
 class Cpu; 

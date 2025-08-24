@@ -1,7 +1,6 @@
 #include <iostream> 
 
 #include "Screen.h" 
-#include "Cpu.h"
 
 using namespace std; 
 

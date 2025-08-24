@@ -8,8 +8,6 @@
 #include <cstring> 
 
 #include "Cpu.h"
-#include "Screen.h" 
-#include "Memory.h" 
 
 using namespace std; 
 
@@ -465,6 +463,12 @@ void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad){
     }
 }
 
+// fx07 
+void Cpu::setVXToDelayTimer(char secondNibble){
+    int X = convertCharToHex(secondNibble); 
+    regist_V[X] = delayTimer; 
+}
+
 // fx0a 
 void Cpu::loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad){
     int X = convertCharToHex(secondNibble); 
@@ -703,6 +707,8 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                         switch (fourthNibble){
                             case '7':
                                 // fx07 
+                                // setVXToDelayTimer(secondNibble); 
+
                                 getCurrentInstruction(); 
                                 break; 
                             case 'a':

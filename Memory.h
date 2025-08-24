@@ -6,6 +6,9 @@
 #include <stack>  
 #include <string> 
 #include <cstring> 
+
+#include "Cpu.h"
+
 class Cpu; 
 
 class Memory {
