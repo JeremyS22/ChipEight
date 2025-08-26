@@ -19,7 +19,7 @@ bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypa
             inputToCloseEmulator = debugger.runDebugger(cpu, memory, screen, keypad, debugger); 
             if(inputToCloseEmulator == true){
                     destroyEmulator(debugger, screen); 
-                    return true;  
+                return true;  
             }
         }
         auto startOfClock = chrono::steady_clock::now(); 

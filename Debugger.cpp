@@ -15,6 +15,7 @@ Debugger::Debugger() :
     fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"), 
     font(nullptr), 
     messageText(nullptr), 
+    messageFont(nullptr),
     x(0), 
     y(0), 
     width(0), 
@@ -23,8 +24,48 @@ Debugger::Debugger() :
     textColor(""){
         vector<std::string> pastInstructionVector(6,"0"); 
         vector<std::string> pastProgramCounterVector(6,"0"); 
-    } 
+} 
+
+bool Debugger::initializeDebugger(){
+
+    SDL_Init(SDL_INIT_VIDEO); 
+    SDL_Init(SDL_INIT_EVENTS); 
+
+    SDL_CreateWindowAndRenderer(512, 512, (SDL_WINDOW_RESIZABLE), &debuggingWindow, &debuggingRenderer); 
+    SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0);  
+    SDL_RenderClear(debuggingRenderer); 
+    SDL_SetWindowPosition(debuggingWindow, 0, 30); 
+    SDL_SetWindowTitle(debuggingWindow, "Debugger"); 
+
+    // returns 0 if successful, -1 on any error 
+    if(TTF_Init() == -1){
+        cout << "Error initializing debugging window, closing SDL and window" << endl; 
+        return true; 
+    }    
+
+    createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20, true, debuggingRenderer, "white"); 
+
+    const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
+    int height = 50;  
+    for(int i = 0; i < 15; i+=2){
+        createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20, true, debuggingRenderer, "white"); 
+        createBoxAndAddText(fontRegular, registerNames[i+1], 90, height, 20, 20, true, debuggingRenderer, "white"); 
+        height+=35; 
+    }
     
+    createBoxAndAddText(fontSemiBold, "PC:", 10, 330, 30, 20, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontSemiBold, "Instr:", 10, 350, 50, 20, true, debuggingRenderer, "white"); 
+    createBoxAndAddText(fontSemiBold, "Stack:", 160, 20, 50, 20, true, debuggingRenderer, "white"); 
+
+    createBoxAndAddText(fontRegular, "Register I:", 10, 372, 90, 22, true, debuggingRenderer, "white"); 
+
+    SDL_RenderPresent(debuggingRenderer); 
+
+    cout << "Status: (Debugger) Debugging Window and Renderer Created " << endl; 
+
+    return false; 
+}
+
 bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger){
     if (getDebuggerIsOn() == false){
         setDebuggerIsOn(true);
@@ -82,50 +123,11 @@ SDL_Renderer* Debugger::getDebuggingRenderer(){
     return debuggingRenderer; 
 }
 
-bool Debugger::initializeDebugger(){
-
-    SDL_Init(SDL_INIT_VIDEO); 
-    SDL_Init(SDL_INIT_EVENTS); 
-
-    SDL_CreateWindowAndRenderer(512, 512, (SDL_WINDOW_RESIZABLE), &debuggingWindow, &debuggingRenderer); 
-    SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0);  
-    SDL_RenderClear(debuggingRenderer); 
-    SDL_SetWindowPosition(debuggingWindow, 0, 30); 
-    SDL_SetWindowTitle(debuggingWindow, "Debugger"); 
-
-    // returns 0 if successful, -1 on any error 
-    if(TTF_Init() == -1){
-        cout << "Error initializing debugging window, closing SDL and window" << endl; 
-        return true; 
-    }    
-
-    createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20, true, debuggingRenderer, "white"); 
-
-    const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
-    int height = 50;  
-    for(int i = 0; i < 15; i+=2){
-        createBoxAndAddText(fontRegular, registerNames[i], 10, height, 20, 20, true, debuggingRenderer, "white"); 
-        createBoxAndAddText(fontRegular, registerNames[i+1], 90, height, 20, 20, true, debuggingRenderer, "white"); 
-        height+=35; 
-    }
-    
-    createBoxAndAddText(fontSemiBold, "PC:", 10, 330, 30, 20, true, debuggingRenderer, "white"); 
-    createBoxAndAddText(fontSemiBold, "Instr:", 10, 350, 50, 20, true, debuggingRenderer, "white"); 
-    createBoxAndAddText(fontSemiBold, "Stack:", 160, 20, 50, 20, true, debuggingRenderer, "white"); 
-
-    createBoxAndAddText(fontRegular, "Register I:", 10, 372, 90, 22, true, debuggingRenderer, "white"); 
-
-    SDL_RenderPresent(debuggingRenderer); 
-
-    cout << "Status: (Debugger) Debugging Window and Renderer Created " << endl; 
-
-    return false; 
-}
-
 bool Debugger::destroyDebuggerWindow(){
     SDL_DestroyWindow(debuggingWindow); 
     SDL_DestroyRenderer(debuggingRenderer); 
-    TTF_CloseFont((messageFont)); 
+    TTF_CloseFont(messageFont); 
+    messageFont = nullptr; 
     TTF_Quit(); 
     SDL_Quit();  
     
@@ -306,6 +308,8 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     SDL_RenderPresent(debuggingRenderer); 
     
     SDL_DestroyTexture(message);  
+
+    TTF_CloseFont(messageFont); 
 }
 
 void Debugger::resetDataOnDebuggerScreen(){
