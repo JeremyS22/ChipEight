@@ -78,7 +78,7 @@ void setCurrentInstruction (std::string Instruction);
 
 std::string getCurrentInstruction(); 
 
-void setDelayTimer(uint8_t passedInTime); 
+void setDelayTimer(uint8_t time); 
 
 uint8_t getDelayTimer(); 
 

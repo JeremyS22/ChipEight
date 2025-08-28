@@ -52,7 +52,8 @@ class Debugger {
     std::string convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits); 
     void outputStackToDebugger(Memory memory); 
     std::string convertIntToHexString(int value); 
-    void outputRegisterIToDebugger(std::string address); 
+    void outputDelayTimerToDebugger(uint8_t delayTimer); 
+    void outputIndexRegisterToDebugger(std::string address); 
     void outputPastInstructionsToDebugger(std::string currentInstruction); 
     void outputPastPCToDebugger(std::string programCounter); 
     void createBoxAndAddText(const char* font, const char* text, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* DebuggingRenderer, 
@@ -61,7 +62,8 @@ class Debugger {
     void resetRegisterData(); 
     void resetPCAndInstructionData(); 
     void resetStackData(); 
-    void resetRegisterIData(); 
+    void resetIndexRegisterData(); 
+    void resetDelayAndSoundTimerData(); 
 
     Debugger(); 
 

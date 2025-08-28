@@ -59,6 +59,8 @@ bool Debugger::initializeDebugger(){
 
     createBoxAndAddText(fontRegular, "Register I:", 10, 372, 90, 22, true, debuggingRenderer, "white"); 
 
+    createBoxAndAddText(fontRegular, "Delay:", 10, 395, 60, 22, true, debuggingRenderer, "white"); 
+
     SDL_RenderPresent(debuggingRenderer); 
 
     cout << "Status: (Debugger) Debugging Window and Renderer Created " << endl; 
@@ -183,7 +185,11 @@ void Debugger::outputPastPCToDebugger(string programCounter){
     }
 }
 
-void Debugger::outputRegisterIToDebugger(string address){
+void Debugger::outputDelayTimerToDebugger(uint8_t delayTimer){
+    createBoxAndAddText(fontExtraBold, convertIntToString(delayTimer, false, false).c_str(), 90, 396, 28, 22, false, debuggingRenderer, "white"); 
+}
+
+void Debugger::outputIndexRegisterToDebugger(string address){
     stringstream sstreamObj; 
     sstreamObj << "0x" << address;
     string convertedAddress = sstreamObj.str(); 
@@ -316,7 +322,8 @@ void Debugger::resetDataOnDebuggerScreen(){
     resetRegisterData(); 
     resetPCAndInstructionData();     
     resetStackData(); 
-    resetRegisterIData(); 
+    resetIndexRegisterData(); 
+    resetDelayAndSoundTimerData(); 
 }
 
 void Debugger::resetRegisterData(){
@@ -350,10 +357,14 @@ void Debugger::resetStackData(){
     createBoxAndAddText(fontRegular, "---", 240, 50, 60, 22, true, debuggingRenderer, "white");  
 }
 
-void Debugger::resetRegisterIData(){
+void Debugger::resetIndexRegisterData(){
     createBoxAndAddText(fontExtraBold, "", 105, 372, 60, 22, false, debuggingRenderer, "white"); 
 
     createBoxAndAddText(fontExtraBold, "0x0", 105, 372, 60, 22, false, debuggingRenderer, "white"); 
+}
+
+void Debugger::resetDelayAndSoundTimerData(){
+    createBoxAndAddText(fontExtraBold, "", 90, 396, 28, 22, false, debuggingRenderer, "white"); 
 }
 
 string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToHexDigits){

@@ -66,8 +66,8 @@ uint8_t Cpu::getRegist_V(int name){
     return regist_V[name];  
 }
 
-void Cpu::setDelayTimer(uint8_t passedInTime){
-    delayTimer = passedInTime; 
+void Cpu::setDelayTimer(uint8_t time){
+    delayTimer = time; 
 }
 
 uint8_t Cpu::getDelayTimer(){
@@ -403,7 +403,7 @@ void Cpu::loadAddressInRegisterI(string address){
     cout << address << "Address being stored in Register I " << hex << setw(2) << setfill('0') << stoi(address, nullptr, 16) << endl; 
     regist_I = stoi(address, nullptr, 16); 
     if(debugger.getDebuggerIsOn() == true){
-        debugger.outputRegisterIToDebugger(address); 
+        debugger.outputIndexRegisterToDebugger(address); 
     }
 }
 
@@ -496,7 +496,7 @@ void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
     regist_I += regist_V[X]; 
 
     if(debugger.getDebuggerIsOn() == true){
-        debugger.outputRegisterIToDebugger(convertIntToHexString(regist_I)); 
+        debugger.outputIndexRegisterToDebugger(convertIntToHexString(regist_I)); 
     }
 
     if(COSMAC_VIP_FLAG_IS_ON == false){
@@ -542,7 +542,7 @@ void Cpu::storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_
             regist_I = tempAddress; 
 
             if(debugger.getDebuggerIsOn() == true){
-                debugger.outputRegisterIToDebugger(convertIntToHexString(regist_I)); 
+                debugger.outputIndexRegisterToDebugger(convertIntToHexString(regist_I)); 
             } 
         }
     }
@@ -564,7 +564,7 @@ void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_V
             regist_I = tempAddress; 
 
             if(debugger.getDebuggerIsOn() == true){
-                debugger.outputRegisterIToDebugger(convertIntToHexString(regist_I)); 
+                debugger.outputIndexRegisterToDebugger(convertIntToHexString(regist_I)); 
             }
         }
     }

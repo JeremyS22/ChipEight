@@ -13,8 +13,7 @@ void ChipEight::initializeEmulator(Memory& memory, string romFileLocation, Cpu& 
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 }
 
-void ChipEight::runDelayTimer(Cpu& cpu){
-
+void ChipEight::runDelayTimer(Cpu& cpu, Debugger debugger){
     uint8_t localDelayTimer = cpu.getDelayTimer(); 
     while(localDelayTimer > 0){
         if(localDelayTimer >= 60){
@@ -26,6 +25,7 @@ void ChipEight::runDelayTimer(Cpu& cpu){
             localDelayTimer = 0; 
             cpu.setDelayTimer(0); 
         }
+        debugger.outputDelayTimerToDebugger(cpu.getDelayTimer()); 
     }
 }
 
@@ -34,13 +34,13 @@ bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypa
         if (debugger.getDebuggerIsOn() == true){
             inputToCloseEmulator = debugger.runDebugger(cpu, memory, screen, keypad, debugger); 
             if(inputToCloseEmulator == true){
-                    destroyEmulator(debugger, screen); 
+                destroyEmulator(debugger, screen); 
                 return true;  
             }
         }
         auto startOfClock = chrono::steady_clock::now(); 
         for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] != 'd'; ++instructionCounter){ 
-            runDelayTimer(cpu); 
+            runDelayTimer(cpu, debugger); 
             inputToCloseEmulator = keypad.getKeypadInput(screen, debugger, cpu, memory, keypad); 
             if(inputToCloseEmulator == true){
                 destroyEmulator(debugger, screen); 
