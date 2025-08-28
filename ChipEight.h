@@ -14,6 +14,7 @@ class Debugger;
 class ChipEight {
     public:
         void initializeEmulator(Memory& memory, std::string romFileLocation, Cpu& cpu, Screen& screen, Debugger& debugger); 
+        void runDelayTimer(Cpu& cpu); 
         bool mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, bool inputToCloseEmulator, int instructionsPerSecond);
         void destroyEmulator(Debugger debugger, Screen screen); 
 

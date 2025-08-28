@@ -66,6 +66,14 @@ uint8_t Cpu::getRegist_V(int name){
     return regist_V[name];  
 }
 
+void Cpu::setDelayTimer(uint8_t passedInTime){
+    delayTimer = passedInTime; 
+}
+
+uint8_t Cpu::getDelayTimer(){
+    return delayTimer; 
+}
+
 void Cpu::pushProgramCounterOnStack(Memory& memory){
     memory.systemStack.push(getProgramCounter());  
     memory.setStackPointer(memory.systemStack.top()); 
