@@ -19,7 +19,7 @@ void Screen::initializeScreen(){
         
         // Initializing this to 16.0 by default since Chip 8 native's resoution is so small  
         setScalingMultipiler(16.0); 
-        SDL_CreateWindowAndRenderer(64 * getScalingMultipiler(), 32 * getScalingMultipiler(), 0, &window, &renderer); 
+        SDL_CreateWindowAndRenderer(64 * (int)getScalingMultipiler(), 32 * (int)getScalingMultipiler(), 0, &window, &renderer); 
         SDL_SetWindowTitle(window, "ChipEight"); 
 
         setWindowIsOpen(true); 

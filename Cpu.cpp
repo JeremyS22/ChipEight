@@ -274,6 +274,7 @@ void Cpu::addVXToVY(char secondNibble, char thirdNibble){
         regist_V[0xF] = 1; 
     }
     else {
+        regist_V[X] = result; 
         regist_V[0xF] = 0; 
     }
 
