@@ -8,7 +8,7 @@ class Cpu;
 
 class Screen {
 private: 
-    int scalingMultipiler; 
+    float scalingMultipiler; 
     bool pixelStatus[64][32]; 
     bool windowStatus; 
 
@@ -22,8 +22,8 @@ public:
 
     void initializeScreen(); 
     void turnOffAllPixels(Cpu& cpu); 
-    void setScalingMultipiler(int ScalingMultipiler); 
-    int getScalingMultipiler();  
+    void setScalingMultipiler(float ScalingMultipiler); 
+    float getScalingMultipiler();  
     void setPixelStatus(int coordinateX, int coordinateY, bool value, Cpu& cpu); 
     bool getPixelStatus(int coordinateX, int coordinateY); 
     void setWindowIsOpen(bool IsRunning); 

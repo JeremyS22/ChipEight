@@ -17,8 +17,8 @@ void Screen::initializeScreen(){
         SDL_Init(SDL_INIT_GAMECONTROLLER); 
         SDL_Init(SDL_INIT_EVENTS); 
         
-        // Initializing this to 16 by default since Chip 8 native's resoution is so small  
-        setScalingMultipiler(16); 
+        // Initializing this to 16.0 by default since Chip 8 native's resoution is so small  
+        setScalingMultipiler(16.0); 
         SDL_CreateWindowAndRenderer(64 * getScalingMultipiler(), 32 * getScalingMultipiler(), 0, &window, &renderer); 
         SDL_SetWindowTitle(window, "ChipEight"); 
 
@@ -42,11 +42,11 @@ void Screen::turnOffAllPixels(Cpu& cpu){
       memset(pixelStatus, false, sizeof(pixelStatus));  
 }
 
-void Screen::setScalingMultipiler(int ScalingMultipiler){
+void Screen::setScalingMultipiler(float ScalingMultipiler){
         scalingMultipiler = ScalingMultipiler; 
 }
 
-int Screen::getScalingMultipiler(){
+float Screen::getScalingMultipiler(){
         return scalingMultipiler; 
 }
 

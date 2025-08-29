@@ -132,28 +132,28 @@ void setValueInRegisterVX(char secondNibble, std::string value);
 void addValueToRegisterVX(char secondNibble, std::string value); 
 
 // 8xy0 
-void setVXToValueOfVY(int secondNibble, int thirdNibble); 
+void setVXToValueOfVY(char secondNibble, char thirdNibble); 
 
 // 8xy1 
-void bitwiseOrVXAndVY(int secondNibble, int thirdNibble); 
+void bitwiseOrVXAndVY(char secondNibble, char thirdNibble); 
 
 // 8xy2 
-void bitwiseAndVXAndVY(int secondNibble, int thirdNibble); 
+void bitwiseAndVXAndVY(char secondNibble, char thirdNibble); 
 
 // 8xy3   
-void bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble); 
+void bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble); 
 
 // 8xy4    
-void addVXToVY(int secondNibble, int thirdNibble); 
+void addVXToVY(char secondNibble, char thirdNibble); 
 
 // 8xy5     
-void subtractVYFromVX(int secondNibble, int thirdNibble); 
+void subtractVYFromVX(char secondNibble, char thirdNibble); 
 
 //8xy6 
 void shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
 
 // 8xy7      
-void subtractVXFromVY(int secondNibble, int thirdNibble); 
+void subtractVXFromVY(char secondNibble, char thirdNibble); 
 
 // 8xyE 
 void shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 

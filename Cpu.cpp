@@ -215,7 +215,7 @@ void Cpu::addValueToRegisterVX (char secondNibble, string value){
 }
 
 // 8xy0 
-void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble){
+void Cpu::setVXToValueOfVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[Y]; 
@@ -226,7 +226,7 @@ void Cpu::setVXToValueOfVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy1 
-void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble){
+void Cpu::bitwiseOrVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] |= regist_V[Y]; 
@@ -238,7 +238,7 @@ void Cpu::bitwiseOrVXAndVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy2  
-void Cpu::bitwiseAndVXAndVY(int secondNibble, int thirdNibble){
+void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] & regist_V[Y]; 
@@ -250,7 +250,7 @@ void Cpu::bitwiseAndVXAndVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy3   
-void Cpu::bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble){
+void Cpu::bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] = regist_V[X] ^ regist_V[Y]; 
@@ -262,7 +262,7 @@ void Cpu::bitwiseExclusiveOrVXAndVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy4    
-void Cpu::addVXToVY(int secondNibble, int thirdNibble){
+void Cpu::addVXToVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     int result = regist_V[X] + regist_V[Y]; 
@@ -286,7 +286,7 @@ void Cpu::addVXToVY(int secondNibble, int thirdNibble){
 }
 
 // 8xy5     
-void Cpu::subtractVYFromVX(int secondNibble, int thirdNibble){
+void Cpu::subtractVYFromVX(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
 
@@ -343,7 +343,7 @@ void Cpu::shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP
 }
 
 // 8xy7      
-void Cpu::subtractVXFromVY(int secondNibble, int thirdNibble){
+void Cpu::subtractVXFromVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     if(regist_V[X] > regist_V[Y]){
@@ -764,9 +764,9 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
         }
 }
  
-int Cpu::convertCharToHex(char Value){
+int Cpu::convertCharToHex(char value){
     stringstream hexString; 
-    hexString << "0x" << Value;     
+    hexString << "0x" << value;     
     return stoi(hexString.str(), nullptr, 16);    
 }
 
