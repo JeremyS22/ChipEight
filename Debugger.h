@@ -58,10 +58,11 @@ class Debugger {
     void outputPastPCToDebugger(std::string programCounter); 
     void createBoxAndAddText(const char* font, const char* text, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* DebuggingRenderer, 
         std::string textColor); 
-    void resetDataOnDebuggerScreen(); 
+    void resetDataOnDebuggerScreen(Memory memory); 
     void resetRegisterData(); 
     void resetPCAndInstructionData(); 
-    void resetStackData(); 
+    void resetStackData(Memory memory); 
+    void copyStackToDebuggingVector(Memory memory); 
     void resetIndexRegisterData(); 
     void resetDelayAndSoundTimerData(); 
 

@@ -73,7 +73,7 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
         setDebuggerIsOn(true);
     }
 
-    resetDataOnDebuggerScreen(); 
+    resetDataOnDebuggerScreen(memory); 
     cout << "[DEBUGGER] Press right arrow key to step 1 instruction, up arrow key to step by 5 instructions" << endl; 
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 
     cout << "[DEBUGGER]   Press Escape key to close emulator" << endl; 
@@ -238,8 +238,8 @@ void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName
 } 
 
 void Debugger::outputStackToDebugger(Memory memory){
-    string topOfStack = convertIntToHexString(memory.getStackPointer()); 
     if(memory.getStackSize() > stackPrintingVector.size()){
+        string topOfStack = convertIntToHexString(memory.getStackPointer()); 
         stackPrintingVector.emplace(stackPrintingVector.begin(), topOfStack); 
     }
     else {
@@ -318,10 +318,10 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     TTF_CloseFont(messageFont); 
 }
 
-void Debugger::resetDataOnDebuggerScreen(){
+void Debugger::resetDataOnDebuggerScreen(Memory memory){
     resetRegisterData(); 
     resetPCAndInstructionData();     
-    resetStackData(); 
+    resetStackData(memory); 
     resetIndexRegisterData(); 
     resetDelayAndSoundTimerData(); 
 }
@@ -350,11 +350,23 @@ void Debugger::resetPCAndInstructionData(){
     createBoxAndAddText(fontExtraBold, "---", 90, 350, 50, 22, false, debuggingRenderer, "white");  
 }
 
-void Debugger::resetStackData(){
+void Debugger::resetStackData(Memory memory){
+    copyStackToDebuggingVector(memory); 
     createBoxAndAddText(fontExtraBold, "", 190, 50, 280, 276, false, debuggingRenderer, "white");
      
     createBoxAndAddText(fontRegular, "0x0", 190, 50, 36, 22, true, debuggingRenderer, "white"); 
     createBoxAndAddText(fontRegular, "---", 240, 50, 60, 22, true, debuggingRenderer, "white");  
+}
+
+void Debugger::copyStackToDebuggingVector(Memory memory){
+    stackPrintingVector.clear(); 
+
+    string topOfStack; 
+    for(int i = 0; i < memory.systemStack.size(); ++i){
+        topOfStack = convertIntToHexString(memory.systemStack.top()); 
+        stackPrintingVector.push_back(topOfStack); 
+        memory.systemStack.pop(); 
+    }
 }
 
 void Debugger::resetIndexRegisterData(){
@@ -390,6 +402,6 @@ string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToH
 string Debugger::convertIntToHexString(int value){
     stringstream hexadecimalVal; 
     hexadecimalVal << "0x" << hex << value; 
-
+    
     return hexadecimalVal.str(); 
 }
