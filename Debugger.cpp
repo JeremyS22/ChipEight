@@ -24,6 +24,7 @@ Debugger::Debugger() :
     textColor(""){
         vector<std::string> pastInstructionVector(6,"0"); 
         vector<std::string> pastProgramCounterVector(6,"0"); 
+        vector<std::string> stackPrintingVector(16,"0"); 
 } 
 
 bool Debugger::initializeDebugger(){
@@ -123,6 +124,18 @@ bool Debugger::getDebuggerIsOn(){
 
 SDL_Renderer* Debugger::getDebuggingRenderer(){
     return debuggingRenderer; 
+}
+
+void Debugger::setStackPrintingVector(string value){
+    stackPrintingVector.push_back(value); 
+}
+
+string Debugger::getStackPrintingVectorElement(int index){
+    return stackPrintingVector.at(index); 
+}
+
+int Debugger::getStackPrintingVectorSize(){
+    return stackPrintingVector.size(); 
 }
 
 bool Debugger::destroyDebuggerWindow(){
@@ -360,9 +373,10 @@ void Debugger::resetStackData(Memory memory){
 
 void Debugger::copyStackToDebuggingVector(Memory memory){
     stackPrintingVector.clear(); 
+    int stackSize = memory.systemStack.size(); 
 
     string topOfStack; 
-    for(int i = 0; i < memory.systemStack.size(); ++i){
+    for(int i = 0; i < stackSize; ++i){
         topOfStack = convertIntToHexString(memory.systemStack.top()); 
         stackPrintingVector.push_back(topOfStack); 
         memory.systemStack.pop(); 
@@ -402,6 +416,6 @@ string Debugger::convertIntToString(int value, bool add0xPrefix, bool convertToH
 string Debugger::convertIntToHexString(int value){
     stringstream hexadecimalVal; 
     hexadecimalVal << "0x" << hex << value; 
-    
+
     return hexadecimalVal.str(); 
 }
