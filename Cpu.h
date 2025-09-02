@@ -180,7 +180,7 @@ void skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad);
 void setVXToDelayTimer(char secondNibble); 
 
 //fx15 
-void setDelayTimerToVXValue(char secondNibble); 
+void setDelayTimerToVXValue(char secondNibble, Cpu& cpu); 
 
 // fx0a 
 void loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad); 

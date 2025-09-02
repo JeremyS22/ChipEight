@@ -126,16 +126,15 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 void Cpu::runDelayTimer(){
     uint8_t localDelayTimer = getDelayTimer(); 
     while(localDelayTimer > 0){
-        if(localDelayTimer >= 60){
-            localDelayTimer-=60; 
-            setDelayTimer(localDelayTimer); 
-            this_thread::sleep_for(chrono::seconds(1)); 
-        }   
-        else {
-            localDelayTimer = 0; 
-            setDelayTimer(0); 
-        }
+        auto startOfComputeClock = chrono::steady_clock::now(); 
+        localDelayTimer-=1; 
+        setDelayTimer(localDelayTimer); 
         debugger.outputDelayTimerToDebugger(getDelayTimer()); 
+        auto endOfComputeClock = chrono::steady_clock::now(); 
+
+        chrono::duration<double> timeElasped = endOfComputeClock - startOfComputeClock; 
+        int timeToSleep = 16666666 - timeElasped.count(); 
+        this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
 }
 
@@ -530,11 +529,15 @@ void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
 }
 
 // fx15 
-void Cpu::setDelayTimerToVXValue(char secondNibble){
+void Cpu::setDelayTimerToVXValue(char secondNibble, Cpu& cpu){
     int X = convertCharToHex(secondNibble); 
     delayTimer = regist_V[X]; 
 
-    runDelayTimer(); 
+    thread delayTimerThread(&Cpu::runDelayTimer, &cpu);  
+    if(delayTimerThread.joinable()){
+        cout << "STARTED THREAD " << endl; 
+        delayTimerThread.detach(); 
+    } 
 }
 
 // fx33 
@@ -756,7 +759,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                         switch (fourthNibble){
                             case '5':
                                 // fx15 
-                                setDelayTimerToVXValue(secondNibble); 
+                                setDelayTimerToVXValue(secondNibble, cpu); 
                                 break; 
                             case '8':
                                 // fx18   
