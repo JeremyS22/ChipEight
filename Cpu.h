@@ -102,6 +102,8 @@ std::string getLastTwoNibbles(std::string currentInstruction);
 
 std::string getLastThreeNibbles(std::string currentInstruction); 
 
+void runDelayTimer(); 
+
 // 0nnn (Not implementing)
 
 // 00e0 
@@ -175,8 +177,10 @@ void skipInstructionIfKeyIsPressed(char secondNibble, Keypad keypad);
 void skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad); 
 
 // fx07 
-
 void setVXToDelayTimer(char secondNibble); 
+
+//fx15 
+void setDelayTimerToVXValue(char secondNibble); 
 
 // fx0a 
 void loopUntilKeyPressed(char secondNibble, Screen& screen, Keypad keypad); 

@@ -6,6 +6,8 @@
 #include <bitset> 
 #include <stack> 
 #include <cstring> 
+#include <chrono> 
+#include <thread> 
 
 #include "Cpu.h"
 
@@ -119,6 +121,22 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 
     return lastThreeNibbles; 
 
+}
+
+void Cpu::runDelayTimer(){
+    uint8_t localDelayTimer = getDelayTimer(); 
+    while(localDelayTimer > 0){
+        if(localDelayTimer >= 60){
+            localDelayTimer-=60; 
+            setDelayTimer(localDelayTimer); 
+            this_thread::sleep_for(chrono::seconds(1)); 
+        }   
+        else {
+            localDelayTimer = 0; 
+            setDelayTimer(0); 
+        }
+        debugger.outputDelayTimerToDebugger(getDelayTimer()); 
+    }
 }
 
 // 0nnn
@@ -511,6 +529,14 @@ void Cpu::addVXToRegisterI(char secondNibble, bool COSMAC_VIP_FLAG_IS_ON){
     }
 }
 
+// fx15 
+void Cpu::setDelayTimerToVXValue(char secondNibble){
+    int X = convertCharToHex(secondNibble); 
+    delayTimer = regist_V[X]; 
+
+    runDelayTimer(); 
+}
+
 // fx33 
 void Cpu::storeEachVXDigitInMemory(char secondNibble, Memory& memory){
     int X = convertCharToHex(secondNibble); 
@@ -730,7 +756,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                         switch (fourthNibble){
                             case '5':
                                 // fx15 
-                                getCurrentInstruction(); 
+                                setDelayTimerToVXValue(secondNibble); 
                                 break; 
                             case '8':
                                 // fx18   
