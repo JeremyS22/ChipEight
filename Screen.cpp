@@ -33,12 +33,6 @@ void Screen::initializeScreen(){
 } 
 
 void Screen::turnOffAllPixels(Cpu& cpu){
-        /* for (int i = 0; i < 64; ++i){
-                for (int j = 0; j < 32; ++j){
-                        // initialized to FALSE by default to represent turned off pixels 
-                        setPixelStatus(i, j, 0, cpu); 
-                }
-        }    */
       memset(pixelStatus, false, sizeof(pixelStatus));  
 }
 

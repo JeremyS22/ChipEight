@@ -124,6 +124,7 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 }
 
 void Cpu::runDelayTimer(){
+    cout << "  In threaded function " << endl; 
     uint8_t localDelayTimer = getDelayTimer(); 
     while(localDelayTimer > 0){
         auto startOfComputeClock = chrono::steady_clock::now(); 
@@ -133,9 +134,10 @@ void Cpu::runDelayTimer(){
         auto endOfComputeClock = chrono::steady_clock::now(); 
 
         chrono::duration<double> timeElasped = endOfComputeClock - startOfComputeClock; 
-        int timeToSleep = 16666666 - timeElasped.count(); 
+        int timeToSleep = 16666666 - (int)timeElasped.count(); 
         this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
+    cout << "  Exiting threaded function" << endl; 
 }
 
 // 0nnn
@@ -535,9 +537,10 @@ void Cpu::setDelayTimerToVXValue(char secondNibble, Cpu& cpu){
 
     thread delayTimerThread(&Cpu::runDelayTimer, &cpu);  
     if(delayTimerThread.joinable()){
-        cout << "STARTED THREAD " << endl; 
+        cout << "Delay Timer thread started " << endl; 
         delayTimerThread.detach(); 
     } 
+    cout << "Delay Timer thread ended " << endl; 
 }
 
 // fx33 
@@ -616,6 +619,7 @@ void Cpu::fetchInstructions(Memory memory){
     cout << "Pre-Increment Program Counter " << getProgramCounter() << endl; 
     incrementProgramCounter(getProgramCounterPointer(), 2); 
     cout << "Post-Increment Program Counter " << getProgramCounter() << endl; 
+    cout << "Current Instruction " << getCurrentInstruction() << endl; 
 }
 
 void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen, Memory& memory, Cpu& cpu, Keypad keypad){
@@ -745,9 +749,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                         switch (fourthNibble){
                             case '7':
                                 // fx07 
-                                // setVXToDelayTimer(secondNibble); 
-
-                                getCurrentInstruction(); 
+                                setVXToDelayTimer(secondNibble); 
                                 break; 
                             case 'a':
                                 // fx0a   
