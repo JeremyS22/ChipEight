@@ -20,7 +20,7 @@ class CpuTest : public testing::Test {
 
 // 8xy0 
 
-TEST_F(CpuTest, RegisterVXEqualsVY){
+TEST_F(CpuTest, 8xy0_VXHoldsValueOfVY_WhenSettingVYToVX){
     cpu.setRegist_V(0, 3);
     cpu.setRegist_V(1, 6);
 
@@ -30,7 +30,7 @@ TEST_F(CpuTest, RegisterVXEqualsVY){
 
 // 8xy4 
 
-TEST_F(CpuTest, VXPlusVY){
+TEST_F(CpuTest, 8xy4_VXHoldsSum_WhenVYPlusVX){
     cpu.setRegist_V(0, 0);
     cpu.setRegist_V(1, 0);
     cpu.addVXToVY(secondNibble, thirdNibble); 
@@ -62,7 +62,7 @@ TEST_F(CpuTest, VXPlusVY){
     EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF wasn't set to 0, check 0xF in 8xy4's implementation to ensure overflow triggers carry flag"; 
 } 
 
-TEST_F(CpuTest, VXOverflowsCorrectlyAfterAddingVY){
+TEST_F(CpuTest, 8xy4_VXOverflowsCorrectly_AfterAddingVYToVX){
     cpu.setRegist_V(0, 255);
     cpu.setRegist_V(1, 1);
 
@@ -79,15 +79,15 @@ TEST_F(CpuTest, 8xy5_SetVXToExpectedValue_WhenV1MinusV0){
     EXPECT_EQ(cpu.getRegist_V(0), 88) << "Result should be 88.  Check the substraction between the two operands or opcode implementation"; 
 }
 
-TEST_F(CpuTest, 8xy5_VXUnderflowsCorrectly_WhenV0IsLessThanV1){
-    cpu.setRegist_V(0, 1);
-    cpu.setRegist_V(1, 256);    
+TEST_F(CpuTest, 8xy5_VXUnderflowsCorrectly_V1MinusV0_WhenV0LessThanV1){
+    cpu.setRegist_V(0, 0);
+    cpu.setRegist_V(1, 255);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
     EXPECT_EQ(cpu.getRegist_V(0), 1) << "Register V1 should underflow to be 1.  ";  
 }
 
-TEST_F(CpuTest, 8xy5_SetVFToZero_WhenV0IsLessThanV1){
+TEST_F(CpuTest, 8xy5_SetVFToZero_V1MinusV0_WhenV0IsLessThanV1){
     cpu.setRegist_V(0, 1);
     cpu.setRegist_V(1, 255);    
 
@@ -96,12 +96,85 @@ TEST_F(CpuTest, 8xy5_SetVFToZero_WhenV0IsLessThanV1){
     EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
-TEST_F(CpuTest, 8xy5_SetVFToOne_WhenV0IsGreaterThanV1){
+TEST_F(CpuTest, 8xy5_SetVFToOne_V1MinusV0_WhenV0IsGreaterThanV1){
     cpu.setRegist_V(0, 2);
     cpu.setRegist_V(1, 1);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
     EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
     EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+}
+
+// 8xy6 
+
+TEST_F(CpuTest, 8xy6_VXHoldsCorrectValue_WhenShiftedRightOnce){
+    cpu.setRegist_V(0, 0);
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
+    EXPECT_EQ(cpu.getRegist_V(0), 0) << "VX should be 0, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
+
+    cpu.setRegist_V(0, 7);
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
+    EXPECT_EQ(cpu.getRegist_V(0), 3) << "VX should be 3, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
+
+    cpu.setRegist_V(0, 14); 
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
+    EXPECT_EQ(cpu.getRegist_V(0), 7) << "VX should be 7, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
+
+    cpu.setRegist_V(0, 128); 
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
+    EXPECT_EQ(cpu.getRegist_V(0), 64) << "VX should be 64, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
+}
+
+TEST_F(CpuTest, 8xy6_VFHoldsShiftedOutBit_WhenVXShiftedRight){
+    cpu.setRegist_V(0, 15);
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "VF should be 0. Check 0xF in 8xy6's implementation";    
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "VF should be 1. Check 0xF in 8xy6's implementation";    
+
+    cpu.setRegist_V(0, 14);
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
+    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "VF should be 1.  Check 0xF in 8xy6's implementation";    
+    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "VF should be 0.  Check 0xF in 8xy6's implementation";    
+}
+
+TEST_F(CpuTest, 8xy6_VXSetToVY_WhenCosmacFlagIsOn){
+    cpu.setRegist_V(0, 128);
+    cpu.setRegist_V(1, 0);
+    
+    bool turnOnCosmacFlag = true; 
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
+    EXPECT_EQ(cpu.getRegist_V(0), cpu.getRegist_V(1)) << "VX != VY, when Cosmac flag is on.  Check Cosmac implementation in 8xy6's method";    
+}
+
+TEST_F(CpuTest, 8xy6_VXSetToVYAndShiftsCorrectly_WhenCosmacFlagIsOn){
+    cpu.setRegist_V(0, 128);
+    cpu.setRegist_V(1, 4);
+    
+    bool turnOnCosmacFlag = true; 
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
+    EXPECT_EQ(cpu.getRegist_V(0), 2) << "VX holds incorrect value and should be 2.  Either VX wasn't set to VY or VX shifted incorrectly. Check the implementation of either. ";  
+}
+
+TEST_F(CpuTest, 8xy6_VFHoldsShiftedOutBit_WhenCosmacFlagIsOn){
+    cpu.setRegist_V(0, 128);
+    cpu.setRegist_V(1, 4);
+    
+    bool turnOnCosmacFlag = true; 
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
+    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "VF should be 1. Check 0xF in 8xy6's implementation";    
+    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "VF should be 0. Check 0xF in 8xy6's implementation";    
+
+    cpu.setRegist_V(0, 128);
+    cpu.setRegist_V(1, 15);
+    
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "VF should be 1. Check 0xF in 8xy6's implementation";    
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "VF should be 0. Check 0xF in 8xy6's implementation";    
 }
 
