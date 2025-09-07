@@ -12,7 +12,7 @@ Memory::Memory(){
     stackPointer = 0; 
 }
 
-void Memory::loadFontDataIntoMemory(Cpu cpu, Memory& memory){
+void Memory::loadFontDataIntoMemory(Cpu& cpu, Memory& memory){
 
     cout << "Status: (Memory) Loading font data into memory" << endl; 
 

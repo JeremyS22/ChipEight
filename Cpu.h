@@ -4,6 +4,8 @@
 #include <iostream> 
 #include <cstdint> 
 #include <string> 
+#include <future> 
+#include <thread> 
 
 #include "Screen.h" 
 #include "Memory.h" 
@@ -35,6 +37,12 @@ class Cpu {
         std::string currentInstruction; 
 
         Debugger& debugger; 
+
+        std::promise<void> delayTimerPromise; 
+
+        std::future<void> delayTimerFuture; 
+        
+        std::thread delayTimerThread; 
 
     public:
 

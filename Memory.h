@@ -32,7 +32,7 @@ class Memory {
     Memory();  
     ~Memory(){}; 
 
-    void loadFontDataIntoMemory(Cpu cpu, Memory& memory); 
+    void loadFontDataIntoMemory(Cpu& cpu, Memory& memory); 
     void loadRomIntoMemory(Memory& memory, std::string romFileLocation, Cpu& cpu); 
     void setStackPointer(uint16_t addressAtTopOfStack); 
     uint16_t getStackPointer(); 

@@ -7,7 +7,6 @@
 #include <stack> 
 #include <cstring> 
 #include <chrono> 
-#include <thread> 
 
 #include "Cpu.h"
 
@@ -24,6 +23,7 @@ Cpu::Cpu(Debugger& debugger) : debugger(debugger){
     memset(regist_V, 0, sizeof(regist_V)); 
     delayTimer = 0; 
     soundTimer = 0; 
+    delayTimerFuture = delayTimerPromise.get_future(); 
 }; 
 
 void Cpu::setProgramCounter(uint16_t * programCounter, int value){
