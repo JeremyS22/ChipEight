@@ -366,7 +366,7 @@ void Cpu::shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP
 void Cpu::subtractVXFromVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
-    if(regist_V[X] > regist_V[Y]){
+    if(regist_V[Y] > regist_V[X]){
         regist_V[0xF] = 1; 
         
         cout << "VX > VY! Register VF is " << regist_V[0xF]<< endl; 
