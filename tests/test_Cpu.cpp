@@ -18,6 +18,30 @@ class CpuTest : public testing::Test {
     Cpu cpu;
 }; 
 
+// 5xy0 
+
+TEST_F(CpuTest, 5xy0_ProgramCounterIncrementsByTwo_WhenVXEqualVY){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0x200); 
+    
+    cpu.setRegist_V(0, 10);
+    cpu.setRegist_V(1, 10);    
+
+    cpu.skipInstructionIfVXEqualsVY(secondNibble, thirdNibble); 
+
+    EXPECT_EQ(cpu.getProgramCounter(), 0x202) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
+}
+
+TEST_F(CpuTest, 5xy0_ProgramCounterRemainsSame_WhenVXNotEqualVY){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0x200); 
+    
+    cpu.setRegist_V(0, 10);
+    cpu.setRegist_V(1, 20);    
+
+    cpu.skipInstructionIfVXEqualsVY(secondNibble, thirdNibble); 
+
+    EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
+}
+
 // 8xy0 
 
 TEST_F(CpuTest, 8xy0_VXHoldsValueOfVY_WhenSettingVYToVX){
@@ -214,5 +238,30 @@ TEST_F(CpuTest, 8xy7_SetVFToOne_WhenSubtractingVXFromVY_AndVYIsGreaterThanVX){
     cpu.subtractVXFromVY(secondNibble, thirdNibble); 
     EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
     EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+}
+
+// 9xy0 
+
+TEST_F(CpuTest, 9xy0_ProgramCounterIncrementsByTwo_WhenVXNotEqualVY){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0x200); 
+    
+    cpu.setRegist_V(0, 10);
+    cpu.setRegist_V(1, 20);    
+
+    cpu.skipInstructionIfVXNotEqualsVY(secondNibble, thirdNibble); 
+
+    EXPECT_NE(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to increment by 2, check conditional logic in 9xy0 instruction"; 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x202) << "Program Counter was expected to increment by 2, check conditional logic in 9xy0 instruction"; 
+}
+
+TEST_F(CpuTest, 9xy0_ProgramCounterRemainsSame_WhenVXEqualVY){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0x200); 
+    
+    cpu.setRegist_V(0, 10);
+    cpu.setRegist_V(1, 10);    
+
+    cpu.skipInstructionIfVXNotEqualsVY(secondNibble, thirdNibble); 
+
+    EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
 }
 

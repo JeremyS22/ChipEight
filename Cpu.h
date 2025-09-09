@@ -70,11 +70,11 @@ class Cpu {
     Cpu(Debugger& debugger); 
     ~Cpu(){}
 
-void setProgramCounter(uint16_t * programCounter, int value); 
+void setProgramCounter(uint16_t* programCounter, int value); 
 
-void incrementProgramCounter(uint16_t * programCounter, int value); 
+void incrementProgramCounter(uint16_t* programCounter, int value); 
 
-void decrementProgramCounter(uint16_t * programCounter, int value); 
+void decrementProgramCounter(uint16_t* programCounter, int value); 
 
 uint16_t getProgramCounter(); 
 
@@ -132,7 +132,7 @@ void skipInstructionIfVXEqualsNN(char secondNibble, std::string value);
 // 4xnn 
 void skipInstructionIfVXNotEqualsNN(char secondNibble, std::string value); 
 
-// 5xnn 
+// 5xy0 
 void skipInstructionIfVXEqualsVY(char secondNibble, char thirdNibble); 
 
 // 6xnn 
@@ -168,7 +168,7 @@ void subtractVXFromVY(char secondNibble, char thirdNibble);
 // 8xyE 
 void shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON); 
 
-// 9xyn 
+// 9xy0 
 void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble); 
 
 // annn 

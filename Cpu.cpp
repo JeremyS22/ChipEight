@@ -26,16 +26,16 @@ Cpu::Cpu(Debugger& debugger) : debugger(debugger){
     delayTimerFuture = delayTimerPromise.get_future(); 
 }; 
 
-void Cpu::setProgramCounter(uint16_t * programCounter, int value){
+void Cpu::setProgramCounter(uint16_t* programCounter, int value){
     *programCounter = value;  
 }
 
-void Cpu::incrementProgramCounter(uint16_t * programCounter, int value){
+void Cpu::incrementProgramCounter(uint16_t* programCounter, int value){
     *programCounter += value;  
 }
 
 // including this just in case, may delete this later 
-void Cpu::decrementProgramCounter(uint16_t * programCounter, int value){
+void Cpu::decrementProgramCounter(uint16_t* programCounter, int value){
     *programCounter -= value;  
 }
 
@@ -200,7 +200,7 @@ void Cpu::skipInstructionIfVXNotEqualsNN(char secondNibble, string value){
     }
 }
 
-// 5xyn 
+// 5xy0 
 void Cpu::skipInstructionIfVXEqualsVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
@@ -407,7 +407,7 @@ void Cpu::shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_
     }
 }
 
-// 9xyn 
+// 9xy0 
 void Cpu::skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble){
     int X = convertCharToHex(secondNibble); 
     int Y = convertCharToHex(thirdNibble); 
