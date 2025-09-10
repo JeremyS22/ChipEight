@@ -52,6 +52,38 @@ TEST_F(CpuTest, 8xy0_VXHoldsValueOfVY_WhenSettingVYToVX){
     EXPECT_EQ(cpu.getRegist_V(0), 6); 
 }
 
+// 8xy1 
+
+TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenBitwiseORVXAndVY){
+    cpu.setRegist_V(0, 90);
+    cpu.setRegist_V(1, 60);
+
+    cpu.bitwiseOrVXAndVY(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 126); 
+}
+
+TEST_F(CpuTest, 8xy1_TestVXHoldsCorrectValue_WhenVXAndVYHaveSameValue){
+    cpu.setRegist_V(0, 20);
+
+    cpu.bitwiseOrVXAndVY(secondNibble, secondNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 20); 
+}
+
+TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenTestingORWithZero){
+    cpu.setRegist_V(0, 15);
+    cpu.setRegist_V(1, 0);
+
+    cpu.bitwiseOrVXAndVY(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 15); 
+}
+
+TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenVXAndVYHaveMaxValues){
+    cpu.setRegist_V(0, 255);
+
+    cpu.bitwiseOrVXAndVY(secondNibble, secondNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 255); 
+}
+
 // 8xy4 
 
 TEST_F(CpuTest, 8xy4_VXHoldsSum_WhenVYPlusVX){
