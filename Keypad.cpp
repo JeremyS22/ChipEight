@@ -52,6 +52,7 @@ bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory
 }
 
 bool Keypad::checkIfKeyIsPressed(int keyFromVX){
+
     const Uint8* state = SDL_GetKeyboardState(NULL); 
 
     if(state[keypadMap[keyFromVX]] == true){

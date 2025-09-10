@@ -484,9 +484,7 @@ void Cpu::skipInstructionIfKeyIsPressed(char secondNibble, Keypad keypad){
 // exa1 
 void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad){
     int X = convertCharToHex(secondNibble); 
-    cout << "Looking for key " << regist_V[X] << endl; 
     if(keypad.checkIfKeyIsNotPressed(regist_V[X])){
-        cout << "Key " << regist_V[X] << "NOT PRESSED " << endl;  
         incrementProgramCounter(getProgramCounterPointer(), 2); 
     }
 }
