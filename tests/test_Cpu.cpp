@@ -28,7 +28,7 @@ TEST_F(CpuTest, 5xy0_ProgramCounterIncrementsByTwo_WhenVXEqualVY){
 
     cpu.skipInstructionIfVXEqualsVY(secondNibble, thirdNibble); 
 
-    EXPECT_EQ(cpu.getProgramCounter(), 0x202) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x202) << "Program Counter was expected to increment by 2, check conditional logic in 5xy0 instruction"; 
 }
 
 TEST_F(CpuTest, 5xy0_ProgramCounterRemainsSame_WhenVXNotEqualVY){
@@ -39,7 +39,57 @@ TEST_F(CpuTest, 5xy0_ProgramCounterRemainsSame_WhenVXNotEqualVY){
 
     cpu.skipInstructionIfVXEqualsVY(secondNibble, thirdNibble); 
 
-    EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 5xy0 instruction"; 
+}
+
+// 7xnn 
+
+TEST_F(CpuTest, 7xnn_VXHoldsCorrectValue_AfterAddingNN){
+    cpu.setRegist_V(0, 10);
+    std::string value = "a"; 
+
+    cpu.addValueToRegisterVX (secondNibble, value); 
+    EXPECT_EQ(cpu.getRegist_V(0), 20) << "Wrong value after adding, check 7xnn's arithmetic implementation.  Remember NN is hexadecimal";   
+}
+
+TEST_F(CpuTest, 7xnn_VXOverflowsAndHoldsCorrectValue_WhenAddingMaxValueOfNN){
+    cpu.setRegist_V(0, 10);
+    std::string value = "ff"; 
+
+    cpu.addValueToRegisterVX (secondNibble, value); 
+    EXPECT_EQ(cpu.getRegist_V(0), 9) << "Wrong value after adding, check 7xnn's arithmetic implementation.  Or in the case VX didn't overflow correctly, check VX's data type (which should be uint8_t).  Remember NN is hexadecimal";   
+}
+
+TEST_F(CpuTest, 7xnn_VXHoldsCorrectValue_WhenAddingZero){
+    cpu.setRegist_V(0, 255);
+    std::string value = "0"; 
+
+    cpu.addValueToRegisterVX (secondNibble, value); 
+    EXPECT_EQ(cpu.getRegist_V(0), 255) << "Wrong value after adding zero to VX, check 7xnn's arithmetic implementation.  Remember NN is hexadecimal";   
+}
+
+TEST_F(CpuTest, 7xnn_VXOverflowsAndHoldsCorrectValue_WhenAddingToMaxValueOfVX){
+    cpu.setRegist_V(0, 255);
+    std::string value = "a"; 
+
+    cpu.addValueToRegisterVX (secondNibble, value); 
+    EXPECT_EQ(cpu.getRegist_V(0), 9) << "Wrong value after adding max NN value to VX, check 7xnn's arithmetic implementation.  Or in the case VX didn't overflow correctly, check VX's data type (which should be uint8_t).  Remember NN is hexadecimal";   
+}
+
+TEST_F(CpuTest, 7xnn_VXHoldsCorrectValue_WhenVXIsZero){
+    cpu.setRegist_V(0, 0);
+    std::string value = "a"; 
+
+    cpu.addValueToRegisterVX (secondNibble, value); 
+    EXPECT_EQ(cpu.getRegist_V(0), 10) << "Wrong value after adding where VX is 0, check 7xnn's arithmetic implementation.  Remember NN is hexadecimal";   
+}
+
+TEST_F(CpuTest, 7xnn_VXHoldsCorrectValue_WhenNNHasLeadingZeros){
+    cpu.setRegist_V(0, 0);
+    std::string value = "0a"; 
+
+    cpu.addValueToRegisterVX (secondNibble, value); 
+    EXPECT_EQ(cpu.getRegist_V(0), 10) << "Wrong value after adding VX to a NN value with leading zero (ie 0x0a), check 7xnn's arithmetic implementation.  Remember NN is hexadecimal";   
 }
 
 // 8xy0 
@@ -49,7 +99,7 @@ TEST_F(CpuTest, 8xy0_VXHoldsValueOfVY_WhenSettingVYToVX){
     cpu.setRegist_V(1, 6);
 
     cpu.setVXToValueOfVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 6); 
+    EXPECT_EQ(cpu.getRegist_V(0), 6) << "VX and VY don't equal each other, check 8xy0's implementation";  
 }
 
 // 8xy1 
@@ -59,14 +109,14 @@ TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenBitwiseORVXAndVY){
     cpu.setRegist_V(1, 60);
 
     cpu.bitwiseOrVXAndVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 126); 
+    EXPECT_EQ(cpu.getRegist_V(0), 126) << "Wrong value, check basic OR implementation in 8xy1"; 
 }
 
 TEST_F(CpuTest, 8xy1_TestVXHoldsCorrectValue_WhenVXAndVYHaveSameValue){
     cpu.setRegist_V(0, 20);
 
     cpu.bitwiseOrVXAndVY(secondNibble, secondNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 20); 
+    EXPECT_EQ(cpu.getRegist_V(0), 20) << "Wrong value where both VX and VY held same value, check OR implementation in 8xy1."; 
 }
 
 TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenTestingORWithZero){
@@ -74,14 +124,14 @@ TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenTestingORWithZero){
     cpu.setRegist_V(1, 0);
 
     cpu.bitwiseOrVXAndVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 15); 
+    EXPECT_EQ(cpu.getRegist_V(0), 15) << "Wrong value where VY was zero, check OR implementation in 8xy1."; 
 }
 
 TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenVXAndVYHaveMaxValues){
     cpu.setRegist_V(0, 255);
 
     cpu.bitwiseOrVXAndVY(secondNibble, secondNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 255); 
+    EXPECT_EQ(cpu.getRegist_V(0), 255) << "Wrong value where both VX and VY held max values, check OR implementation in 8xy1.";  
 }
 
 // 8xy4 
