@@ -134,6 +134,38 @@ TEST_F(CpuTest, 8xy1_VXHoldsCorrectValue_WhenVXAndVYHaveMaxValues){
     EXPECT_EQ(cpu.getRegist_V(0), 255) << "Wrong value where both VX and VY held max values, check OR implementation in 8xy1.";  
 }
 
+// 8xy2  
+
+TEST_F(CpuTest, 8xy2_VXHoldsCorrectValue_WhenBitwiseANDVXAndVY){
+    cpu.setRegist_V(0, 15);
+    cpu.setRegist_V(1, 12);
+
+    cpu.bitwiseAndVXAndVY(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 12) << "Wrong value, check basic AND implementation in 8xy2"; 
+}
+
+TEST_F(CpuTest, 8xy2_TestVXHoldsCorrectValue_WhenVXAndVYHaveSameValue){
+    cpu.setRegist_V(0, 20);
+    
+    cpu.bitwiseAndVXAndVY(secondNibble, secondNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 20) << "Wrong value where both VX and VY held same value, check AND implementation in 8xy2."; 
+}
+    
+TEST_F(CpuTest, 8xy2_VXHoldsCorrectValue_WhenTestingANDWithZero){
+    cpu.setRegist_V(0, 15);
+    cpu.setRegist_V(1, 0);
+
+    cpu.bitwiseAndVXAndVY(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 0) << "Wrong value where VY was zero, check AND implementation in 8xy2."; 
+}
+
+TEST_F(CpuTest, 8xy2_VXHoldsCorrectValue_WhenVXAndVYHaveMaxValues){
+    cpu.setRegist_V(0, 255);
+
+    cpu.bitwiseAndVXAndVY(secondNibble, secondNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 255) << "Wrong value where both VX and VY held max values, check AND implementation in 8xy2.";  
+} 
+
 // 8xy4 
 
 TEST_F(CpuTest, 8xy4_VXHoldsSum_WhenVYPlusVX){
