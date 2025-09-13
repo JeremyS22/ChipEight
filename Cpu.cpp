@@ -7,13 +7,14 @@
 #include <stack> 
 #include <cstring> 
 #include <chrono> 
+#include <typeinfo>
 
 #include "Cpu.h"
 
 using namespace std; 
 
 // for running older ROMs from 1980s and 1970s 
-bool COSMAC_VIP_FLAG_IS_ON = false; 
+bool COSMAC_VIP_FLAG_IS_ON = true; 
 
 // injecting this debugger instance to avoid passing it 
 //      in the majority of function arguments in this class 
@@ -137,7 +138,7 @@ void Cpu::runDelayTimer(){
         int timeToSleep = 16666666 - (int)timeElasped.count(); 
         this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
-    cout << "  Exiting threaded function" << endl; 
+    cout << "\n  Exiting threaded function" << endl; 
 }
 
 // 0nnn
@@ -260,7 +261,7 @@ void Cpu::bitwiseOrVXAndVY(char secondNibble, char thirdNibble){
 void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
-    regist_V[X] = regist_V[X] & regist_V[Y]; 
+    regist_V[X] &= regist_V[Y]; 
     cout << "AFTER BITWISE AND " << regist_V[X] << endl; 
 
     if(debugger.getDebuggerIsOn() == true){
@@ -272,7 +273,7 @@ void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble){
 void Cpu::bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
-    regist_V[X] = regist_V[X] ^ regist_V[Y]; 
+    regist_V[X] ^= regist_V[Y]; 
     cout << "AFTER BITWISE XOR " << regist_V[X] << endl; 
 
     if(debugger.getDebuggerIsOn() == true){
@@ -442,7 +443,7 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
     SDL_RenderSetScale(screen.renderer, screen.getScalingMultipiler(), screen.getScalingMultipiler());    
     uint16_t spriteDataAddress = regist_I; 
     
-    for(int i = 0; i < spriteHeight; i++){
+    for(int i = 0; i < spriteHeight; ++i){
         uint16_t binaryVal = memory.systemMemory[spriteDataAddress]; 
         bitset<16> binaryValue (binaryVal); 
 
@@ -450,7 +451,7 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
         cout << "Binary value from memory address of register I " << binaryValue << endl; 
 
         // starting from 7 because LSB 
-        for(int j = 7; j >= 0; j--){
+        for(int j = 7; j >= 0; --j){
            bool pixelIsPresent = screen.getPixelStatus(coordinateX, coordinateY);
            if(binaryValue[j] == 1 && pixelIsPresent == false){
                 SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1);     
@@ -463,10 +464,10 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
             }
             screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 
-            coordinateX++; 
+            ++coordinateX; 
         }
-        spriteDataAddress++; 
-        coordinateY++; 
+        ++spriteDataAddress; 
+        ++coordinateY; 
         // resets X coordinate for drawing the next line 
         coordinateX = regist_V[X];    
     }
@@ -548,7 +549,7 @@ void Cpu::storeEachVXDigitInMemory(char secondNibble, Memory& memory){
     uint8_t tempVXValue = regist_V[X]; 
     
     // adding 2 to compensate for modulus 10 and getting the right most digit  
-    for (uint16_t currentAddress = regist_I + 2; currentAddress >= regist_I; currentAddress--){
+    for(uint16_t currentAddress = regist_I + 2; currentAddress >= regist_I; --currentAddress){
         if (tempVXValue != 0){
             digitOfVX = tempVXValue % 10; 
             // storing float result in int to truncate decimal 
@@ -565,9 +566,9 @@ void Cpu::storeEachVXDigitInMemory(char secondNibble, Memory& memory){
 void Cpu::storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
     uint16_t tempAddress = regist_I; 
-    for (int i = 0; i <= X; i++){
+    for(int i = 0; i <= X; ++i){
         memory.systemMemory[tempAddress] = regist_V[i]; 
-        tempAddress++; 
+        ++tempAddress; 
         
         if (COSMAC_VIP_FLAG_IS_ON == true){
             regist_I = tempAddress; 
@@ -583,9 +584,9 @@ void Cpu::storeRegistersToMemory(char secondNibble, Memory& memory, bool COSMAC_
 void Cpu::storeMemoryToRegisters(char secondNibble, Memory memory, bool COSMAC_VIP_FLAG_IS_ON){
     int X = convertCharToHex(secondNibble); 
     uint16_t tempAddress = regist_I; 
-    for (int i = 0; i <= X; i++){
+    for(int i = 0; i <= X; ++i){
         regist_V[i] = memory.systemMemory[tempAddress]; 
-        tempAddress++; 
+        ++tempAddress; 
         
         if(debugger.getDebuggerIsOn() == true){
             debugger.outputRegistersToDebugger(getRegist_V(i), i);   

@@ -54,8 +54,9 @@ bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory
 bool Keypad::checkIfKeyIsPressed(int keyFromVX){
 
     const Uint8* state = SDL_GetKeyboardState(NULL); 
-
+    
     if(state[keypadMap[keyFromVX]] == true){
+        cout << "Key " << keyFromVX << " PRESSED " << endl; 
         return true; 
     }
     return false; 
@@ -63,7 +64,7 @@ bool Keypad::checkIfKeyIsPressed(int keyFromVX){
 
 bool Keypad::checkIfKeyIsNotPressed(int keyFromVX){
     const Uint8* state = SDL_GetKeyboardState(NULL); 
-
+    
     if(state[keypadMap[keyFromVX]] == false){
         return true; 
     }
@@ -72,7 +73,7 @@ bool Keypad::checkIfKeyIsNotPressed(int keyFromVX){
 
 uint8_t Keypad::getPressedKey(Screen& screen){
     if(SDL_PollEvent(&screen.windowEvent) && COSMAC_VIP_FLAG_IS_ON == false // for modern interpreters 
-        || COSMAC_VIP_FLAG_IS_ON == true && SDL_PollEvent(&screen.windowEvent) && screen.windowEvent.type == SDL_KEYUP){ // for COSMAC VIP interpreter 
+        || COSMAC_VIP_FLAG_IS_ON == true && screen.windowEvent.type == SDL_KEYUP){ // for COSMAC VIP interpreter 
         cout << "WINDOW EVENT FOUND " << endl; 
         const Uint8* state = SDL_GetKeyboardState(NULL);  
 

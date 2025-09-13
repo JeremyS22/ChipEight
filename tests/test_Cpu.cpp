@@ -379,3 +379,37 @@ TEST_F(CpuTest, 9xy0_ProgramCounterRemainsSame_WhenVXEqualVY){
     EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
 }
 
+class ConversionTestSuite : public testing::Test {
+    protected:
+        ConversionTestSuite(): cpu(debugger){}
+        Debugger debugger; 
+        Cpu cpu;
+}; 
+
+TEST_F(ConversionTestSuite, convertCharToHex_ReturnsCorrectHexValue){
+    char nibbleValue = '6'; 
+    int result = cpu.convertCharToHex(nibbleValue); 
+
+    EXPECT_EQ(result, 6) << "Incorrect integer value was return from method, check method's conversion implementation"; 
+}
+
+TEST_F(ConversionTestSuite, convertCharToHex_ReturnsCorrectHexValue_WhenPassingInMaxValue){
+    char nibbleValue = 'f'; 
+    int result = cpu.convertCharToHex(nibbleValue); 
+
+    EXPECT_EQ(result, 15) << "Incorrect integer value was return from method, check method's conversion implementation"; 
+}
+
+TEST_F(ConversionTestSuite, convertCharToHex_ReturnsCorrectHexValue_WhenPassingInMinValue){
+    char nibbleValue = '0'; 
+    int result = cpu.convertCharToHex(nibbleValue); 
+
+    EXPECT_EQ(result, 0) << "Incorrect integer value was return from method, check method's conversion implementation"; 
+}
+
+TEST_F(ConversionTestSuite, convertIntToHexString_ReturnsCorrectHexString){
+    std::string result = cpu.convertIntToHexString(648); 
+
+    EXPECT_EQ(result, "288") << "Incorrect string value was return from method, check method's conversion implementation";  
+}
+
