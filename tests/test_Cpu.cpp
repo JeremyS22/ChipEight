@@ -211,7 +211,7 @@ TEST_F(CpuTest, 8xy4_VXOverflowsCorrectly_AfterAddingVYToVX){
 
 // 8xy5 
 
-TEST_F(CpuTest, 8xy5_SetVXToExpectedValue_WhenSubtractingVYFromVX){
+TEST_F(CpuTest, 8xy5_VXHoldsExpectedValue){
     cpu.setRegist_V(0, 148);
     cpu.setRegist_V(1, 60);
     
@@ -219,7 +219,7 @@ TEST_F(CpuTest, 8xy5_SetVXToExpectedValue_WhenSubtractingVYFromVX){
     EXPECT_EQ(cpu.getRegist_V(0), 88) << "Result should be 88.  Check the substraction between the two operands or opcode implementation"; 
 }
 
-TEST_F(CpuTest, 8xy5_VXUnderflowsCorrectly_WhenSubtractingVYFromVX_AndVXIsLessThanVY){
+TEST_F(CpuTest, 8xy5_VXUnderflowsCorrectly_WhenVXIsLessThanVY){
     cpu.setRegist_V(0, 0);
     cpu.setRegist_V(1, 255);    
 
@@ -227,7 +227,23 @@ TEST_F(CpuTest, 8xy5_VXUnderflowsCorrectly_WhenSubtractingVYFromVX_AndVXIsLessTh
     EXPECT_EQ(cpu.getRegist_V(0), 1) << "Register V1 should underflow to be 1.  ";  
 }
 
-TEST_F(CpuTest, 8xy5_SetVFToZero_WhenSubtractingVYFromVX_AndVXIsLessThanVY){
+TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVXAndVYAreSameValue){
+    cpu.setRegist_V(0, 20);
+    cpu.setRegist_V(1, 20);    
+
+    cpu.subtractVYFromVX(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 0) << "Register V1 should underflow to be 1.  ";  
+}
+
+TEST_F(CpuTest, 8xy5_VFHoldsCorrectValue_WhenVXAndVYAreSameValue){
+    cpu.setRegist_V(0, 20);
+    cpu.setRegist_V(1, 20);    
+
+    cpu.subtractVYFromVX(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register V1 should underflow to be 1.  ";  
+}
+
+TEST_F(CpuTest, 8xy5_SetVFToZero_WhenVXIsLessThanVY){
     cpu.setRegist_V(0, 1);
     cpu.setRegist_V(1, 255);    
 
@@ -236,13 +252,22 @@ TEST_F(CpuTest, 8xy5_SetVFToZero_WhenSubtractingVYFromVX_AndVXIsLessThanVY){
     EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
-TEST_F(CpuTest, 8xy5_SetVFToOne_WhenSubtractingVYFromVX_AndVXIsGreaterThanVY){
+TEST_F(CpuTest, 8xy5_SetVFToOne_WhenVXIsGreaterThanVY){
     cpu.setRegist_V(0, 2);
     cpu.setRegist_V(1, 1);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
     EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
     EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+}
+
+TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVFIsVX_AndVXIsGreaterThanVY){
+    secondNibble = 'f'; // to pass register VF into method 
+    cpu.setRegist_V(0xF, 20);
+    cpu.setRegist_V(1, 15);    
+
+    cpu.subtractVYFromVX(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Incorrect value after subtracting VF - VY.  Ensure 8xy5 logic is correct when VF is VX";  
 }
 
 // 8xy6 
@@ -320,7 +345,7 @@ TEST_F(CpuTest, 8xy6_VFHoldsShiftedOutBit_WhenCosmacFlagIsOn){
 
 // 8xy7 
 
-TEST_F(CpuTest, 8xy7_SetVXToExpectedValue_WhenSubtractingVXFromVY){
+TEST_F(CpuTest, 8xy7_VXHoldsExpectedValue){
     cpu.setRegist_V(0, 10);
     cpu.setRegist_V(1, 20);
     
@@ -328,7 +353,7 @@ TEST_F(CpuTest, 8xy7_SetVXToExpectedValue_WhenSubtractingVXFromVY){
     EXPECT_EQ(cpu.getRegist_V(0), 10) << "Result should be 88.  Check the substraction between the two operands or opcode implementation"; 
 }
 
-TEST_F(CpuTest, 8xy7_VXUnderflowsCorrectly_WhenSubtractingVXFromVY_AndVYIsLessThanVX){
+TEST_F(CpuTest, 8xy7_VXUnderflowsCorrectly_WhenVYIsLessThanVX){
     cpu.setRegist_V(0, 255);
     cpu.setRegist_V(1, 0);    
 
@@ -336,7 +361,7 @@ TEST_F(CpuTest, 8xy7_VXUnderflowsCorrectly_WhenSubtractingVXFromVY_AndVYIsLessTh
     EXPECT_EQ(cpu.getRegist_V(0), 1) << "Register V1 should underflow to be 1.  ";  
 }
 
-TEST_F(CpuTest, 8xy7_SetVFToZero_WhenSubtractingVXFromVY_AndVYIsLessThanVX){
+TEST_F(CpuTest, 8xy7_SetVFToZero_WhenVYIsLessThanVX){
     cpu.setRegist_V(0, 255);
     cpu.setRegist_V(1, 1);    
 
@@ -345,7 +370,7 @@ TEST_F(CpuTest, 8xy7_SetVFToZero_WhenSubtractingVXFromVY_AndVYIsLessThanVX){
     EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
-TEST_F(CpuTest, 8xy7_SetVFToOne_WhenSubtractingVXFromVY_AndVYIsGreaterThanVX){
+TEST_F(CpuTest, 8xy7_SetVFToOne_WhenVYIsGreaterThanVX){
     cpu.setRegist_V(0, 1);
     cpu.setRegist_V(1, 255);    
 
@@ -378,6 +403,7 @@ TEST_F(CpuTest, 9xy0_ProgramCounterRemainsSame_WhenVXEqualVY){
 
     EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
 }
+
 
 class ConversionTestSuite : public testing::Test {
     protected:

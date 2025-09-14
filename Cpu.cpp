@@ -14,10 +14,10 @@
 using namespace std; 
 
 // for running older ROMs from 1980s and 1970s 
-bool COSMAC_VIP_FLAG_IS_ON = true; 
+bool COSMAC_VIP_FLAG_IS_ON = false; 
 
 // injecting this debugger instance to avoid passing it 
-//      in the majority of function arguments in this class 
+//      in the majority of function parameters in this class 
 Cpu::Cpu(Debugger& debugger) : debugger(debugger){ 
     programCounter = 0; 
     regist_I = 0; 
@@ -274,7 +274,7 @@ void Cpu::bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] ^= regist_V[Y]; 
-    cout << "AFTER BITWISE XOR " << regist_V[X] << endl; 
+    cout << "AFTER BITWISE XOR " << (int)regist_V[X] << endl; 
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -311,14 +311,14 @@ void Cpu::subtractVYFromVX(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
 
-    if(regist_V[X] > regist_V[Y]){
+    if(regist_V[X] >= regist_V[Y]){
         regist_V[0xF] = 1; 
 
         if(debugger.getDebuggerIsOn() == true){
             debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         }
 
-        cout << "VX > VY! Register VF is " << regist_V[0xF]<< endl; 
+        cout << "VX > VY! Register VF is " << (int)regist_V[0xF]<< endl; 
     }
     else {
         regist_V[0xF] = 0; 
@@ -327,15 +327,17 @@ void Cpu::subtractVYFromVX(char secondNibble, char thirdNibble){
             debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         }
 
-        cout << "VX < VY! Register VF is " << regist_V[0xF]<< endl; 
+        cout << "VX < VY! Register VF is " << (int)regist_V[0xF]<< endl; 
     }
-    regist_V[X] -= regist_V[Y]; 
+    if(X != 0xF){
+        regist_V[X] -= regist_V[Y]; 
+    }
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
     }
 
-    cout << "AFTER VX - VY! " << regist_V[X] << " also register VF is " << regist_V[0xF]<< endl; 
+    cout << "AFTER VX - VY! " << (int)regist_V[X] << " also register VF is " << (int)regist_V[0xF]<< endl; 
 
 }
 
