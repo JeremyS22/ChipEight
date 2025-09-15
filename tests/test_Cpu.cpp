@@ -232,7 +232,7 @@ TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVXAndVYAreSameValue){
     cpu.setRegist_V(1, 20);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 0) << "Register V1 should underflow to be 1.  ";  
+    EXPECT_EQ(cpu.getRegist_V(0), 0) << "The result should be 0 but wasn't.  Check 8xy5's implementation when VX and VY are the same value ";  
 }
 
 TEST_F(CpuTest, 8xy5_VFHoldsCorrectValue_WhenVXAndVYAreSameValue){
@@ -240,7 +240,7 @@ TEST_F(CpuTest, 8xy5_VFHoldsCorrectValue_WhenVXAndVYAreSameValue){
     cpu.setRegist_V(1, 20);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register V1 should underflow to be 1.  ";  
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register VF should be 1 but wasn't.  Check 8xy5's VF logic";  
 }
 
 TEST_F(CpuTest, 8xy5_SetVFToZero_WhenVXIsLessThanVY){
@@ -262,12 +262,21 @@ TEST_F(CpuTest, 8xy5_SetVFToOne_WhenVXIsGreaterThanVY){
 }
 
 TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVFIsVX_AndVXIsGreaterThanVY){
-    secondNibble = 'f'; // to pass register VF into method 
+    secondNibble = 'f'; 
     cpu.setRegist_V(0xF, 20);
     cpu.setRegist_V(1, 15);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
     EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Incorrect value after subtracting VF - VY.  Ensure 8xy5 logic is correct when VF is VX";  
+}
+
+TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVXAndVYAreBothVF){
+    secondNibble = 'f'; // to pass register VF into method 
+    thirdNibble = 'f'; 
+    cpu.setRegist_V(0xF, 60);
+
+    cpu.subtractVYFromVX(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "The result should be 1 but wasn't.  Note that if VX is VF, VX's result after calling this method should be the flag (1 or 0).  Not the result from the VX - VY.  Check 8xy5's implementation to ensure this";   
 }
 
 // 8xy6 
@@ -359,6 +368,22 @@ TEST_F(CpuTest, 8xy7_VXUnderflowsCorrectly_WhenVYIsLessThanVX){
 
     cpu.subtractVXFromVY(secondNibble, thirdNibble); 
     EXPECT_EQ(cpu.getRegist_V(0), 1) << "Register V1 should underflow to be 1.  ";  
+}
+
+TEST_F(CpuTest, 8xy7_VXHoldsCorrectValue_WhenVXAndVYAreSameValue){
+    cpu.setRegist_V(0, 20);
+    cpu.setRegist_V(1, 20);    
+
+    cpu.subtractVXFromVY(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0), 0) << "The result should be 0 but wasn't.  Check 8xy7's implementation when VX and VY are the same value ";  
+}
+
+TEST_F(CpuTest, 8xy7_VFHoldsCorrectValue_WhenVYAndVXAreSameValue){
+    cpu.setRegist_V(0, 20);
+    cpu.setRegist_V(1, 20);    
+
+    cpu.subtractVXFromVY(secondNibble, thirdNibble); 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register VF should be 1 but wasn't.  Check 8xy7's VF logic";  
 }
 
 TEST_F(CpuTest, 8xy7_SetVFToZero_WhenVYIsLessThanVX){
