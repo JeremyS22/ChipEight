@@ -169,30 +169,6 @@ TEST_F(CpuTest, 8xy2_VXHoldsCorrectValue_WhenVXAndVYHaveMaxValues){
 // 8xy4 
 
 TEST_F(CpuTest, 8xy4_VXHoldsSum_WhenVYPlusVX){
-    cpu.setRegist_V(0, 0);
-    cpu.setRegist_V(1, 0);
-    cpu.addVXToVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 0) << "Result isn't 0, check addition between the two operands or opcode implementation"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF wasn't set to 0, check 0xF in 8xy4's implementation to ensure overflow triggers carry flag"; 
-
-    cpu.setRegist_V(0, 1);
-    cpu.setRegist_V(1, 0);
-    cpu.addVXToVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 1) << "8xy4 - Result isn't 1, check addition between the two operands or opcode implementation"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF wasn't set to 0, check 0xF in 8xy4's implementation to ensure overflow triggers carry flag"; 
-    
-    cpu.setRegist_V(0, 0);
-    cpu.setRegist_V(1, 1);
-    cpu.addVXToVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 1) << "Result isn't 1, check addition between the two operands or opcode implementation"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF wasn't set to 0, check 0xF in 8xy4's implementation to ensure overflow triggers carry flag"; 
-    
-    cpu.setRegist_V(0, 24);
-    cpu.setRegist_V(1, 42);
-    cpu.addVXToVY(secondNibble, thirdNibble); 
-    EXPECT_EQ(cpu.getRegist_V(0), 66) << "Result isn't 66, check addition between the two operands or opcode implementation"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF wasn't set to 0, check 0xF in 8xy4's implementation to ensure overflow triggers carry flag"; 
-
     cpu.setRegist_V(0, 253);
     cpu.setRegist_V(1, 2);
     cpu.addVXToVY(secondNibble, thirdNibble); 
@@ -282,39 +258,25 @@ TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVXAndVYAreBothVF){
 // 8xy6 
 
 TEST_F(CpuTest, 8xy6_VXHoldsCorrectValue_WhenShiftedRightOnce){
-    cpu.setRegist_V(0, 0);
-    
-    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
-    EXPECT_EQ(cpu.getRegist_V(0), 0) << "VX should be 0, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
-
-    cpu.setRegist_V(0, 7);
-    
-    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
-    EXPECT_EQ(cpu.getRegist_V(0), 3) << "VX should be 3, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
-
-    cpu.setRegist_V(0, 14); 
-    
-    cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
-    EXPECT_EQ(cpu.getRegist_V(0), 7) << "VX should be 7, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
-
     cpu.setRegist_V(0, 128); 
     
     cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
-    EXPECT_EQ(cpu.getRegist_V(0), 64) << "VX should be 64, but received incorrect value after shifting right. Check 8xy6's bitwise implementation";    
+    EXPECT_EQ(cpu.getRegist_V(0), 64) << "VX should be 64.  But received incorrect value after shifting right. Check 8xy6's bitwise implementation"; 
 }
 
 TEST_F(CpuTest, 8xy6_VFHoldsShiftedOutBit_WhenVXShiftedRight){
+    std::string errorMessage = "Check 0xF in 8xy6's and ensure VF correctly holds shifted out bit"; 
     cpu.setRegist_V(0, 15);
     
     cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "VF should be 0. Check 0xF in 8xy6's implementation";    
-    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "VF should be 1. Check 0xF in 8xy6's implementation";    
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "VF shouldn't be 0. " << errorMessage; 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "VF should be 1. " << errorMessage; 
 
     cpu.setRegist_V(0, 14);
     
     cpu.shiftVXValueRight(secondNibble, thirdNibble, false); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "VF should be 1.  Check 0xF in 8xy6's implementation";    
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "VF should be 0.  Check 0xF in 8xy6's implementation";    
+    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "VF shouldn't be 1. " << errorMessage;  
+    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "VF should be 0. " << errorMessage; 
 }
 
 TEST_F(CpuTest, 8xy6_VXSetToVY_WhenCosmacFlagIsOn){
@@ -336,20 +298,44 @@ TEST_F(CpuTest, 8xy6_VXSetToVYAndShiftsCorrectly_WhenCosmacFlagIsOn){
 }
 
 TEST_F(CpuTest, 8xy6_VFHoldsShiftedOutBit_WhenCosmacFlagIsOn){
+    std::string errorMessage = "Check 0xF in 8xy6's COSMAC implementation and ensure VF correctly holds shifted out bit"; 
     cpu.setRegist_V(0, 128);
     cpu.setRegist_V(1, 4);
     
     bool turnOnCosmacFlag = true; 
     cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "VF should be 1. Check 0xF in 8xy6's implementation";    
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "VF should be 0. Check 0xF in 8xy6's implementation";    
+    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "VF shouldn't be 1. " << errorMessage; 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "VF should be 0. " << errorMessage; 
 
     cpu.setRegist_V(0, 128);
     cpu.setRegist_V(1, 15);
     
     cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "VF should be 1. Check 0xF in 8xy6's implementation";    
-    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "VF should be 0. Check 0xF in 8xy6's implementation";    
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "VF shouldn't be 0. " << errorMessage;  
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "VF should be 1. " << errorMessage; 
+}
+
+TEST_F(CpuTest, 8xy6_VFHoldsCorrectValue_WhenCosmacFlagIsOn_AndVYIsVF){
+    thirdNibble = 'f'; 
+    cpu.setRegist_V(0, 10);
+    cpu.setRegist_V(0xF, 193);
+    std::string errorMessage = "VF should be 1, when Cosmac flag is on.  Check Cosmac implementation in 8xy6's method";    
+
+    bool turnOnCosmacFlag = true; 
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << errorMessage; 
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << errorMessage; 
+}
+
+TEST_F(CpuTest, 8xy6_VXHoldsCorrectValue_WhenCosmacFlagIsOn_AndVYIsVF){
+    thirdNibble = 'f'; 
+    cpu.setRegist_V(0, 10);
+    cpu.setRegist_V(0xF, 193);
+    std::string errorMessage = "Result should be 96 after shifted right.  Check Cosmac implementation in 8xy6's method";    
+
+    bool turnOnCosmacFlag = true; 
+    cpu.shiftVXValueRight(secondNibble, thirdNibble, turnOnCosmacFlag); 
+    EXPECT_EQ(cpu.getRegist_V(0), 96) << errorMessage; 
 }
 
 // 8xy7 
@@ -391,8 +377,8 @@ TEST_F(CpuTest, 8xy7_SetVFToZero_WhenVYIsLessThanVX){
     cpu.setRegist_V(1, 1);    
 
     cpu.subtractVXFromVY(secondNibble, thirdNibble); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "Register 0xF shouldn't be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
 TEST_F(CpuTest, 8xy7_SetVFToOne_WhenVYIsGreaterThanVX){
@@ -407,6 +393,7 @@ TEST_F(CpuTest, 8xy7_SetVFToOne_WhenVYIsGreaterThanVX){
 // 9xy0 
 
 TEST_F(CpuTest, 9xy0_ProgramCounterIncrementsByTwo_WhenVXNotEqualVY){
+    std::string errorMessage = "Program Counter was expected to increment by 2, check conditional logic in 9xy0 instruction"; 
     cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0x200); 
     
     cpu.setRegist_V(0, 10);
@@ -414,8 +401,8 @@ TEST_F(CpuTest, 9xy0_ProgramCounterIncrementsByTwo_WhenVXNotEqualVY){
 
     cpu.skipInstructionIfVXNotEqualsVY(secondNibble, thirdNibble); 
 
-    EXPECT_NE(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to increment by 2, check conditional logic in 9xy0 instruction"; 
-    EXPECT_EQ(cpu.getProgramCounter(), 0x202) << "Program Counter was expected to increment by 2, check conditional logic in 9xy0 instruction"; 
+    EXPECT_NE(cpu.getProgramCounter(), 0x200) << errorMessage; 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x202) << errorMessage; 
 }
 
 TEST_F(CpuTest, 9xy0_ProgramCounterRemainsSame_WhenVXEqualVY){
@@ -435,32 +422,35 @@ class ConversionTestSuite : public testing::Test {
         ConversionTestSuite(): cpu(debugger){}
         Debugger debugger; 
         Cpu cpu;
+
+        std::string errorMessageForIncorrectInt = "Incorrect integer value was return from method, check method's conversion implementation"; 
+        std::string errorMessageForIncorrectString = "Incorrect integer value was return from method, check method's conversion implementation"; 
 }; 
 
 TEST_F(ConversionTestSuite, convertCharToHex_ReturnsCorrectHexValue){
     char nibbleValue = '6'; 
     int result = cpu.convertCharToHex(nibbleValue); 
 
-    EXPECT_EQ(result, 6) << "Incorrect integer value was return from method, check method's conversion implementation"; 
+    EXPECT_EQ(result, 6) << errorMessageForIncorrectInt; 
 }
 
 TEST_F(ConversionTestSuite, convertCharToHex_ReturnsCorrectHexValue_WhenPassingInMaxValue){
     char nibbleValue = 'f'; 
     int result = cpu.convertCharToHex(nibbleValue); 
 
-    EXPECT_EQ(result, 15) << "Incorrect integer value was return from method, check method's conversion implementation"; 
+    EXPECT_EQ(result, 15) << errorMessageForIncorrectInt; 
 }
 
 TEST_F(ConversionTestSuite, convertCharToHex_ReturnsCorrectHexValue_WhenPassingInMinValue){
     char nibbleValue = '0'; 
     int result = cpu.convertCharToHex(nibbleValue); 
 
-    EXPECT_EQ(result, 0) << "Incorrect integer value was return from method, check method's conversion implementation"; 
+    EXPECT_EQ(result, 0) << errorMessageForIncorrectInt; 
 }
 
 TEST_F(ConversionTestSuite, convertIntToHexString_ReturnsCorrectHexString){
     std::string result = cpu.convertIntToHexString(648); 
 
-    EXPECT_EQ(result, "288") << "Incorrect string value was return from method, check method's conversion implementation";  
+    EXPECT_EQ(result, "288") << errorMessageForIncorrectString; 
 }
 

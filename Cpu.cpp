@@ -358,20 +358,28 @@ void Cpu::shiftVXValueRight(char secondNibble, char thirdNibble, bool COSMAC_VIP
     }
 
     bitset<8> binaryValueOfVX (regist_V[X]); 
-    regist_V[0xF] = binaryValueOfVX[0]; 
-    regist_V[X] >>= 1; 
+    regist_V[0xF] = binaryValueOfVX[0];     
+
+    if(X != 0xF){
+        regist_V[X] >>= 1;     
+    }
 
     if(debugger.getDebuggerIsOn() == true){
-        debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+        if(X != 0xF){
+            debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF);   
+        } 
         debugger.outputRegistersToDebugger(getRegist_V(X), X);   
     }
-    
+
 }
 
 // 8xy7      
 void Cpu::subtractVXFromVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
+
+    uint8_t result = regist_V[Y] - regist_V[X];  
+
     if(regist_V[Y] >= regist_V[X]){
         regist_V[0xF] = 1; 
         
@@ -381,7 +389,9 @@ void Cpu::subtractVXFromVY(char secondNibble, char thirdNibble){
         regist_V[0xF] = 0; 
         cout << "VX < VY! Register VF is " << regist_V[0xF]<< endl; 
     }
-    regist_V[X] = regist_V[Y] - regist_V[X];  
+    if(X != 0xF){
+        regist_V[X] = result; 
+    }
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
@@ -408,7 +418,9 @@ void Cpu::shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_
     regist_V[X] <<= 1;
      
     if(debugger.getDebuggerIsOn() == true){
-        debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+        if(X != 0xF){
+            debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF);   
+        } 
         debugger.outputRegistersToDebugger(getRegist_V(X), X);   
     }
 }
