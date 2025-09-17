@@ -414,8 +414,10 @@ void Cpu::shiftVXValueLeft(char secondNibble, char thirdNibble, bool COSMAC_VIP_
     }
 
     bitset<8> binaryValueOfVX (regist_V[X]); 
-    regist_V[0xF] = binaryValueOfVX[0]; 
-    regist_V[X] <<= 1;
+    regist_V[0xF] = binaryValueOfVX[7]; 
+    if(X != 0xF){
+        regist_V[X] <<= 1;
+    }
      
     if(debugger.getDebuggerIsOn() == true){
         if(X != 0xF){
@@ -648,17 +650,22 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
         switch(firstNibble){
             case '0': 
                 getCurrentInstruction(); // call function 
-                switch (fourthNibble){
-                    case '0':
-                    // call clear screen function 00e0 
-                    clearScreenInstruction(screen, cpu); 
-                    break; 
-                    case 'e':
-                    // call return function 00ee
-                    returnToAddressFromStack(memory); 
-                    break; 
+                switch (thirdNibble){
+                    case 'e':    
+                        switch (fourthNibble){
+                            case '0':
+                            // call clear screen function 00e0 
+                            clearScreenInstruction(screen, cpu); 
+                            break; 
+                            case 'e':
+                            // call return function 00ee
+                            returnToAddressFromStack(memory); 
+                            break; 
+                        } 
+                    default: 
+                        break; 
                 } 
-                break;
+            break;
             case '1':
                 // call jump address function 1nnn  
                 // Note: n = the 12 bit address  
