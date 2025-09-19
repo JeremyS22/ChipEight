@@ -18,6 +18,17 @@ Additional Features I may add:
 ### Installation
 <a href = "https://jeremys22.github.io/ChipEightDocs/docs/installation"> So far only linux is listed </a>, but more will be added later. 
 
+### Progress 
+Note that these games are still a WIP 
+![20250917-0415-19 0380068](https://github.com/user-attachments/assets/427e2726-aae1-4f84-a97b-f60ecdacb99d)
+<p align = "center"><strong><em>Pong</em></strong></p> 
+
+![20250917-0424-56 7288760](https://github.com/user-attachments/assets/0c529781-1a5c-4ad8-984b-416ba0fd1e4b)
+<p align = "center"><strong><em>Space Invaders</em></strong></p> 
+
+### Test Roms 
+Here's a list of fully working ROMs that assess various components of the Chip 8 emulator (ie. graphics, opcodes, flags, IO, etc.) and ensures each functions is correctly 
+
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 <p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
 
@@ -35,8 +46,11 @@ https://github.com/corax89/chip8-test-rom
 
 <img width="1103" height="553" alt="Screenshot 2025-07-22 163218" src="https://github.com/user-attachments/assets/cd95e96c-50c3-45b5-99dd-6565d06c38bd" />
 <p align = "center"><strong><em>Timendus' Opcode Test ROM </em></strong></p> 
-This is Timendus' version of Corax's original Opcode test ROM.  (The "r" next to the opcodes are checkmarks) 
 
+<img width="1066" height="557" alt="image" src="https://github.com/user-attachments/assets/5fa3fa1e-80d4-4627-8aae-6924939b2fbe" />
+<p align = "center"><strong><em>Timendus' Flag ROM that tests Chip 8's flag register</em></strong></p> 
+
+This is Timendus' version of Corax's original Opcode test ROM.  (The "r" next to the opcodes are checkmarks) 
 <strong>ROM source:</strong><br>
 https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file 
 
