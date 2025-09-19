@@ -66,7 +66,6 @@ class Cpu {
 
     }; 
 
-    // Cpu(); 
     Cpu(Debugger& debugger); 
     ~Cpu(){}
 
@@ -101,6 +100,8 @@ uint16_t getRegist_I();
 void setRegist_V(int name, uint8_t value); 
 
 uint8_t getRegist_V(int name); 
+
+int printRegist_V(int name); 
 
 void pushProgramCounterOnStack(Memory& memory); 
 

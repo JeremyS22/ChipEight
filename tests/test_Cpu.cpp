@@ -224,8 +224,8 @@ TEST_F(CpuTest, 8xy5_SetVFToZero_WhenVXIsLessThanVY){
     cpu.setRegist_V(1, 255);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_NE(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.printRegist_V(0xF) << "but shouldn't be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.printRegist_V(0xF) << "but should be 0. Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
 TEST_F(CpuTest, 8xy5_SetVFToOne_WhenVXIsGreaterThanVY){
@@ -233,8 +233,8 @@ TEST_F(CpuTest, 8xy5_SetVFToOne_WhenVXIsGreaterThanVY){
     cpu.setRegist_V(1, 1);    
 
     cpu.subtractVYFromVX(secondNibble, thirdNibble); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.printRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.printRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
 TEST_F(CpuTest, 8xy5_VXHoldsCorrectValue_WhenVFIsVX_AndVXIsGreaterThanVY){
@@ -386,8 +386,8 @@ TEST_F(CpuTest, 8xy7_SetVFToOne_WhenVYIsGreaterThanVX){
     cpu.setRegist_V(1, 255);    
 
     cpu.subtractVXFromVY(secondNibble, thirdNibble); 
-    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
-    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.getRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_NE(cpu.getRegist_V(0xF), 0) << "Register 0xF was set to " << cpu.printRegist_V(0xF) << "but shouldn't be 0.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
+    EXPECT_EQ(cpu.getRegist_V(0xF), 1) << "Register 0xF was set to " << cpu.printRegist_V(0xF) << "but should be 1.  Check 0xF in 8xy5's implementation to ensure underflow triggers carry flag"; 
 }
 
 // 9xy0 

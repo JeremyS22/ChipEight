@@ -14,7 +14,7 @@
 using namespace std; 
 
 // for running older ROMs from 1980s and 1970s 
-bool COSMAC_VIP_FLAG_IS_ON = false; 
+bool COSMAC_VIP_FLAG_IS_ON = true; 
 
 // injecting this debugger instance to avoid passing it 
 //      in the majority of function parameters in this class 
@@ -75,6 +75,10 @@ void Cpu::setDelayTimer(uint8_t time){
 
 uint8_t Cpu::getDelayTimer(){
     return delayTimer; 
+}
+
+int Cpu::printRegist_V(int name){
+    return (int)regist_V[name]; 
 }
 
 void Cpu::pushProgramCounterOnStack(Memory& memory){
@@ -250,7 +254,7 @@ void Cpu::bitwiseOrVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] |= regist_V[Y]; 
-    cout << "AFTER BITWISE OR " << regist_V[X] << endl; 
+    cout << "AFTER BITWISE OR " << printRegist_V(X) << endl; 
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -262,7 +266,7 @@ void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] &= regist_V[Y]; 
-    cout << "AFTER BITWISE AND " << regist_V[X] << endl; 
+    cout << "AFTER BITWISE AND " << printRegist_V(X) << endl; 
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -274,7 +278,7 @@ void Cpu::bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] ^= regist_V[Y]; 
-    cout << "AFTER BITWISE XOR " << (int)regist_V[X] << endl; 
+    cout << "AFTER BITWISE XOR " << printRegist_V(X)<< endl; 
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -298,7 +302,7 @@ void Cpu::addVXToVY(char secondNibble, char thirdNibble){
         regist_V[0xF] = 0; 
     }
 
-    cout << "AFTER adding VX and VY " << regist_V[X] << "also register VF is " << getRegist_V(0xF) << endl; 
+    cout << "AFTER adding VX and VY " << printRegist_V(X) << "also register VF is " << printRegist_V(0xF) << endl; 
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -320,7 +324,7 @@ void Cpu::subtractVYFromVX(char secondNibble, char thirdNibble){
             debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         }
 
-        cout << "VX > VY! Register VF is " << (int)regist_V[0xF]<< endl; 
+        cout << "VX > VY! Register VF is " << printRegist_V(0xF)<< endl; 
     }
     else {
         regist_V[0xF] = 0; 
@@ -329,7 +333,7 @@ void Cpu::subtractVYFromVX(char secondNibble, char thirdNibble){
             debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         }
 
-        cout << "VX < VY! Register VF is " << (int)regist_V[0xF]<< endl; 
+        cout << "VX < VY! Register VF is " << printRegist_V(0xF) << endl; 
     }
 
     if(X != 0xF){
@@ -340,7 +344,7 @@ void Cpu::subtractVYFromVX(char secondNibble, char thirdNibble){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
     }
 
-    cout << "AFTER VX - VY! " << (int)regist_V[X] << " also register VF is " << (int)regist_V[0xF]<< endl; 
+    cout << "AFTER VX - VY! " << printRegist_V(X) << " also register VF is " << printRegist_V(0xF) << endl; 
 
 }
 
@@ -383,11 +387,11 @@ void Cpu::subtractVXFromVY(char secondNibble, char thirdNibble){
     if(regist_V[Y] >= regist_V[X]){
         regist_V[0xF] = 1; 
         
-        cout << "VX > VY! Register VF is " << regist_V[0xF]<< endl; 
+        cout << "VX > VY! Register VF is " << printRegist_V(0xF)<< endl; 
     }
     else {
         regist_V[0xF] = 0; 
-        cout << "VX < VY! Register VF is " << regist_V[0xF]<< endl; 
+        cout << "VX < VY! Register VF is " << printRegist_V(0xF)<< endl; 
     }
     if(X != 0xF){
         regist_V[X] = result; 
@@ -397,7 +401,7 @@ void Cpu::subtractVXFromVY(char secondNibble, char thirdNibble){
         debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
         debugger.outputRegistersToDebugger(getRegist_V(X), X);   
     }
-    cout << "AFTER VX - VY! " << regist_V[X] << "also register VF is " << regist_V[0xF]<< endl; 
+    cout << "AFTER VX - VY! " << printRegist_V(X) << "also register VF is " << printRegist_V(0xF)<< endl; 
 }
 
 // 8xyE 
