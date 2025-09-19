@@ -18,7 +18,7 @@ bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypa
         if (debugger.getDebuggerIsOn() == true){
             inputToCloseEmulator = debugger.runDebugger(cpu, memory, screen, keypad, debugger); 
             if(inputToCloseEmulator == true){
-                destroyEmulator(debugger, screen); 
+                destroyEmulator(debugger, screen, cpu); 
                 return true;  
             }
         }
@@ -26,7 +26,7 @@ bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypa
         for(int instructionCounter = 0; instructionCounter < instructionsPerSecond || cpu.getCurrentInstruction()[0] != 'd'; ++instructionCounter){ 
             inputToCloseEmulator = keypad.getKeypadInput(screen, debugger, cpu, memory, keypad); 
             if(inputToCloseEmulator == true){
-                destroyEmulator(debugger, screen); 
+                destroyEmulator(debugger, screen, cpu); 
                 return true;  
             }
             cpu.fetchInstructions(memory); 
@@ -44,8 +44,25 @@ bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypa
     return true; 
 }
 
-void ChipEight::destroyEmulator(Debugger debugger, Screen screen){
+void ChipEight::destroyEmulator(Debugger& debugger, Screen& screen, Cpu& cpu){
+    waitForDelayTimerThreadToEnd(cpu); 
     debugger.destroyDebuggerWindow();
     screen.destroyCreatedWindow(); 
     screen.setWindowIsOpen(false); 
+}
+
+void ChipEight::waitForDelayTimerThreadToEnd(Cpu& cpu){
+    future<bool>& future = cpu.getFuture(); 
+    future_status status; 
+
+    while(true){    
+        this_thread::sleep_for(chrono::milliseconds(50)); 
+        status = future.wait_for(chrono::milliseconds(1)); 
+        cout << "Main thread waiting . . . " << endl; 
+
+        if(status == future_status::ready){
+            cout << "Future received it's result and confirmed runDelayTimer()'s thread has completed, closing emulator" << endl; 
+            break; 
+        }
+    }
 }

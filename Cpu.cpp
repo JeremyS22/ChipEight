@@ -24,7 +24,6 @@ Cpu::Cpu(Debugger& debugger) : debugger(debugger){
     memset(regist_V, 0, sizeof(regist_V)); 
     delayTimer = 0; 
     soundTimer = 0; 
-    delayTimerFuture = delayTimerPromise.get_future(); 
 }; 
 
 void Cpu::setProgramCounter(uint16_t* programCounter, int value){
@@ -128,8 +127,8 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 
 }
 
-void Cpu::runDelayTimer(){
-    cout << "  In threaded function " << endl; 
+bool Cpu::runDelayTimer(){
+    cout << "    Delay Timer thread started and In threaded function " << endl; 
     uint8_t localDelayTimer = getDelayTimer(); 
     while(localDelayTimer > 0){
         auto startOfComputeClock = chrono::steady_clock::now(); 
@@ -143,6 +142,12 @@ void Cpu::runDelayTimer(){
         this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
     cout << "\n  Exiting threaded function" << endl; 
+
+    return true; 
+}
+
+future<bool>& Cpu::getFuture(){
+    return delayTimerFuture; 
 }
 
 // 0nnn
@@ -557,11 +562,7 @@ void Cpu::setDelayTimerToVXValue(char secondNibble, Cpu& cpu){
     int X = convertCharToHex(secondNibble); 
     delayTimer = regist_V[X]; 
 
-    thread delayTimerThread(&Cpu::runDelayTimer, &cpu);  
-    if(delayTimerThread.joinable()){
-        cout << "Delay Timer thread started " << endl; 
-        delayTimerThread.detach(); 
-    } 
+    delayTimerFuture = async(launch::async, &Cpu::runDelayTimer, &cpu); 
     cout << "Delay Timer thread ended " << endl; 
 }
 

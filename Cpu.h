@@ -38,13 +38,13 @@ class Cpu {
 
         Debugger& debugger; 
 
-        std::promise<void> delayTimerPromise; 
-
-        std::future<void> delayTimerFuture; 
+        std::future<bool> delayTimerFuture; 
         
         std::thread delayTimerThread; 
 
     public:
+
+        std::future<bool>& getFuture(); 
 
         uint8_t fontData[80] =  {
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -111,7 +111,7 @@ std::string getLastTwoNibbles(std::string currentInstruction);
 
 std::string getLastThreeNibbles(std::string currentInstruction); 
 
-void runDelayTimer(); 
+bool runDelayTimer(); 
 
 // 0nnn (Not implementing)
 
