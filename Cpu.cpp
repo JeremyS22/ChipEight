@@ -24,6 +24,7 @@ Cpu::Cpu(Debugger& debugger) : debugger(debugger){
     memset(regist_V, 0, sizeof(regist_V)); 
     delayTimer = 0; 
     soundTimer = 0; 
+    delayTimerThreadIsRunning.store(false); 
 }; 
 
 void Cpu::setProgramCounter(uint16_t* programCounter, int value){
@@ -128,6 +129,7 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 }
 
 bool Cpu::runDelayTimer(){
+    delayTimerThreadIsRunning.store(true); 
     cout << "    Delay Timer thread started and In threaded function " << endl; 
     uint8_t localDelayTimer = getDelayTimer(); 
     while(localDelayTimer > 0){
@@ -143,11 +145,16 @@ bool Cpu::runDelayTimer(){
     }
     cout << "\n  Exiting threaded function" << endl; 
 
+    delayTimerThreadIsRunning.store(false); 
     return true; 
 }
 
 future<bool>& Cpu::getFuture(){
     return delayTimerFuture; 
+}
+
+bool Cpu::getDelayTimerThreadIsRunning(){
+    return delayTimerThreadIsRunning.load(); 
 }
 
 // 0nnn

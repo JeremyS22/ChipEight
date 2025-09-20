@@ -52,17 +52,24 @@ void ChipEight::destroyEmulator(Debugger& debugger, Screen& screen, Cpu& cpu){
 }
 
 void ChipEight::waitForDelayTimerThreadToEnd(Cpu& cpu){
-    future<bool>& future = cpu.getFuture(); 
-    future_status status; 
 
-    while(true){    
-        this_thread::sleep_for(chrono::milliseconds(50)); 
-        status = future.wait_for(chrono::milliseconds(1)); 
-        cout << "Main thread waiting . . . " << endl; 
+    if(cpu.getDelayTimerThreadIsRunning() == false){
+        return; 
+    }
+    else{
+        future<bool>& future = cpu.getFuture(); 
+        future_status status; 
 
-        if(status == future_status::ready){
-            cout << "Future received it's result and confirmed runDelayTimer()'s thread has completed, closing emulator" << endl; 
-            break; 
+        while(true){    
+            this_thread::sleep_for(chrono::milliseconds(50)); 
+            status = future.wait_for(chrono::milliseconds(1)); 
+            cout << "Main thread waiting . . . " << endl; 
+
+            if(status == future_status::ready){
+
+                cout << "Future received it's result and confirmed runDelayTimer()'s thread has completed, closing emulator" << endl; 
+                break; 
+            }
         }
     }
 }

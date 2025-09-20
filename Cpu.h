@@ -6,6 +6,7 @@
 #include <string> 
 #include <future> 
 #include <thread> 
+#include <atomic> 
 
 #include "Screen.h" 
 #include "Memory.h" 
@@ -41,6 +42,8 @@ class Cpu {
         std::future<bool> delayTimerFuture; 
         
         std::thread delayTimerThread; 
+
+        std::atomic<bool> delayTimerThreadIsRunning; 
 
     public:
 
@@ -102,6 +105,8 @@ void setRegist_V(int name, uint8_t value);
 uint8_t getRegist_V(int name); 
 
 int printRegist_V(int name); 
+
+bool getDelayTimerThreadIsRunning(); 
 
 void pushProgramCounterOnStack(Memory& memory); 
 
