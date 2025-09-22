@@ -45,6 +45,8 @@ class Cpu {
 
         std::atomic<bool> delayTimerThreadIsRunning; 
 
+        std::atomic<bool> newDelayTimerThreadWaiting; 
+
     public:
 
         std::future<bool>& getFuture(); 
@@ -106,7 +108,7 @@ uint8_t getRegist_V(int name);
 
 int printRegist_V(int name); 
 
-bool getDelayTimerThreadIsRunning(); 
+bool checkDelayTimerThreadIsRunning(); 
 
 void pushProgramCounterOnStack(Memory& memory); 
 

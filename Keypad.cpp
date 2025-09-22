@@ -41,7 +41,7 @@ bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory
                     }
                     break; 
                 case SDLK_ESCAPE: 
-                    cout << "ESC pressed or Released, EXITING " << endl; 
+                    cout << "Status: (Keypad) ESC pressed or Released, EXITING " << endl; 
                     return true; 
                 default:
                     return false; 

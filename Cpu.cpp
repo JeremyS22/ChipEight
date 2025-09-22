@@ -14,7 +14,7 @@
 using namespace std; 
 
 // for running older ROMs from 1980s and 1970s 
-bool COSMAC_VIP_FLAG_IS_ON = true; 
+bool COSMAC_VIP_FLAG_IS_ON = false; 
 
 // injecting this debugger instance to avoid passing it 
 //      in the majority of function parameters in this class 
@@ -25,6 +25,7 @@ Cpu::Cpu(Debugger& debugger) : debugger(debugger){
     delayTimer = 0; 
     soundTimer = 0; 
     delayTimerThreadIsRunning.store(false); 
+    newDelayTimerThreadWaiting.store(false); 
 }; 
 
 void Cpu::setProgramCounter(uint16_t* programCounter, int value){
@@ -129,10 +130,23 @@ string Cpu::getLastThreeNibbles (string currentInstruction){
 }
 
 bool Cpu::runDelayTimer(){
+    if(delayTimerThreadIsRunning.load() == true){
+        newDelayTimerThreadWaiting.store(true); 
+        while(delayTimerThreadIsRunning.load() == true){
+            this_thread::sleep_for(chrono::nanoseconds(8333333)); 
+        } 
+        newDelayTimerThreadWaiting.store(false); 
+    }
+
     delayTimerThreadIsRunning.store(true); 
     cout << "    Delay Timer thread started and In threaded function " << endl; 
     uint8_t localDelayTimer = getDelayTimer(); 
     while(localDelayTimer > 0){
+        if(newDelayTimerThreadWaiting.load() == true){
+            delayTimerThreadIsRunning.store(false); 
+            cout << "    Aborting delay timer in current thread!  New fx15 opcode called in another thread " << endl; 
+            return true; 
+        }
         auto startOfComputeClock = chrono::steady_clock::now(); 
         localDelayTimer-=1; 
         setDelayTimer(localDelayTimer); 
@@ -153,7 +167,7 @@ future<bool>& Cpu::getFuture(){
     return delayTimerFuture; 
 }
 
-bool Cpu::getDelayTimerThreadIsRunning(){
+bool Cpu::checkDelayTimerThreadIsRunning(){
     return delayTimerThreadIsRunning.load(); 
 }
 
