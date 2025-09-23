@@ -5,6 +5,9 @@
 #include "src/include/SDL2/SDL.h" 
 #include <SDL_ttf.h> 
 #include <vector> 
+#include <future> 
+#include <chrono> 
+#include <thread> 
 
 #include "Memory.h" 
 #include "Cpu.h"

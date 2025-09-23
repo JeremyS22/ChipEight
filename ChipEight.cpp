@@ -59,7 +59,7 @@ void ChipEight::waitForDelayTimerThreadToEnd(Cpu& cpu){
     else{
         future<bool>& future = cpu.getFuture(); 
         future_status status; 
-
+ 
         while(true){    
             this_thread::sleep_for(chrono::milliseconds(50)); 
             status = future.wait_for(chrono::milliseconds(1)); 

@@ -74,6 +74,22 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
         setDebuggerIsOn(true);
     }
 
+    if(cpu.checkDelayTimerThreadIsRunning() == true){
+        future<bool>& future = cpu.getFuture(); 
+        future_status status; 
+
+        while(true){
+            cout << "waiting . . . " << endl; 
+            this_thread::sleep_for(chrono::nanoseconds(10000000)); 
+            status = future.wait_for(chrono::microseconds(1)); 
+
+            if(status == future_status::ready){
+                cout << "Future received in debugger " << endl; 
+                break; 
+            }
+        }
+    }
+
     resetDataOnDebuggerScreen(memory); 
     cout << "[DEBUGGER] Press right arrow key to step 1 instruction, up arrow key to step by 5 instructions" << endl; 
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 

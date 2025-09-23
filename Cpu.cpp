@@ -141,12 +141,14 @@ bool Cpu::runDelayTimer(){
     delayTimerThreadIsRunning.store(true); 
     cout << "    Delay Timer thread started and In threaded function " << endl; 
     uint8_t localDelayTimer = getDelayTimer(); 
+
     while(localDelayTimer > 0){
         if(newDelayTimerThreadWaiting.load() == true){
             delayTimerThreadIsRunning.store(false); 
             cout << "    Aborting delay timer in current thread!  New fx15 opcode called in another thread " << endl; 
             return true; 
         }
+
         auto startOfComputeClock = chrono::steady_clock::now(); 
         localDelayTimer-=1; 
         setDelayTimer(localDelayTimer); 
@@ -157,7 +159,7 @@ bool Cpu::runDelayTimer(){
         int timeToSleep = 16666666 - (int)timeElasped.count(); 
         this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
-    cout << "\n  Exiting threaded function" << endl; 
+    cout << "\n    Exiting threaded function" << endl; 
 
     delayTimerThreadIsRunning.store(false); 
     return true; 
@@ -543,6 +545,7 @@ void Cpu::skipInstructionIfKeyNotPressed(char secondNibble, Keypad keypad){
 void Cpu::setVXToDelayTimer(char secondNibble){
     int X = convertCharToHex(secondNibble); 
     regist_V[X] = delayTimer; 
+    cout << "At end of set delay timer " << endl; 
 }
 
 // fx0a 
@@ -584,7 +587,7 @@ void Cpu::setDelayTimerToVXValue(char secondNibble, Cpu& cpu){
     delayTimer = regist_V[X]; 
 
     delayTimerFuture = async(launch::async, &Cpu::runDelayTimer, &cpu); 
-    cout << "Delay Timer thread ended " << endl; 
+    cout << "Continuing asynchronously with delay timer thread " << endl; 
 }
 
 // fx33 
