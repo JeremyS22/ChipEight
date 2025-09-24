@@ -23,7 +23,7 @@ Note that these games are still a WIP
 ![20250917-0415-19 0380068](https://github.com/user-attachments/assets/427e2726-aae1-4f84-a97b-f60ecdacb99d)
 <p align = "center"><strong><em>Pong</em></strong></p> 
 
-![20250917-0424-56 7288760](https://github.com/user-attachments/assets/0c529781-1a5c-4ad8-984b-416ba0fd1e4b)
+![Recording 2025-09-23 122546_GIF_PUSHED](https://github.com/user-attachments/assets/065c4527-3ff7-456d-b914-33995d87f27f)
 <p align = "center"><strong><em>Space Invaders</em></strong></p> 
 
 ### Test Roms 
