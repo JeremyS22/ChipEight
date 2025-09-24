@@ -227,43 +227,15 @@ void Debugger::outputIndexRegisterToDebugger(string address){
 
 void Debugger::outputRegistersToDebugger(uint8_t registerValue, int registerName){
     string convertedRegisterValue = convertIntToString(registerValue, false, false); 
-    int targetPositionX = (registerName % 2 == 0)  ? 40 : 120; 
 
-    // calling function for each register individually to fix/readjust text size rendering issues 
-    switch(registerName){
-        case 0x0:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 50, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x1:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 50, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x2:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 85, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x3:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 85, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x4:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 120, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x5:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 120, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x6:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 155, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x7:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 155, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x8:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 190, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0x9:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 190, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0xA:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 225, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0xB:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 225, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0xC:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 260, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0xD:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 260, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0xE:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 295, 20, 22, false, debuggingRenderer, "white"); break;
-        case 0xF:
-            createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, 295, 20, 22, false, debuggingRenderer, "white"); break;
-    }
+    // to get correct column based on register's name 
+    int targetPositionX = (registerName % 2 == 0)  ? 40 : 120; 
+    
+    // to get correct row based on register's name 
+    float tempVal = registerName / 2;
+    int targetPositionY = (ceil(tempVal) * 35) + 50; 
+
+    createBoxAndAddText(fontExtraBold, convertedRegisterValue.c_str(), targetPositionX, targetPositionY, 20, 22, false, debuggingRenderer, "white"); 
 } 
 
 void Debugger::outputStackToDebugger(Memory memory){
