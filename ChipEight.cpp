@@ -15,7 +15,7 @@ void ChipEight::initializeEmulator(Memory& memory, string romFileLocation, Cpu& 
 
 bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, bool inputToCloseEmulator, int instructionsPerSecond){
     while(screen.getWindowIsOpen()){
-        if (debugger.getDebuggerIsOn() == true){
+        if (debugger.getDebuggerIsOn() == true && debugger.checkDebuggerRunsWithoutStepping() == false){
             inputToCloseEmulator = debugger.runDebugger(cpu, memory, screen, keypad, debugger); 
             if(inputToCloseEmulator == true){
                 destroyEmulator(debugger, screen, cpu); 
@@ -59,7 +59,7 @@ void ChipEight::waitForDelayTimerThreadToEnd(Cpu& cpu){
     else{
         future<bool>& future = cpu.getFuture(); 
         future_status status; 
- 
+
         while(true){    
             this_thread::sleep_for(chrono::milliseconds(50)); 
             status = future.wait_for(chrono::milliseconds(1)); 

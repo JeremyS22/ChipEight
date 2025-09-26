@@ -7,9 +7,10 @@
 using namespace std; 
 
 Debugger::Debugger() : 
-    debuggerIsOn (false), 
-    debuggingWindow (nullptr), 
-    debuggingRenderer (nullptr), 
+    debuggerIsOn(false), 
+    debuggerRunsWithoutStepping(false), 
+    debuggingWindow(nullptr), 
+    debuggingRenderer(nullptr), 
     fontRegular("./assets/Inter_28pt-Regular.ttf"), 
     fontExtraBold("./assets/Inter_28pt-ExtraBold.ttf"), 
     fontSemiBold("./assets/Inter_28pt-SemiBold.ttf"), 
@@ -73,6 +74,9 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
     if (getDebuggerIsOn() == false){
         setDebuggerIsOn(true);
     }
+    if(checkDebuggerRunsWithoutStepping() == true){
+        debuggerRunsWithoutStepping = false; 
+    }
 
     if(cpu.checkDelayTimerThreadIsRunning() == true){
         future<bool>& future = cpu.getFuture(); 
@@ -106,7 +110,10 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
                     case SDLK_BACKQUOTE: 
                         cout << "[DEBUGGER] Grave/Tilde key PRESSED, exiting debugging mode " << endl; 
                         setDebuggerIsOn(false); 
-                        return false; 
+                        return false;
+                    case SDLK_LSHIFT:
+                        debuggerRunsWithoutStepping = true; 
+                        return false;   
                     case SDLK_RIGHT:
                         cpu.fetchInstructions(memory); 
                         cpu.decodeAndExecuteInstructions(cpu.getCurrentInstruction(), screen, memory, cpu, keypad); 
@@ -136,6 +143,10 @@ void Debugger::setDebuggerIsOn(bool value){
 
 bool Debugger::getDebuggerIsOn(){
     return debuggerIsOn; 
+}
+
+bool Debugger::checkDebuggerRunsWithoutStepping(){
+    return debuggerRunsWithoutStepping; 
 }
 
 SDL_Renderer* Debugger::getDebuggingRenderer(){

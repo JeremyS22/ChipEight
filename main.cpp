@@ -22,8 +22,8 @@ int main (int argv, char** args){
     ChipEight chipEight; 
 
     int instructionsPerSecond = 540; 
-    debugger.setDebuggerIsOn(false); 
-    string romFileLocation = "ROMS/6-keypad.ch8"; 
+    debugger.setDebuggerIsOn(true); 
+    string romFileLocation = "ROMS/Space Invaders [David Winter].ch8"; 
     bool inputToCloseEmulator = false; 
     
     chipEight.initializeEmulator(memory, romFileLocation, cpu, screen, debugger);     

@@ -22,6 +22,7 @@ class Keypad;
 class Debugger {
     private: 
     bool debuggerIsOn; 
+    bool debuggerRunsWithoutStepping;  
     SDL_Window* debuggingWindow;  
     SDL_Renderer* debuggingRenderer; 
     const char* fontRegular;
@@ -46,6 +47,7 @@ class Debugger {
     bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger); 
     void setDebuggerIsOn(bool value); 
     bool getDebuggerIsOn(); 
+    bool checkDebuggerRunsWithoutStepping(); 
     void setStackPrintingVector(std::string value);  
     std::string getStackPrintingVectorElement(int index); 
     int getStackPrintingVectorSize(); 
