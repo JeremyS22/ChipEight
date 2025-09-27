@@ -70,7 +70,7 @@ bool Debugger::initializeDebugger(){
     return false; 
 }
 
-bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger){
+bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger){
     if (getDebuggerIsOn() == false){
         setDebuggerIsOn(true);
     }
@@ -285,11 +285,13 @@ void Debugger::outputStackToDebugger(Memory memory){
 
 void Debugger::createBoxAndAddText(const char* font, const char* messageText, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* debuggingRenderer, 
     string textColor){
+        
+    debugRendererMutex.lock(); 
 
     SDL_Color pickedColor; 
 
     TTF_Font* messageFont = TTF_OpenFont(font, 28); 
-
+    
     if(!messageFont){
         cout << "Error no TTF font not loaded, check your font file path " << endl;  
         return;        
@@ -315,6 +317,7 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     messageTextbox.y = y; 
     messageTextbox.w = width; 
     messageTextbox.h = height; 
+    
 
     if(textIsStatic == false){
         // drawing with renderer's color (black) over previous texture to "clear" it 
@@ -322,12 +325,14 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     }
 
     SDL_RenderCopy(debuggingRenderer, message, NULL, &messageTextbox); 
-    
+
     SDL_RenderPresent(debuggingRenderer); 
-    
+
     SDL_DestroyTexture(message);  
 
     TTF_CloseFont(messageFont); 
+
+    debugRendererMutex.unlock(); 
 }
 
 void Debugger::resetDataOnDebuggerScreen(Memory memory){

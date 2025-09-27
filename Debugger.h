@@ -8,6 +8,7 @@
 #include <future> 
 #include <chrono> 
 #include <thread> 
+#include <mutex>
 
 #include "Memory.h" 
 #include "Cpu.h"
@@ -23,6 +24,7 @@ class Debugger {
     private: 
     bool debuggerIsOn; 
     bool debuggerRunsWithoutStepping;  
+    std::mutex debugRendererMutex; 
     SDL_Window* debuggingWindow;  
     SDL_Renderer* debuggingRenderer; 
     const char* fontRegular;
@@ -44,7 +46,7 @@ class Debugger {
     TTF_Font* messageFont; 
 
     public: 
-    bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger debugger); 
+    bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger); 
     void setDebuggerIsOn(bool value); 
     bool getDebuggerIsOn(); 
     bool checkDebuggerRunsWithoutStepping(); 
