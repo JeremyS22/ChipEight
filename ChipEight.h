@@ -19,9 +19,11 @@ class Keypad;
 class Debugger;
 
 class ChipEight {
+    private:
+        bool inputToCloseEmulator; 
     public:
         void initializeEmulator(Memory& memory, std::string romFileLocation, Cpu& cpu, Screen& screen, Debugger& debugger); 
-        bool mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, bool inputToCloseEmulator, int instructionsPerSecond);
+        bool mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, int instructionsPerSecond);
         void destroyEmulator(Debugger& debugger, Screen& screen, Cpu& cpu); 
         void waitForDelayTimerThreadToEnd(Cpu& cpu); 
 

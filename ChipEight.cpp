@@ -4,7 +4,7 @@
 
 using namespace std; 
 
-ChipEight::ChipEight(){}; 
+ChipEight::ChipEight() : inputToCloseEmulator(false){}; 
 
 void ChipEight::initializeEmulator(Memory& memory, string romFileLocation, Cpu& cpu, Screen& screen, Debugger& debugger){
     screen.initializeScreen(); 
@@ -13,7 +13,7 @@ void ChipEight::initializeEmulator(Memory& memory, string romFileLocation, Cpu& 
     memory.loadRomIntoMemory(memory, romFileLocation, cpu); 
 }
 
-bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, bool inputToCloseEmulator, int instructionsPerSecond){
+bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, int instructionsPerSecond){
     while(screen.getWindowIsOpen()){
         if (debugger.getDebuggerIsOn() == true && debugger.checkDebuggerRunsWithoutStepping() == false){
             inputToCloseEmulator = debugger.runDebugger(cpu, memory, screen, keypad, debugger); 
@@ -48,7 +48,6 @@ void ChipEight::destroyEmulator(Debugger& debugger, Screen& screen, Cpu& cpu){
     waitForDelayTimerThreadToEnd(cpu); 
     debugger.destroyDebuggerWindow();
     screen.destroyCreatedWindow(); 
-    screen.setWindowIsOpen(false); 
 }
 
 void ChipEight::waitForDelayTimerThreadToEnd(Cpu& cpu){

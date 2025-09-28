@@ -22,13 +22,12 @@ int main (int argv, char** args){
     ChipEight chipEight; 
 
     int instructionsPerSecond = 540; 
-    debugger.setDebuggerIsOn(true); 
-    string romFileLocation = "ROMS/Space Invaders [David Winter].ch8"; 
-    bool inputToCloseEmulator = false; 
+    debugger.setDebuggerIsOn(false); 
+    string romFileLocation = "ROMS/Pong (1 player).ch8"; 
     
     chipEight.initializeEmulator(memory, romFileLocation, cpu, screen, debugger);     
     
-    if(chipEight.mainLoop(cpu, memory, screen, keypad, debugger, inputToCloseEmulator, instructionsPerSecond) == true){
+    if(chipEight.mainLoop(cpu, memory, screen, keypad, debugger, instructionsPerSecond) == true){
         return 0; 
     }
     
