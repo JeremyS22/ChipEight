@@ -26,6 +26,9 @@ Note that these games are still a WIP
 ![Recording 2025-09-23 122546_GIF_PUSHED](https://github.com/user-attachments/assets/065c4527-3ff7-456d-b914-33995d87f27f)
 <p align = "center"><strong><em>Space Invaders</em></strong></p> 
 
+![Recording 2025-09-27 221332_PUSHED_](https://github.com/user-attachments/assets/c0796fad-5202-46b4-8f72-3059681361d3)
+<p align = "center"><strong><em>Missle</em></strong></p> 
+
 ### Test Roms 
 Here's a list of fully working ROMs that assess various components of the Chip 8 emulator (ie. graphics, opcodes, flags, IO, etc.) and ensures each functions is correctly 
 
