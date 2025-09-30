@@ -33,7 +33,8 @@ Note that these games are still a WIP
 Here's a list of fully working ROMs that assess various components of the Chip 8 emulator (ie. graphics, opcodes, flags, IO, etc.) and ensures each functions correctly 
 
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
-<p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
+<p align = "center"><strong><em>IBM Boot Logo rom fully rendered  
+  <br>and utilizes a few basic instructions (including rendering, jumping and a few other opcodes) </em></strong></p> 
 
 <img width="1595" height="567" alt="Screenshot 2025-08-14 230741" src="https://github.com/user-attachments/assets/631b6393-500a-4022-9b32-1fc748f85212" />
 <p align = "center"><strong><em>Debugger Implemented Previewing CPU Opcodes, Stack, Program Counter, Registers </em></strong></p> 
@@ -49,11 +50,12 @@ https://github.com/corax89/chip8-test-rom
 
 <img width="1103" height="553" alt="Screenshot 2025-07-22 163218" src="https://github.com/user-attachments/assets/cd95e96c-50c3-45b5-99dd-6565d06c38bd" />
 <p align = "center"><strong><em>Timendus' Opcode Test ROM </em></strong></p> 
+<p align = "center">This is Timendus' version of Corax's original Opcode test ROM and that tests the functionality of even more opcodes.  <br>(The "r" next to the opcodes are checkmarks)</p>
 
 <img width="1066" height="557" alt="image" src="https://github.com/user-attachments/assets/5fa3fa1e-80d4-4627-8aae-6924939b2fbe" />
 <p align = "center"><strong><em>Timendus' Flag ROM that tests Chip 8's flag register</em></strong></p> 
 
-This is Timendus' version of Corax's original Opcode test ROM.  (The "r" next to the opcodes are checkmarks) 
+ 
 <strong>ROM source:</strong><br>
 https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file 
 
