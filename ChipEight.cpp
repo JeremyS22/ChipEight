@@ -14,7 +14,7 @@ void ChipEight::initializeEmulator(Memory& memory, string romFileLocation, Cpu& 
 }
 
 bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, int instructionsPerSecond){
-    while(screen.getWindowIsOpen()){
+    while(true){
         if (debugger.getDebuggerIsOn() == true && debugger.checkDebuggerRunsWithoutStepping() == false){
             inputToCloseEmulator = debugger.runDebugger(cpu, memory, screen, keypad, debugger); 
             if(inputToCloseEmulator == true){

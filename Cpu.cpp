@@ -479,6 +479,20 @@ void Cpu::loadAddressInRegisterI(string address){
     }
 }
 
+// cxnn 
+
+void Cpu::bitwiseANDRandNumAndNN(char secondNibble, string value){
+    int X = convertCharToHex(secondNibble); 
+    uint8_t lastTwoNibbles = stoi(value, nullptr, 16); 
+
+    srand(time(0)); 
+    uint8_t randomNum = rand() % 255; 
+
+    regist_V[X] = lastTwoNibbles & randomNum; 
+
+    cout << "Random Number is " << (int)randomNum << " NN is " << (int)lastTwoNibbles << endl; 
+}
+
 // dxyn 
 void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen& screen, 
                             Memory memory, Cpu& cpu){
@@ -683,42 +697,41 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                     case 'e':    
                         switch (fourthNibble){
                             case '0':
-                            // call clear screen function 00e0 
-                            clearScreenInstruction(screen, cpu); 
-                            break; 
+                                // call clear screen function 00e0 
+                                clearScreenInstruction(screen, cpu); 
+                                break; 
                             case 'e':
-                            // call return function 00ee
-                            returnToAddressFromStack(memory); 
-                            break; 
+                                // call return function 00ee
+                                returnToAddressFromStack(memory); 
+                                break; 
                         } 
                     default: 
                         break; 
                 } 
             break;
             case '1':
-                // call jump address function 1nnn  
+                // 1nnn  
                 // Note: n = the 12 bit address  
                 jumpToAddress(getLastThreeNibbles(currentInstruction));  
                 break;
             case '2': 
-                // call the subroutine call function 2nnn 
+                // 2nnn 
                 putAddressOnStack(getLastThreeNibbles(getCurrentInstruction()), memory); 
                 break;
             case '3': 
-                // call skip next instruction if VX == NN  3xnn  
+                // 3xnn  
                 skipInstructionIfVXEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '4': 
-                // call skip next instruction if VX != NN 4xnn 
+                // 4xnn 
                 skipInstructionIfVXNotEqualsNN(secondNibble, getLastTwoNibbles(getCurrentInstruction())); 
                 break;
             case '5': 
-                // call skip next instruction if VX == VY 5xy0 
+                // 5xy0 
                 skipInstructionIfVXEqualsVY(secondNibble, thirdNibble); 
                 break;
             case '6': 
                 // 600c 
-                // call set register Vx function 
                 setValueInRegisterVX(secondNibble, getLastTwoNibbles(currentInstruction)); 
                 break;
             case '7': 
@@ -728,59 +741,61 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
             case '8': 
                 switch (fourthNibble){
                     case '0':
-                    // 8XY0 
-                    setVXToValueOfVY(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy0 
+                        setVXToValueOfVY(secondNibble, thirdNibble); 
+                        break; 
                     case '1':
-                    // 8xy1 
-                    bitwiseOrVXAndVY(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy1 
+                        bitwiseOrVXAndVY(secondNibble, thirdNibble); 
+                        break; 
                     case '2':
-                    // 8xy2 
-                    bitwiseAndVXAndVY(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy2 
+                        bitwiseAndVXAndVY(secondNibble, thirdNibble); 
+                        break; 
                     case '3':
-                    // 8xy3  
-                    bitwiseExclusiveOrVXAndVY(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy3  
+                        bitwiseExclusiveOrVXAndVY(secondNibble, thirdNibble); 
+                        break; 
                     case '4':
-                    // 8xy4   
-                    addVXToVY(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy4   
+                        addVXToVY(secondNibble, thirdNibble); 
+                        break; 
                     case '5':
-                    // 8xy5   
-                    subtractVYFromVX(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy5   
+                        subtractVYFromVX(secondNibble, thirdNibble); 
+                        break; 
                     case '6':
-                    // 8xy6   
-                    shiftVXValueRight(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
-                    break; 
+                        // 8xy6   
+                        shiftVXValueRight(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
+                        break; 
                     case '7':
-                    // 8xy7    
-                    subtractVXFromVY(secondNibble, thirdNibble); 
-                    break; 
+                        // 8xy7    
+                        subtractVXFromVY(secondNibble, thirdNibble); 
+                        break; 
                     case 'e':
-                    // 8xyE 
-                    shiftVXValueLeft(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
-                    break; 
+                        // 8xyE 
+                        shiftVXValueLeft(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
+                        break; 
                 } 
                 break;
             case '9': 
-                // call skip next instruction if VX != VY 9xy0 
+                // 9xy0 
                 skipInstructionIfVXNotEqualsVY(secondNibble, thirdNibble); 
                 break;
             case 'a': 
-                // call set index to register I function  
+                // annn 
                 loadAddressInRegisterI(getLastThreeNibbles(currentInstruction));  
                 break; 
             case 'b': 
+                // bnnn 
                 getCurrentInstruction(); // call function 
                 break;
             case 'c': 
-                getCurrentInstruction(); // call function 
+                // cxnn 
+                bitwiseANDRandNumAndNN(secondNibble, getLastTwoNibbles(currentInstruction)); 
                 break;
             case 'd': 
-                // call display/draw fucntion  
+                // dxyn 
                 drawSpriteAtVXAndVY(secondNibble, thirdNibble, fourthNibble, screen, memory, cpu);  
                 break;
             case 'e':       
@@ -792,7 +807,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                     case 'a':
                         // exa1 
                         skipInstructionIfKeyNotPressed(secondNibble, keypad);  
-                    break; 
+                        break; 
                 } 
                 break;
             case 'f': 

@@ -7,6 +7,8 @@
 #include <future> 
 #include <thread> 
 #include <atomic> 
+#include <cstdlib> 
+#include <ctime> 
 
 #include "Screen.h" 
 #include "Memory.h" 
@@ -181,6 +183,9 @@ void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble);
 
 // annn 
 void loadAddressInRegisterI(std::string address); 
+
+// cxnn 
+void bitwiseANDRandNumAndNN(char secondNibble, std::string value); 
 
 // dxyn 
 void drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen& screen, 
