@@ -30,7 +30,7 @@ Note that these games are still a WIP
 <p align = "center"><strong><em>Missle</em></strong></p> 
 
 ### Test Roms 
-Here's a list of fully working ROMs that assess various components of the Chip 8 emulator (ie. graphics, opcodes, flags, IO, etc.) and ensures each functions is correctly 
+Here's a list of fully working ROMs that assess various components of the Chip 8 emulator (ie. graphics, opcodes, flags, IO, etc.) and ensures each functions correctly 
 
 ![Screenshot 2025-07-02 153850](https://github.com/user-attachments/assets/0efe8489-3846-4030-8038-de5adbc142ad)
 <p align = "center"><strong><em>IBM Boot Logo rom fully rendered and running on the ChipEight </em></strong></p> 
