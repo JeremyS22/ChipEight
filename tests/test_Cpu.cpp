@@ -457,6 +457,43 @@ TEST_F(CpuTest, 9xy0_ProgramCounterRemainsSame_WhenVXEqualVY){
     EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
 }
 
+// cxnn 
+
+TEST_F(CpuTest, cxnn_VXHoldsCorrectValue_WhenInputValueIsZero){
+    cpu.setRegist_V(0, 10);
+    std::string inputValue = "0x0"; 
+
+    cpu.bitwiseANDRandNumAndNN(secondNibble, inputValue); 
+
+    EXPECT_EQ(cpu.getRegist_V(0), 0) << "Check the result is greater than or equal to zero, ensure that contraint is implemented "; 
+}
+
+TEST_F(CpuTest, cxnn_VXDoesntSurpassExpectedValue_WhenInputValueIsFifteen){
+    cpu.setRegist_V(0, 10);
+    std::string inputValue = "0xf"; 
+
+    cpu.bitwiseANDRandNumAndNN(secondNibble, inputValue); 
+
+    EXPECT_LE(cpu.getRegist_V(0), 15) << "Check the result is greater than the max expected value (15), check your bitwise AND implementation and ensure NN is handled correctly "; 
+}
+
+TEST_F(CpuTest, cxnn_VXLessThan255){
+    cpu.setRegist_V(0, 10);
+    std::string inputValue = "0xf"; 
+
+    cpu.bitwiseANDRandNumAndNN(secondNibble, inputValue); 
+
+    EXPECT_LE(cpu.getRegist_V(0), 255) << "Check the result is less than or equal to 255 (0xff), ensure that contraint is implemented "; 
+}
+
+TEST_F(CpuTest, cxnn_VXGreaterThanZero){
+    cpu.setRegist_V(0, 10);
+    std::string inputValue = "0xf"; 
+
+    cpu.bitwiseANDRandNumAndNN(secondNibble, inputValue); 
+
+    EXPECT_GE(cpu.getRegist_V(0), 0) << "Check the result is greater than or equal to zero, ensure that contraint is implemented "; 
+}
 
 class ConversionTestSuite : public testing::Test {
     protected:
@@ -493,5 +530,23 @@ TEST_F(ConversionTestSuite, convertIntToHexString_ReturnsCorrectHexString){
     std::string result = cpu.convertIntToHexString(648); 
 
     EXPECT_EQ(result, "288") << errorMessageForIncorrectString; 
+}
+
+
+class FetchInstructionsTestSuite : public testing::Test {
+    protected:
+        FetchInstructionsTestSuite(): cpu(debugger){}
+        Debugger debugger; 
+        Cpu cpu;
+        Memory memory; 
+}; 
+
+TEST_F(FetchInstructionsTestSuite, fetchInstructions_FetchesCorrectOpcode){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 200); 
+    memory.systemMemory[cpu.getProgramCounter()] = 23; 
+    memory.systemMemory[cpu.getProgramCounter()+1] = 64; 
+
+    cpu.fetchInstructions(memory); 
+    EXPECT_EQ(cpu.getCurrentInstruction(), "1740"); 
 }
 
