@@ -20,7 +20,7 @@ Additional Features I may add:
 
 ### Progress 
 Note that these games are still a WIP 
-![20250917-0415-19 0380068](https://github.com/user-attachments/assets/427e2726-aae1-4f84-a97b-f60ecdacb99d)
+![Recording 2025-10-01 221150_PONG_PUSHED](https://github.com/user-attachments/assets/6e6e690f-e925-4cdb-9da4-d956c4fde342)
 <p align = "center"><strong><em>Pong</em></strong></p> 
 
 ![Recording 2025-09-23 122546_GIF_PUSHED](https://github.com/user-attachments/assets/065c4527-3ff7-456d-b914-33995d87f27f)
@@ -50,7 +50,7 @@ https://github.com/corax89/chip8-test-rom
 
 <img width="1103" height="553" alt="Screenshot 2025-07-22 163218" src="https://github.com/user-attachments/assets/cd95e96c-50c3-45b5-99dd-6565d06c38bd" />
 <p align = "center"><strong><em>Timendus' Opcode Test ROM </em></strong></p> 
-<p align = "center">This is Timendus' version of Corax's original Opcode test ROM and that tests the functionality of even more opcodes.  <br>(The "r" next to the opcodes are checkmarks)</p>
+<p align = "center">This is Timendus' version of Corax's original Opcode test ROM and tests the functionality of even more opcodes.  <br>(The "r" next to the opcodes are checkmarks)</p>
 
 <img width="1066" height="557" alt="image" src="https://github.com/user-attachments/assets/5fa3fa1e-80d4-4627-8aae-6924939b2fbe" />
 <p align = "center"><strong><em>Timendus' Flag ROM that tests Chip 8's flag register</em></strong></p> 
