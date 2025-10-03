@@ -226,7 +226,6 @@ int convertCharToHex(char Value);
 
 std::string convertIntToHexString(int value); 
 
-
 }; 
 
 #endif 

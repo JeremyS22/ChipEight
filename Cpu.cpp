@@ -14,7 +14,7 @@
 using namespace std; 
 
 // for running older ROMs from 1980s and 1970s 
-bool COSMAC_VIP_FLAG_IS_ON = false; 
+bool COSMAC_VIP_FLAG_IS_ON = true; 
 
 // injecting this debugger instance to avoid passing it 
 //      in the majority of function parameters in this class 
@@ -496,47 +496,57 @@ void Cpu::bitwiseANDRandNumAndNN(char secondNibble, string value){
 // dxyn 
 void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNibble, Screen& screen, 
                             Memory memory, Cpu& cpu){
-
+                                
     // secondNibble is VX, thirdNibble is VY 
     int X = convertCharToHex(secondNibble);  
     int Y = convertCharToHex(thirdNibble); 
     int spriteHeight = convertCharToHex(fourthNibble); 
 
-    int coordinateX = regist_V[X];
+    int originalCoordinateXVal = regist_V[X];
+    int coordinateX = originalCoordinateXVal; 
+    if(coordinateX > 63){
+        originalCoordinateXVal = (coordinateX % 63); 
+        coordinateX = originalCoordinateXVal; 
+    }
+
     int coordinateY = regist_V[Y];  
+    if(coordinateY > 31){
+        coordinateY = (coordinateY % 31); 
+    }
 
     SDL_RenderSetScale(screen.renderer, screen.getScalingMultipiler(), screen.getScalingMultipiler());    
     uint16_t spriteDataAddress = regist_I; 
-    
+
     for(int i = 0; i < spriteHeight; ++i){
+
         uint16_t binaryVal = memory.systemMemory[spriteDataAddress]; 
         bitset<16> binaryValue (binaryVal); 
 
         // TODO: add to debugger 
-        cout << "Binary value from memory address of register I " << binaryValue << endl; 
+        // cout << "Binary value from memory address of register I " << binaryValue << endl; 
 
         // starting from 7 because LSB 
         for(int j = 7; j >= 0; --j){
-           bool pixelIsPresent = screen.getPixelStatus(coordinateX, coordinateY);
-           if(binaryValue[j] == 1 && pixelIsPresent == false){
+                bool pixelIsPresent = screen.getPixelStatus(coordinateX, coordinateY);
+            if(binaryValue[j] == 1 && pixelIsPresent == false){
                 SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1);     
                 // TODO: add custom renderer color, specifically this color as primary 
-                SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
+                    SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
             }
             else if (binaryValue[j] == 1 && pixelIsPresent == true){
                 // TODO: set color as secondary 
                 SDL_SetRenderDrawColor(screen.renderer, 0, 0, 0, 0);                
-                SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
+                    SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
             }
-            screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 
-            ++coordinateX; 
+                screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 
+                ++coordinateX; 
         }
         ++spriteDataAddress; 
         ++coordinateY; 
         // resets X coordinate for drawing the next line 
-        coordinateX = regist_V[X];    
+        coordinateX = originalCoordinateXVal;    
     }
-    SDL_RenderPresent(screen.renderer); 
+    SDL_RenderPresent(screen.renderer);
 }
 
 // ex9e 
@@ -874,4 +884,3 @@ string Cpu::convertIntToHexString(int value){
     convertedString << hex << value;     
     return convertedString.str();    
 }
-

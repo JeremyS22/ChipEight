@@ -23,8 +23,7 @@ int main (int argv, char** args){
 
     int instructionsPerSecond = 540; 
     debugger.setDebuggerIsOn(false); 
-    string romFileLocation = "ROMS/Pong (1 player).ch8"; 
-    
+    string romFileLocation = "ROMS/5-quirks.ch8";     
     chipEight.initializeEmulator(memory, romFileLocation, cpu, screen, debugger);     
     
     if(chipEight.mainLoop(cpu, memory, screen, keypad, debugger, instructionsPerSecond) == true){
