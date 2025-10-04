@@ -495,6 +495,37 @@ TEST_F(CpuTest, cxnn_VXGreaterThanZero){
     EXPECT_GE(cpu.getRegist_V(0), 0) << "Check the result is greater than or equal to zero, ensure that contraint is implemented "; 
 }
 
+
+// fx29 
+
+TEST_F(CpuTest, fx29_RegisterIHoldsCorrectAddress){
+    cpu.setRegist_V(0, 0xa); 
+
+    cpu.loadCharacterAddressInRegisterI(secondNibble); 
+    EXPECT_EQ(cpu.getRegist_I(), 0x82); 
+}
+
+TEST_F(CpuTest, fx29_RegisterIHoldsCorrectAddress_WhenLoadingCharacterZero){
+    cpu.setRegist_V(0, 0x0); 
+
+    cpu.loadCharacterAddressInRegisterI(secondNibble); 
+    EXPECT_EQ(cpu.getRegist_I(), 0x50); 
+}
+
+TEST_F(CpuTest, fx29_RegisterIHoldsCorrectAddress_WhenLoadingCharacterF){
+    cpu.setRegist_V(0, 0xf); 
+
+    cpu.loadCharacterAddressInRegisterI(secondNibble); 
+    EXPECT_EQ(cpu.getRegist_I(), 0x9b); 
+}
+
+TEST_F(CpuTest, fx29_RegisterIHoldsCorrectAddress_WhenVXHoldsTwoNibbleValue){
+    cpu.setRegist_V(0, 0x1a); 
+
+    cpu.loadCharacterAddressInRegisterI(secondNibble); 
+    EXPECT_EQ(cpu.getRegist_I(), 0x82) << "Error occurred when VX held a two nibble value, check conditional implementation when VX is greater than 0xf"; 
+}
+
 class ConversionTestSuite : public testing::Test {
     protected:
         ConversionTestSuite(): cpu(debugger){}
@@ -531,7 +562,6 @@ TEST_F(ConversionTestSuite, convertIntToHexString_ReturnsCorrectHexString){
 
     EXPECT_EQ(result, "288") << errorMessageForIncorrectString; 
 }
-
 
 class FetchInstructionsTestSuite : public testing::Test {
     protected:
