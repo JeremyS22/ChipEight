@@ -100,7 +100,7 @@ void setSoundTimer();
 
 uint8_t getSoundTimer(); 
 
-void setRegist_I(); 
+void setRegist_I(uint16_t address); 
 
 uint16_t getRegist_I(); 
 

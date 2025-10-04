@@ -70,6 +70,14 @@ uint8_t Cpu::getRegist_V(int name){
     return regist_V[name];  
 }
 
+void Cpu::setRegist_I(uint16_t address){
+    regist_I = address; 
+} 
+
+uint16_t Cpu::getRegist_I(){
+    return regist_I; 
+} 
+
 void Cpu::setDelayTimer(uint8_t time){
     delayTimer = time; 
 }
@@ -529,17 +537,18 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
         for(int j = 7; j >= 0; --j){
             bool pixelIsPresent = screen.getPixelStatus(coordinateX, coordinateY);
 
-            if(binaryValue[j] == 1 && pixelIsPresent == false){
+            if(binaryValue[j] == 1 && pixelIsPresent == false && coordinateX <= 63 && coordinateY <= 31){
                 // TODO: add custom renderer color, specifically this color as primary 
                 SDL_SetRenderDrawColor(screen.renderer, 179, 254, 238, 1);     
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
+                screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu);
             }
-            else if (binaryValue[j] == 1 && pixelIsPresent == true){
+            else if (binaryValue[j] == 1 && pixelIsPresent == true && coordinateX <= 63 && coordinateY <= 31){
                 // TODO: set color as secondary 
                 SDL_SetRenderDrawColor(screen.renderer, 0, 0, 0, 0);                
                 SDL_RenderDrawPoint(screen.renderer, coordinateX, coordinateY);   
-            }
-            screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu); 
+                screen.setPixelStatus(coordinateX, coordinateY, binaryValue[j], cpu);
+            } 
             ++coordinateX; 
         }
         ++spriteDataAddress; 
@@ -618,9 +627,18 @@ void Cpu::setDelayTimerToVXValue(char secondNibble, Cpu& cpu){
 // fx29 
 void Cpu::loadCharacterAddressInRegisterI(char secondNibble){
     int X = convertCharToHex(secondNibble); 
+    int valueForVX; 
 
-    // mutiply by 5 since the memory address of each character is 5 addresses apart 
-    regist_I = 0x050 + (regist_V[X] * 5); 
+    if(regist_V[X] > 0xf){
+        // to get last nibble 
+        valueForVX = regist_V[X] % 16; 
+    }
+    else{
+        valueForVX = regist_V[X]; 
+    }
+
+    // mutiply by 5 since each character's memory address is 5 apart 
+    regist_I = 0x050 + (valueForVX * 5); 
 }
 
 // fx33 
