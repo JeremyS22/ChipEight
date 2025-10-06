@@ -513,13 +513,13 @@ void Cpu::drawSpriteAtVXAndVY(char secondNibble, char thirdNibble, char fourthNi
     int originalCoordinateXVal = regist_V[X];
     int coordinateX = originalCoordinateXVal; 
     if(coordinateX > 63){
-        originalCoordinateXVal = (coordinateX % 63); 
+        originalCoordinateXVal = coordinateX % 64; 
         coordinateX = originalCoordinateXVal; 
     }
 
     int coordinateY = regist_V[Y];  
     if(coordinateY > 31){
-        coordinateY = (coordinateY % 31); 
+        coordinateY %= 32; 
     }
 
     SDL_RenderSetScale(screen.renderer, screen.getScalingMultipiler(), screen.getScalingMultipiler());    
