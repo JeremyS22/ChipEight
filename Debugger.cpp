@@ -77,6 +77,9 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
     if(checkDebuggerRunsWithoutStepping() == true){
         debuggerRunsWithoutStepping = false; 
     }
+    else{
+        resetDataOnDebuggerScreen(memory); 
+    }
 
     if(cpu.checkDelayTimerThreadIsRunning() == true){
         future<bool>& future = cpu.getFuture(); 
@@ -94,7 +97,7 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
         }
     }
 
-    resetDataOnDebuggerScreen(memory); 
+    
     cout << "[DEBUGGER] Press right arrow key to step 1 instruction, up arrow key to step by 5 instructions" << endl; 
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 
     cout << "[DEBUGGER]   Press Escape key to close emulator" << endl; 
