@@ -20,7 +20,8 @@ Additional Features I may add:
 
 ### Progress 
 Note that these games are still a WIP 
-![Recording 2025-10-01 221150_PONG_PUSHED](https://github.com/user-attachments/assets/6e6e690f-e925-4cdb-9da4-d956c4fde342)
+
+![Recording 2025-10-01 221150_PONG_PUSHED_VERSION_2_SPRITES_CLIPPING](https://github.com/user-attachments/assets/e38e04bd-3262-4554-9a6f-8194e4884b56)
 <p align = "center"><strong><em>Pong</em></strong></p> 
 
 ![Recording 2025-09-23 122546_GIF_PUSHED](https://github.com/user-attachments/assets/065c4527-3ff7-456d-b914-33995d87f27f)
