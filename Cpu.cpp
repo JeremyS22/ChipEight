@@ -286,11 +286,18 @@ void Cpu::setVXToValueOfVY(char secondNibble, char thirdNibble){
 }
 
 // 8xy1 
-void Cpu::bitwiseOrVXAndVY(char secondNibble, char thirdNibble){
+void Cpu::bitwiseOrVXAndVY(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] |= regist_V[Y]; 
     cout << "AFTER BITWISE OR " << printRegist_V(X) << endl; 
+
+    if(COSMAC_VIP_FLAG_IS_ON == true){
+        regist_V[0xF] = 0;  
+        if(debugger.getDebuggerIsOn() == true){
+            debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+        }
+    }
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -298,11 +305,19 @@ void Cpu::bitwiseOrVXAndVY(char secondNibble, char thirdNibble){
 }
 
 // 8xy2  
-void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble){
+void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] &= regist_V[Y]; 
     cout << "AFTER BITWISE AND " << printRegist_V(X) << endl; 
+
+    if(COSMAC_VIP_FLAG_IS_ON == true){
+        regist_V[0xF] = 0;  
+        if(debugger.getDebuggerIsOn() == true){
+            debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+        }
+    }
+
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -310,11 +325,18 @@ void Cpu::bitwiseAndVXAndVY(char secondNibble, char thirdNibble){
 }
 
 // 8xy3   
-void Cpu::bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble){
+void Cpu::bitwiseExclusiveOrVXAndVY(char secondNibble, char thirdNibble, bool COSMAC_VIP_FLAG_IS_ON){
     uint8_t X = convertCharToHex(secondNibble); 
     uint8_t Y = convertCharToHex(thirdNibble); 
     regist_V[X] ^= regist_V[Y]; 
     cout << "AFTER BITWISE XOR " << printRegist_V(X)<< endl; 
+
+    if(COSMAC_VIP_FLAG_IS_ON == true){
+        regist_V[0xF] = 0;  
+        if(debugger.getDebuggerIsOn() == true){
+            debugger.outputRegistersToDebugger(getRegist_V(0xF), 0xF); 
+        }
+    }
 
     if(debugger.getDebuggerIsOn() == true){
         debugger.outputRegistersToDebugger(getRegist_V(X), X); 
@@ -783,15 +805,15 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                         break; 
                     case '1':
                         // 8xy1 
-                        bitwiseOrVXAndVY(secondNibble, thirdNibble); 
+                        bitwiseOrVXAndVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
                         break; 
                     case '2':
                         // 8xy2 
-                        bitwiseAndVXAndVY(secondNibble, thirdNibble); 
+                        bitwiseAndVXAndVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
                         break; 
                     case '3':
                         // 8xy3  
-                        bitwiseExclusiveOrVXAndVY(secondNibble, thirdNibble); 
+                        bitwiseExclusiveOrVXAndVY(secondNibble, thirdNibble, COSMAC_VIP_FLAG_IS_ON); 
                         break; 
                     case '4':
                         // 8xy4   
