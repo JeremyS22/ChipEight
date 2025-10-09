@@ -485,6 +485,36 @@ TEST_F(CpuTest, 9xy0_ProgramCounterRemainsSame_WhenVXEqualVY){
     EXPECT_EQ(cpu.getProgramCounter(), 0x200) << "Program Counter was expected to not increment by 2, check conditional logic in 9xy0 instruction"; 
 }
 
+TEST_F(CpuTest, bnnn_ProgramCounterHoldsCorrectAddress_WhenVXHoldsMaxValue){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0); 
+
+    cpu.setRegist_V(0, 255); 
+
+    cpu.jumpToAddressWithVXOffset(secondNibble, "0x200", BXNN_QUIRK_IS_ON); 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x2ff); 
+}
+
+TEST_F(CpuTest, bnnn_ProgramCounterHoldsCorrectAddress_WhenBxnnFlagOn){
+    char secondNibble = '2';     
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0); 
+    BXNN_QUIRK_IS_ON = true; 
+
+    cpu.setRegist_V(2, 20); 
+
+    cpu.jumpToAddressWithVXOffset(secondNibble, "0x200", BXNN_QUIRK_IS_ON); 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x214); 
+}
+
+TEST_F(CpuTest, bnnn_ProgramCounterHoldsCorrectAddress_WhenBxnnFlagOff){
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0); 
+    BXNN_QUIRK_IS_ON = false; 
+
+    cpu.setRegist_V(0, 30); 
+
+    cpu.jumpToAddressWithVXOffset(secondNibble, "0x200", BXNN_QUIRK_IS_ON); 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x21e); 
+}
+
 // cxnn 
 
 TEST_F(CpuTest, cxnn_VXHoldsCorrectValue_WhenInputValueIsZero){
@@ -556,16 +586,12 @@ TEST_F(CpuTest, fx29_RegisterIHoldsCorrectAddress_WhenVXHoldsTwoNibbleValue){
 
 // bnnn 
 
-TEST_F(CpuTest, bnnn_ProgramCounterHoldsCorrectAddress){
-    Screen screen; 
-    Memory memory; 
-    char secondNibble = '2';     
-
+TEST_F(CpuTest, bnnn_ProgramCounterHoldsCorrectAddress){ 
     cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0); 
 
     cpu.setRegist_V(0, 9); 
 
-    cpu.jumpToAddressWithVXOffset(secondNibble, "0x200"); 
+    cpu.jumpToAddressWithVXOffset(secondNibble, "0x200", BXNN_QUIRK_IS_ON); 
     EXPECT_EQ(cpu.getProgramCounter(), 0x209); 
 }
 

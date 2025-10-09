@@ -21,6 +21,7 @@ class Keypad;
 class Debugger; 
 
 extern bool COSMAC_VIP_FLAG_IS_ON; 
+extern bool BXNN_QUIRK_IS_ON; 
 
 class Cpu {
 
@@ -186,7 +187,7 @@ void loadAddressInRegisterI(std::string address);
 
 // bnnn/bxnn 
 
-void jumpToAddressWithVXOffset(char secondNibble, std::string address); 
+void jumpToAddressWithVXOffset(char secondNibble, std::string address, bool BXNN_QUIRK_IS_ON); 
 
 // cxnn 
 void bitwiseANDRandNumAndNN(char secondNibble, std::string value); 

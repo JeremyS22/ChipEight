@@ -15,6 +15,7 @@ using namespace std;
 
 // for running older ROMs from 1980s and 1970s 
 bool COSMAC_VIP_FLAG_IS_ON = true; 
+bool BXNN_QUIRK_IS_ON = false; 
 
 // injecting this debugger instance to avoid passing it 
 //      in the majority of function parameters in this class 
@@ -164,6 +165,7 @@ bool Cpu::runDelayTimer(){
         auto endOfComputeClock = chrono::steady_clock::now(); 
 
         chrono::duration<double> timeElasped = endOfComputeClock - startOfComputeClock; 
+        // 16,666,666 comes from dividing a million nanoseconds by 60 
         int timeToSleep = 16666666 - (int)timeElasped.count(); 
         this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
@@ -511,8 +513,18 @@ void Cpu::loadAddressInRegisterI(string address){
 
 // bnnn/bxnn 
 
-void Cpu::jumpToAddressWithVXOffset(char secondNibble, string address){
-    int addressWithVXOffset = regist_V[0] + stoi(address, nullptr, 16); 
+void Cpu::jumpToAddressWithVXOffset(char secondNibble, string address, bool BXNN_QUIRK_IS_ON){
+    int addressWithVXOffset; 
+    if(BXNN_QUIRK_IS_ON == true){
+        // bxnn 
+        int X = convertCharToHex(secondNibble);     
+        addressWithVXOffset = regist_V[X] + stoi(address, nullptr, 16); 
+    }
+    else{
+        // bnnn 
+        addressWithVXOffset = regist_V[0] + stoi(address, nullptr, 16); 
+    }
+
     setProgramCounter(getProgramCounterPointer(), addressWithVXOffset);   
 }   
 
@@ -854,7 +866,7 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                 break; 
             case 'b': 
                 // bnnn/bxnn 
-                jumpToAddressWithVXOffset(secondNibble, getLastThreeNibbles(currentInstruction)); 
+                jumpToAddressWithVXOffset(secondNibble, getLastThreeNibbles(currentInstruction), BXNN_QUIRK_IS_ON); 
                 break;
             case 'c': 
                 // cxnn 
