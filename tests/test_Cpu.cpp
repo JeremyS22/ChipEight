@@ -554,6 +554,21 @@ TEST_F(CpuTest, fx29_RegisterIHoldsCorrectAddress_WhenVXHoldsTwoNibbleValue){
     EXPECT_EQ(cpu.getRegist_I(), 0x82) << "Error occurred when VX held a two nibble value, check conditional implementation when VX is greater than 0xf"; 
 }
 
+// bnnn 
+
+TEST_F(CpuTest, bnnn_ProgramCounterHoldsCorrectAddress){
+    Screen screen; 
+    Memory memory; 
+    char secondNibble = '2';     
+
+    cpu.setProgramCounter(cpu.getProgramCounterPointer(), 0); 
+
+    cpu.setRegist_V(0, 9); 
+
+    cpu.jumpToAddressWithVXOffset(secondNibble, "0x200"); 
+    EXPECT_EQ(cpu.getProgramCounter(), 0x209); 
+}
+
 class ConversionTestSuite : public testing::Test {
     protected:
         ConversionTestSuite(): cpu(debugger){}

@@ -184,6 +184,10 @@ void skipInstructionIfVXNotEqualsVY(char secondNibble, char thirdNibble);
 // annn 
 void loadAddressInRegisterI(std::string address); 
 
+// bnnn/bxnn 
+
+void jumpToAddressWithVXOffset(char secondNibble, std::string address); 
+
 // cxnn 
 void bitwiseANDRandNumAndNN(char secondNibble, std::string value); 
 

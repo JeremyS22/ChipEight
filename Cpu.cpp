@@ -509,6 +509,13 @@ void Cpu::loadAddressInRegisterI(string address){
     }
 }
 
+// bnnn/bxnn 
+
+void Cpu::jumpToAddressWithVXOffset(char secondNibble, string address){
+    int addressWithVXOffset = regist_V[0] + stoi(address, nullptr, 16); 
+    setProgramCounter(getProgramCounterPointer(), addressWithVXOffset);   
+}   
+
 // cxnn 
 
 void Cpu::bitwiseANDRandNumAndNN(char secondNibble, string value){
@@ -846,8 +853,8 @@ void Cpu::decodeAndExecuteInstructions(string currentInstruction, Screen& screen
                 loadAddressInRegisterI(getLastThreeNibbles(currentInstruction));  
                 break; 
             case 'b': 
-                // bnnn 
-                getCurrentInstruction(); // call function 
+                // bnnn/bxnn 
+                jumpToAddressWithVXOffset(secondNibble, getLastThreeNibbles(currentInstruction)); 
                 break;
             case 'c': 
                 // cxnn 
