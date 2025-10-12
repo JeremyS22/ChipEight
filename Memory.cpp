@@ -51,6 +51,10 @@ void Memory::loadRomIntoMemory(Memory& memory, string romFileLocation, Cpu& cpu)
     }
 }
 
+uint8_t Memory::getFromMemory(uint8_t address){
+    return systemMemory[address]; 
+}
+
 void Memory::setStackPointer(uint16_t addressAtTopOfStack){
     stackPointer = addressAtTopOfStack; 
 }

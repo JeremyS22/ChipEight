@@ -34,6 +34,7 @@ class Memory {
 
     void loadFontDataIntoMemory(Cpu& cpu, Memory& memory); 
     void loadRomIntoMemory(Memory& memory, std::string romFileLocation, Cpu& cpu); 
+    uint8_t getFromMemory(uint8_t address); 
     void setStackPointer(uint16_t addressAtTopOfStack); 
     uint16_t getStackPointer(); 
     int getStackSize(); 
