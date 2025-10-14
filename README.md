@@ -58,6 +58,9 @@ https://github.com/corax89/chip8-test-rom
 <img width="1066" height="557" alt="image" src="https://github.com/user-attachments/assets/5fa3fa1e-80d4-4627-8aae-6924939b2fbe" />
 <p align = "center"><strong><em>Timendus' Flag ROM that tests Chip 8's flag register</em></strong></p> 
 
+![Recording 2025-10-13 223811_PUSHED](https://github.com/user-attachments/assets/b997d3f5-fb8d-4149-8ec7-6d3d491db2a3)
+<p align = "center"><strong><em>Keypad Test ROM (With COSMAC flag on)
+  <br>Assesses Keypad opcodes and each key's input </em></strong></p> 
  
 <strong>ROM source:</strong><br>
 https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file 
