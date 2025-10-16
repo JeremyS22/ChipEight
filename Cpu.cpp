@@ -165,8 +165,9 @@ bool Cpu::runDelayTimer(){
         auto endOfComputeClock = chrono::steady_clock::now(); 
 
         chrono::duration<double> timeElasped = endOfComputeClock - startOfComputeClock; 
-        // this int literal comes from dividing a million nanoseconds by 60 
-        int timeToSleep = 16666666 - (int)timeElasped.count(); 
+        // comes from dividing a million nanoseconds by 60 
+        int nanoIntervalOfASecond = 16666666; 
+        int timeToSleep = nanoIntervalOfASecond - (int)timeElasped.count(); 
         this_thread::sleep_for(chrono::nanoseconds(timeToSleep)); 
     }
     cout << "\n    Exiting threaded function" << endl; 
