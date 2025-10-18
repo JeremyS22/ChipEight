@@ -29,7 +29,6 @@ Keypad::Keypad() : keypadMap({
 bool Keypad::getKeypadInput(Screen& screen, Debugger& debugger, Cpu& cpu, Memory& memory, Keypad& keypad){
     if (SDL_PollEvent(&screen.windowEvent)){
         if(screen.windowEvent.type == SDL_QUIT){
-            screen.setWindowIsOpen(false); 
             cout << "Clicked closed, EXITING " << endl; 
             return false; 
         }

@@ -88,3 +88,16 @@ TEST_F(ScreenTest, initializeScreen_EachSDLSubsystemsIsInitialized){
     EXPECT_NE(SDL_WasInit(SDL_INIT_EVENTS), 0); 
 }
 
+TEST_F(ScreenTest, destroyCreatedWindow_EachSDLSubsystemsIsClosed){
+    screen.initializeScreen(); 
+
+    screen.destroyCreatedWindow(); 
+    
+    // SDL_WasInit() returns 0 if subsystem wasn't initialized 
+    EXPECT_EQ(SDL_WasInit(SDL_INIT_TIMER), 0); 
+    EXPECT_EQ(SDL_WasInit(SDL_INIT_AUDIO), 0); 
+    EXPECT_EQ(SDL_WasInit(SDL_INIT_VIDEO), 0); 
+    EXPECT_EQ(SDL_WasInit(SDL_INIT_JOYSTICK), 0); 
+    EXPECT_EQ(SDL_WasInit(SDL_INIT_GAMECONTROLLER), 0); 
+    EXPECT_EQ(SDL_WasInit(SDL_INIT_EVENTS), 0); 
+}

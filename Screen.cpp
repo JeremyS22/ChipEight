@@ -21,8 +21,6 @@ void Screen::initializeScreen(){
         setScalingMultipiler(16.0); 
         SDL_CreateWindowAndRenderer(64 * (int)getScalingMultipiler(), 32 * (int)getScalingMultipiler(), 0, &window, &renderer); 
         SDL_SetWindowTitle(window, "ChipEight"); 
-
-        setWindowIsOpen(true); 
         
         // TODO: Add customizable color background 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);  
@@ -61,16 +59,7 @@ bool Screen::getPixelStatus(int coordinateX, int coordinateY){
             return true; 
 }
 
-void Screen::setWindowIsOpen(bool passedInWindowStatus){
-        windowStatus = passedInWindowStatus; 
-}
-
-bool Screen::getWindowIsOpen(){
-        return windowStatus; 
-}
-
 void Screen::destroyCreatedWindow(){
-        setWindowIsOpen(false); 
         SDL_DestroyWindow(window); 
         SDL_DestroyRenderer(renderer); 
         SDL_Quit();  

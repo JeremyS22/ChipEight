@@ -101,7 +101,8 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
     cout << "[DEBUGGER] Press right arrow key to step 1 instruction, up arrow key to step by 5 instructions" << endl; 
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 
     cout << "[DEBUGGER]   Press Escape key to close emulator" << endl; 
-    while(screen.getWindowIsOpen()){
+    bool debuggerWindowIsOpen = true; 
+    while(debuggerWindowIsOpen){
         if (SDL_PollEvent(&screen.windowEvent)){
             if(screen.windowEvent.type == SDL_QUIT){
                 setDebuggerIsOn(false); 
