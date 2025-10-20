@@ -7,6 +7,7 @@ using namespace std;
 ChipEight::ChipEight() : inputToCloseEmulator(false){}; 
 
 void ChipEight::initializeEmulator(Memory& memory, string romFileLocation, Cpu& cpu, Screen& screen, Debugger& debugger){
+    initializeSDLSubsystems(); 
     screen.initializeScreen(); 
     debugger.initializeDebugger(); 
     memory.loadFontDataIntoMemory(cpu, memory); 
@@ -42,6 +43,24 @@ bool ChipEight::mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypa
         } */
     }
     return true; 
+}
+
+void ChipEight::initializeSDLSubsystems(){
+    map<int, Uint32> subSystemMap = {
+        {1, SDL_INIT_TIMER},
+        {2, SDL_INIT_AUDIO},
+        {3, SDL_INIT_VIDEO},
+        {4, SDL_INIT_JOYSTICK},
+        {5, SDL_INIT_GAMECONTROLLER},
+        {6, SDL_INIT_EVENTS}
+    }; 
+    
+    for(auto subSystem : subSystemMap){
+        SDL_Init(subSystem.second); 
+        if(SDL_WasInit(subSystem.second) == 0){
+            cout << "(ChipEight) Error initializing SDL subsystem number " << subSystem.first << ", flag: " << subSystem.second << endl; 
+        }
+    }
 }
 
 void ChipEight::destroyEmulator(Debugger& debugger, Screen& screen, Cpu& cpu){

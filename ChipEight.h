@@ -24,6 +24,7 @@ class ChipEight {
     public:
         void initializeEmulator(Memory& memory, std::string romFileLocation, Cpu& cpu, Screen& screen, Debugger& debugger); 
         bool mainLoop(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger, int instructionsPerSecond);
+        void initializeSDLSubsystems(); 
         void destroyEmulator(Debugger& debugger, Screen& screen, Cpu& cpu); 
         void waitForDelayTimerThreadToEnd(Cpu& cpu); 
 

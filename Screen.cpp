@@ -9,14 +9,6 @@ Screen::Screen() : scalingMultipiler(0), windowStatus(false), window(nullptr), r
 }
 
 void Screen::initializeScreen(){
-             
-        SDL_Init(SDL_INIT_TIMER); 
-        SDL_Init(SDL_INIT_AUDIO); 
-        SDL_Init(SDL_INIT_VIDEO); 
-        SDL_Init(SDL_INIT_JOYSTICK); 
-        SDL_Init(SDL_INIT_GAMECONTROLLER); 
-        SDL_Init(SDL_INIT_EVENTS); 
-        
         // Initializing this to 16.0 by default since Chip 8 native's resoution is so small  
         setScalingMultipiler(16.0); 
         SDL_CreateWindowAndRenderer(64 * (int)getScalingMultipiler(), 32 * (int)getScalingMultipiler(), 0, &window, &renderer); 

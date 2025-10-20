@@ -7,7 +7,6 @@
 #include <stack> 
 #include <cstring> 
 #include <chrono> 
-#include <typeinfo>
 
 #include "Cpu.h"
 
