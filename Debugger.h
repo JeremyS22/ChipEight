@@ -49,6 +49,7 @@ class Debugger {
     bool runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& keypad, Debugger& debugger); 
     void setDebuggerIsOn(bool value); 
     bool getDebuggerIsOn(); 
+    SDL_Window* getDebuggingWindow(); 
     bool checkDebuggerRunsWithoutStepping(); 
     void setStackPrintingVector(std::string value);  
     std::string getStackPrintingVectorElement(int index); 

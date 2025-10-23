@@ -37,14 +37,13 @@ bool Debugger::initializeDebugger(){
     SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0);  
     SDL_RenderClear(debuggingRenderer); 
     SDL_SetWindowPosition(debuggingWindow, 0, 30); 
-    SDL_SetWindowTitle(debuggingWindow, "Debugger"); 
+    SDL_SetWindowTitle(debuggingWindow, "Debugger");  
 
     // returns 0 if successful, -1 on any error 
     if(TTF_Init() == -1){
         cout << "Error initializing debugging window, closing SDL and window" << endl; 
         return true; 
     }    
-
     createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20, true, debuggingRenderer, "white"); 
 
     const char* registerNames[] = {"V0:", "V1:", "V2:", "V3:", "V4:", "V5:", "V6:", "V7:", "V8:", "V9:", "VA:", "VB:", "VC:", "VD:", "VE:", "VF:"}; 
@@ -147,6 +146,10 @@ void Debugger::setDebuggerIsOn(bool value){
 
 bool Debugger::getDebuggerIsOn(){
     return debuggerIsOn; 
+}
+
+SDL_Window* Debugger::getDebuggingWindow(){
+    return debuggingWindow; 
 }
 
 bool Debugger::checkDebuggerRunsWithoutStepping(){
@@ -289,7 +292,7 @@ void Debugger::outputStackToDebugger(Memory memory){
 
 void Debugger::createBoxAndAddText(const char* font, const char* messageText, int x, int y, int width, int height, bool textIsStatic, SDL_Renderer* debuggingRenderer, 
     string textColor){
-        
+    
     debugRendererMutex.lock(); 
 
     SDL_Color pickedColor; 
@@ -298,6 +301,7 @@ void Debugger::createBoxAndAddText(const char* font, const char* messageText, in
     
     if(!messageFont){
         cout << "Error no TTF font not loaded, check your font file path " << endl;  
+        debugRendererMutex.unlock(); 
         return;        
     }
 
