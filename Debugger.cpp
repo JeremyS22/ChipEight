@@ -30,8 +30,14 @@ Debugger::Debugger() :
 
 bool Debugger::initializeDebugger(){
 
-    SDL_Init(SDL_INIT_VIDEO); 
-    SDL_Init(SDL_INIT_EVENTS); 
+    if(SDL_Init(SDL_INIT_VIDEO) == -1){
+        cout << "Error initializing video SDL subsystem for debugger, closing SDL and debugging window" << endl; 
+        return true; 
+    } 
+    if(SDL_Init(SDL_INIT_EVENTS) == -1){
+        cout << "Error initializing events SDL subsystem for debugger, closing SDL and debugging window" << endl; 
+        return true; 
+    }
 
     SDL_CreateWindowAndRenderer(512, 512, (SDL_WINDOW_RESIZABLE), &debuggingWindow, &debuggingRenderer); 
     SDL_SetRenderDrawColor(debuggingRenderer, 0, 0, 0, 0);  
@@ -41,7 +47,7 @@ bool Debugger::initializeDebugger(){
 
     // returns 0 if successful, -1 on any error 
     if(TTF_Init() == -1){
-        cout << "Error initializing debugging window, closing SDL and window" << endl; 
+        cout << "Error initializing TTF for debugger, closing SDL and debugging window" << endl; 
         return true; 
     }    
     createBoxAndAddText(fontSemiBold, "Registers", 10, 20, 70, 20, true, debuggingRenderer, "white"); 
@@ -95,7 +101,6 @@ bool Debugger::runDebugger(Cpu& cpu, Memory& memory, Screen& screen, Keypad& key
             }
         }
     }
-
     
     cout << "[DEBUGGER] Press right arrow key to step 1 instruction, up arrow key to step by 5 instructions" << endl; 
     cout << "[DEBUGGER]  Press Grave/Tilde key (AKA ` or ~) to leave debugger and resume emulation" << endl; 
