@@ -30,6 +30,9 @@ Note that these games are still a WIP
 ![Recording 2025-09-27 221332_PUSHED_](https://github.com/user-attachments/assets/c0796fad-5202-46b4-8f72-3059681361d3)
 <p align = "center"><strong><em>Missle</em></strong></p> 
 
+![Recording 2025-10-24 205239_PUSHED](https://github.com/user-attachments/assets/781f47a9-9107-491d-8755-51ab75a708cc)
+<p align = "center"><strong><em>Brix</em></strong></p> 
+
 ### Debugger 
 Can step through instructions or run debugger in real time without stepping 
 ![Recording 2025-10-02 234650_DEBUGGER_DEMO_PUSHED_VERSION_2](https://github.com/user-attachments/assets/bb0a5d21-a06a-4750-8cb3-c892dfedc77c)
