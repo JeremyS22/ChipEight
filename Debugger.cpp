@@ -177,15 +177,13 @@ int Debugger::getStackPrintingVectorSize(){
     return stackPrintingVector.size(); 
 }
 
-bool Debugger::destroyDebuggerWindow(){
+void Debugger::destroyDebuggerWindow(){
     SDL_DestroyWindow(debuggingWindow); 
     SDL_DestroyRenderer(debuggingRenderer); 
     TTF_CloseFont(messageFont); 
     messageFont = nullptr; 
     TTF_Quit(); 
     SDL_Quit();  
-    
-    return false; 
 }
 
 void Debugger::outputCurrentInstructionToDebugger(string instruction){

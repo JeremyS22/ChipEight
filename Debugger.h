@@ -56,7 +56,7 @@ class Debugger {
     int getStackPrintingVectorSize(); 
     SDL_Renderer* getDebuggingRenderer(); 
     bool initializeDebugger(); 
-    bool destroyDebuggerWindow(); 
+    void destroyDebuggerWindow(); 
     void outputCurrentInstructionToDebugger(std::string instruction); 
     void outputRegistersToDebugger(uint8_t registerValue, int registerName); 
     void outputProgramCounterToDebugger(uint16_t programCounter); 

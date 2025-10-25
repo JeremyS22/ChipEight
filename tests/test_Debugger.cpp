@@ -61,7 +61,7 @@ TEST_F(DebuggerTest, initializeDebugger_EachSDLSubsystemsIsInitialized){
     EXPECT_EQ(SDL_WasInit(SDL_INIT_EVENTS), 0x00004000u); 
     EXPECT_NE(SDL_Init(SDL_INIT_VIDEO), -1); 
     
-    // to clean up what was initialized 
+    // cleaning up 
     debugger.destroyDebuggerWindow(); 
 }
 
@@ -81,6 +81,15 @@ TEST_F(DebuggerTest, initializeDebugger_WindowNamedCorrectTitle){
     debugger.destroyDebuggerWindow(); 
 }
 
+TEST_F(DebuggerTest, initializeDebugger_TTFWasInitialized){
+
+    debugger.initializeDebugger(); 
+
+    // method returns total of times TTF_Init() was called.  Since method above calls this, expected total should be 1  
+    EXPECT_EQ(TTF_WasInit(), 1); 
+    debugger.destroyDebuggerWindow(); 
+}
+
 TEST_F(DebuggerTest, destoryDebuggerWindow_EachSDLSubsystemsIsClosed){
     SDL_Init(SDL_INIT_VIDEO); 
     SDL_Init(SDL_INIT_EVENTS); 
@@ -88,14 +97,6 @@ TEST_F(DebuggerTest, destoryDebuggerWindow_EachSDLSubsystemsIsClosed){
     debugger.destroyDebuggerWindow(); 
     EXPECT_EQ(SDL_WasInit(SDL_INIT_VIDEO), 0); 
     EXPECT_EQ(SDL_WasInit(SDL_INIT_EVENTS), 0); 
-}
-
-TEST_F(DebuggerTest, initializeDebugger_TTFWasInitialized){
-
-    debugger.initializeDebugger(); 
-
-    EXPECT_EQ(TTF_WasInit(), 1); 
-    debugger.destroyDebuggerWindow(); 
 }
 
 TEST_F(DebuggerTest, destoryDebuggerWindow_TTFWasClosed){
