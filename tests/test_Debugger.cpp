@@ -34,6 +34,30 @@ class DebuggerTest : public testing::Test {
     Memory memory;
 
     std::unordered_map<std::string, int> subsystemMap; 
+    void testPrep_EmptySystemStack(){
+        while(!memory.systemStack.empty()){
+            memory.systemStack.pop();
+        }
+    }
+
+    void testPrep_PopFakeDataOnStack(){
+        memory.systemStack.push(0x200); 
+        memory.systemStack.push(0x226);  
+        memory.systemStack.push(0x228); 
+        memory.systemStack.push(0x22a);  
+        memory.systemStack.push(0x22c); 
+        memory.systemStack.push(0x22e);  
+        memory.systemStack.push(0x230); 
+        memory.systemStack.push(0x232);  
+        memory.systemStack.push(0x234); 
+        memory.systemStack.push(0x236);  
+        memory.systemStack.push(0x238); 
+        memory.systemStack.push(0x23a);  
+        memory.systemStack.push(0x23c); 
+        memory.systemStack.push(0x23e);  
+        memory.systemStack.push(0x240); 
+        memory.systemStack.push(0x242);  
+    }
 }; 
 
 TEST_F(DebuggerTest, copyStackToDebuggingVector_ValidatingVectorSize){
@@ -90,7 +114,7 @@ TEST_F(DebuggerTest, initializeDebugger_TTFWasInitialized){
     debugger.destroyDebuggerWindow(); 
 }
 
-TEST_F(DebuggerTest, destoryDebuggerWindow_EachSDLSubsystemsIsClosed){
+TEST_F(DebuggerTest, destroyDebuggerWindow_EachSDLSubsystemsIsClosed){
     SDL_Init(SDL_INIT_VIDEO); 
     SDL_Init(SDL_INIT_EVENTS); 
 
@@ -99,17 +123,39 @@ TEST_F(DebuggerTest, destoryDebuggerWindow_EachSDLSubsystemsIsClosed){
     EXPECT_EQ(SDL_WasInit(SDL_INIT_EVENTS), 0); 
 }
 
-TEST_F(DebuggerTest, destoryDebuggerWindow_TTFWasClosed){
+TEST_F(DebuggerTest, destroyDebuggerWindow_TTFWasClosed){
     TTF_Init(); 
 
     debugger.destroyDebuggerWindow(); 
     EXPECT_EQ(TTF_WasInit(), 0); 
 }
 
-TEST_F(DebuggerTest, destoryDebuggerWindow_DebuggingWindowIsDestroyed){
+TEST_F(DebuggerTest, destroyDebuggerWindow_DebuggingWindowIsDestroyed){
     TTF_Init(); 
 
     debugger.destroyDebuggerWindow(); 
     EXPECT_EQ(TTF_WasInit(), 0); 
+}
+
+TEST_F(DebuggerTest, copyStackToDebuggingVector_SizeOfVectorAndStackMatch){
+    testPrep_EmptySystemStack(); 
+
+    memory.systemStack.push(0x200); 
+    memory.systemStack.push(0x226); 
+    
+    debugger.copyStackToDebuggingVector(memory); 
+    EXPECT_EQ(debugger.getStackPrintingVectorSize(), 2); 
+}
+
+TEST_F(DebuggerTest, copyStackToDebuggingVector_EachStackElementsCopiedToVector){
+    testPrep_EmptySystemStack(); 
+
+    testPrep_PopFakeDataOnStack();     
+    
+    debugger.copyStackToDebuggingVector(memory); 
+    for(int i = debugger.getStackPrintingVectorSize() - 1; i >= 0; --i){
+        EXPECT_EQ(stoi(debugger.getStackPrintingVectorElement(i)), memory.getStackPointer()) << "Error at index " << i << ", Vector element is " << debugger.getStackPrintingVectorElement(i) << "Top of stack " << memory.getStackPointer(); 
+        memory.systemStack.pop(); 
+    }
 }
 
